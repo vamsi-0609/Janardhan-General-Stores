@@ -2,3 +2,4 @@ node_modules/
 dist/
 .verify/
 .image-cache/
+shop-photos/_originals/

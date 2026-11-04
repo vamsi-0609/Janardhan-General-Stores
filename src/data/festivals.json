@@ -1,0 +1,600 @@
+{
+  "festivals": [
+    {
+      "id": "sankranti",
+      "name": "Sankranti",
+      "te": "సంక్రాంతి",
+      "aliases": [
+        "sankranthi",
+        "sankranthi pandaga",
+        "makara sankranti",
+        "pongal",
+        "bhogi",
+        "kanuma",
+        "pedda pandaga",
+        "సంక్రాంతి"
+      ],
+      "colors": [
+        "#b4451c",
+        "#e8a33a"
+      ],
+      "lead": 15,
+      "before": {
+        "title": "Sankranti is coming. Time to make the sweets!",
+        "titleTe": "సంక్రాంతి పిండి వంటలకు కావలసిన సరుకులన్నీ ఇక్కడే",
+        "text": "Ariselu, nuvvula undalu, chakkilalu, sakinalu and payasam. Pick up bellam, biyyapu pindi, nuvvulu, palli, nune and neyyi in one trip, plus muggu and rangoli colours for the front yard."
+      },
+      "day": {
+        "title": "Happy Sankranti!",
+        "titleTe": "సంక్రాంతి శుభాకాంక్షలు!",
+        "text": "Wishing your family a sweet and happy Sankranti. Enjoy the festival with homemade pindi vantalu, and if you have run short of anything, we are open today."
+      },
+      "items": [
+        "jaggery",
+        "rice-flour",
+        "white-sesame",
+        "groundnuts",
+        "groundnut-oil",
+        "ghee",
+        "sugar",
+        "cardamom",
+        "cashew-nuts",
+        "raisins",
+        "besan",
+        "chana-dal",
+        "muggu-powder",
+        "rangoli-colours",
+        "urad-dal"
+      ],
+      "dates": [
+        [
+          [
+            "2027-01-14",
+            "Bhogi",
+            "భోగి"
+          ],
+          [
+            "2027-01-15",
+            "Makara Sankranti",
+            "మకర సంక్రాంతి"
+          ],
+          [
+            "2027-01-16",
+            "Kanuma",
+            "కనుమ"
+          ]
+        ],
+        [
+          [
+            "2028-01-14",
+            "Bhogi",
+            "భోగి"
+          ],
+          [
+            "2028-01-15",
+            "Makara Sankranti",
+            "మకర సంక్రాంతి"
+          ],
+          [
+            "2028-01-16",
+            "Kanuma",
+            "కనుమ"
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "shivaratri",
+      "name": "Maha Shivaratri",
+      "te": "మహా శివరాత్రి",
+      "aliases": [
+        "shivaratri",
+        "sivaratri",
+        "shivratri",
+        "maha sivaratri",
+        "shiva ratri",
+        "శివరాత్రి"
+      ],
+      "colors": [
+        "#1f2a4d",
+        "#55658f"
+      ],
+      "lead": 7,
+      "before": {
+        "title": "Get ready for Maha Shivaratri",
+        "titleTe": "మహా శివరాత్రి పూజకు కావలసినవన్నీ",
+        "text": "Vibhuti, ganga jalam, panneer and honey for abhishekam, plus deepams, karpuram and agarbatti for the night-long jagaram."
+      },
+      "day": {
+        "title": "Om Namah Shivaya. Happy Maha Shivaratri!",
+        "titleTe": "మహా శివరాత్రి శుభాకాంక్షలు!",
+        "text": "May Lord Shiva bless your family. We are open today for any puja items you still need."
+      },
+      "items": [
+        "vibhuti",
+        "vibhuti-pandu",
+        "ganga-jalam",
+        "panneer",
+        "honey",
+        "pooja-coconut",
+        "camphor-tablets",
+        "deepam-oil",
+        "clay-diyas",
+        "sandal-agarbatti",
+        "sandalwood-powder",
+        "tamalapaku",
+        "vakkalu",
+        "urad-dal",
+        "sandalwood-stick"
+      ],
+      "dates": [
+        [
+          [
+            "2027-03-06",
+            "Maha Shivaratri",
+            "మహా శివరాత్రి"
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "ugadi",
+      "name": "Ugadi",
+      "te": "ఉగాది",
+      "aliases": [
+        "yugadi",
+        "telugu new year",
+        "ugadhi",
+        "ఉగాది"
+      ],
+      "colors": [
+        "#2f6b3a",
+        "#a9b83a"
+      ],
+      "lead": 10,
+      "before": {
+        "title": "Ugadi is coming. Welcome the new year!",
+        "titleTe": "ఉగాది పచ్చడి, పూజకు కావలసిన సరుకులు",
+        "text": "Bellam, chintapandu, uppu and karam for Ugadi pachadi, and kumkum, pasupu, kobbari kaya and muggu for the puja and the doorstep."
+      },
+      "day": {
+        "title": "Happy Ugadi!",
+        "titleTe": "ఉగాది శుభాకాంక్షలు!",
+        "text": "Wishing you and your family a happy and prosperous Telugu New Year."
+      },
+      "items": [
+        "jaggery",
+        "tamarind",
+        "salt",
+        "red-chilli-powder",
+        "kumkum",
+        "puja-pasupu",
+        "pooja-coconut",
+        "tamalapaku",
+        "camphor-tablets",
+        "sandal-agarbatti",
+        "clay-diyas",
+        "muggu-powder",
+        "rangoli-colours",
+        "chana-dal"
+      ],
+      "dates": [
+        [
+          [
+            "2027-04-07",
+            "Ugadi",
+            "ఉగాది"
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "rama-navami",
+      "name": "Sri Rama Navami",
+      "te": "శ్రీరామ నవమి",
+      "aliases": [
+        "sri rama navami",
+        "ram navami",
+        "srirama navami",
+        "rama navami",
+        "శ్రీరామ నవమి"
+      ],
+      "colors": [
+        "#b5541b",
+        "#e3a548"
+      ],
+      "lead": 7,
+      "before": {
+        "title": "Sri Rama Navami is coming",
+        "titleTe": "పానకం, వడపప్పు, కళ్యాణ పూజకు కావలసినవి",
+        "text": "Bellam, miriyalu and yalakulu for panakam, pesara pappu for vadapappu, and everything for the Sita Rama kalyanam puja."
+      },
+      "day": {
+        "title": "Happy Sri Rama Navami!",
+        "titleTe": "శ్రీరామ నవమి శుభాకాంక్షలు!",
+        "text": "Jai Sri Ram! Wishing your family peace and happiness."
+      },
+      "items": [
+        "jaggery",
+        "black-pepper",
+        "cardamom",
+        "moong-dal",
+        "pooja-coconut",
+        "tamalapaku",
+        "vakkalu",
+        "kumkum",
+        "puja-pasupu",
+        "camphor-tablets",
+        "sandal-agarbatti",
+        "neyyi-deepam"
+      ],
+      "dates": [
+        [
+          [
+            "2027-04-15",
+            "Sri Rama Navami",
+            "శ్రీరామ నవమి"
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "varalakshmi",
+      "name": "Varalakshmi Vratham",
+      "te": "వరలక్ష్మీ వ్రతం",
+      "aliases": [
+        "varalakshmi vratam",
+        "varalakshmi pooja",
+        "varamahalakshmi",
+        "sravana sukravaram",
+        "వరలక్ష్మి"
+      ],
+      "colors": [
+        "#9c1f4d",
+        "#d9a13b"
+      ],
+      "lead": 10,
+      "before": {
+        "title": "Varalakshmi Vratham is coming",
+        "titleTe": "వరలక్ష్మీ వ్రతానికి కావలసిన సామగ్రి అంతా ఒకే చోట",
+        "text": "The vratham kit, kalasam kayalu and kalasam sugandhalu, pasupu-kumkum for the vayanam, deepams and tamalapaku. Get everything ready before the vratham."
+      },
+      "day": {
+        "title": "Happy Varalakshmi Vratham!",
+        "titleTe": "వరలక్ష్మీ వ్రత శుభాకాంక్షలు!",
+        "text": "May Varalakshmi Devi bless your home with health and prosperity."
+      },
+      "items": [
+        "varalakshmi-kit",
+        "kalasam-kayalu",
+        "kalasam-samanlu-set",
+        "pasupu-kumkum-set",
+        "kumkum",
+        "puja-pasupu",
+        "neyyi-deepam",
+        "clay-diyas",
+        "deepam-oil",
+        "camphor-tablets",
+        "loose-agarbatti",
+        "tamalapaku",
+        "vakkalu",
+        "rangoli-colours"
+      ],
+      "dates": [
+        [
+          [
+            "2027-08-13",
+            "Varalakshmi Vratham",
+            "వరలక్ష్మీ వ్రతం"
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "vinayaka",
+      "name": "Vinayaka Chavithi",
+      "te": "వినాయక చవితి",
+      "aliases": [
+        "vinayaka chavithi",
+        "ganesh chaturthi",
+        "ganesha chaturthi",
+        "vinayaka chaturthi",
+        "ganapathi",
+        "వినాయక చవితి"
+      ],
+      "colors": [
+        "#c2410c",
+        "#f0b429"
+      ],
+      "lead": 10,
+      "before": {
+        "title": "Vinayaka Chavithi is coming",
+        "titleTe": "వినాయక చవితి పూజ, కుడుములకు కావలసినవి",
+        "text": "The Chavithi puja kit, kobbari kaya and pasupu-kumkum, plus biyyapu pindi, bellam, senaga pappu and neyyi for kudumulu and undrallu, and dhonnelu for serving prasadam."
+      },
+      "day": {
+        "title": "Happy Vinayaka Chavithi!",
+        "titleTe": "వినాయక చవితి శుభాకాంక్షలు!",
+        "text": "May Lord Ganesha remove every obstacle. We are open today for last-minute puja items."
+      },
+      "items": [
+        "vinayaka-chavithi-kit",
+        "pooja-coconut",
+        "kumkum",
+        "puja-pasupu",
+        "rice-flour",
+        "jaggery",
+        "chana-dal",
+        "idli-rava",
+        "ghee",
+        "camphor-tablets",
+        "sandal-agarbatti",
+        "tamalapaku",
+        "vakkalu",
+        "prasadam-cups",
+        "urad-dal",
+        "wheat-atta",
+        "sandalwood-stick"
+      ],
+      "dates": [
+        [
+          [
+            "2027-09-04",
+            "Vinayaka Chavithi",
+            "వినాయక చవితి"
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "navaratri",
+      "name": "Devi Navaratrulu & Dasara",
+      "te": "దేవీ నవరాత్రులు & దసరా",
+      "aliases": [
+        "navaratri",
+        "navarathri",
+        "navaratrulu",
+        "navarathrulu",
+        "dasara",
+        "dussehra",
+        "dasera",
+        "vijayadashami",
+        "durga puja",
+        "bathukamma",
+        "దసరా",
+        "నవరాత్రులు"
+      ],
+      "colors": [
+        "#a3122a",
+        "#e0782f"
+      ],
+      "lead": 10,
+      "before": {
+        "title": "Devi Navaratrulu begin soon",
+        "titleTe": "నవరాత్రుల పూజకు కావలసిన సామగ్రి",
+        "text": "Nine days of Devi puja: kumkuma for the archana, kobbari kaya, deepams, karpuram, sambrani and prasadam items, all in one place."
+      },
+      "day": {
+        "title": "Happy Navaratri!",
+        "titleTe": "దసరా శుభాకాంక్షలు!",
+        "text": "May Durga Devi bless your family. Vijayadashami subhakankshalu!"
+      },
+      "items": [
+        "kumkum",
+        "maroon-kumkum",
+        "puja-pasupu",
+        "pooja-coconut",
+        "neyyi-deepam",
+        "clay-diyas",
+        "deepam-oil",
+        "camphor-tablets",
+        "loose-agarbatti",
+        "sambrani-cups",
+        "tamalapaku",
+        "vakkalu",
+        "ghee",
+        "jaggery",
+        "prasadam-cups"
+      ],
+      "dates": [
+        [
+          [
+            "2027-10-01",
+            "Navaratri begins",
+            "నవరాత్రులు ప్రారంభం"
+          ],
+          [
+            "2027-10-02",
+            "Navaratri",
+            "నవరాత్రులు"
+          ],
+          [
+            "2027-10-03",
+            "Navaratri",
+            "నవరాత్రులు"
+          ],
+          [
+            "2027-10-04",
+            "Navaratri",
+            "నవరాత్రులు"
+          ],
+          [
+            "2027-10-05",
+            "Navaratri",
+            "నవరాత్రులు"
+          ],
+          [
+            "2027-10-06",
+            "Navaratri",
+            "నవరాత్రులు"
+          ],
+          [
+            "2027-10-07",
+            "Navaratri",
+            "నవరాత్రులు"
+          ],
+          [
+            "2027-10-08",
+            "Navaratri",
+            "నవరాత్రులు"
+          ],
+          [
+            "2027-10-09",
+            "Dasara (Vijayadashami)",
+            "దసరా (విజయదశమి)",
+            "Happy Dasara!"
+          ]
+        ]
+      ],
+      "note": "Confirm against a Telugu panchangam: sources differ on Dasara 2027 (9 or 10 Oct)."
+    },
+    {
+      "id": "deepavali",
+      "name": "Deepavali",
+      "te": "దీపావళి",
+      "colors": [
+        "#4a1a15",
+        "#c58a2b"
+      ],
+      "lead": 12,
+      "banner": {
+        "pattern": "sparkle",
+        "decor": "✨",
+        "dim": 33
+      },
+      "before": {
+        "title": "Deepavali is coming. Light up your home!",
+        "titleTe": "దీపావళికి కావలసినవన్నీ మా దగ్గర",
+        "text": "Matti pramidalu small and large, candles, deepam oil and wicks for the whole house, the Lakshmi puja kit, rangoli colours, and sugar, neyyi, senaga pindi and jeedi pappu for the sweets."
+      },
+      "day": {
+        "title": "Happy Deepavali!",
+        "titleTe": "దీపావళి శుభాకాంక్షలు!",
+        "text": "May the lights of Deepavali fill your home with joy and prosperity. We are open today for pramidalu, oil and puja items."
+      },
+      "items": [
+        "deepavali-kit",
+        "clay-diyas",
+        "akhanda-deepam",
+        "neyyi-deepam",
+        "candles",
+        "deepam-oil",
+        "round-wicks",
+        "long-wicks",
+        "camphor-tablets",
+        "sandal-agarbatti",
+        "rangoli-colours",
+        "muggu-powder",
+        "kumkum",
+        "sugar",
+        "ghee",
+        "besan",
+        "cashew-nuts",
+        "urad-dal",
+        "wheat-atta"
+      ],
+      "dates": [
+        [
+          [
+            "2026-11-07",
+            "Naraka Chaturdashi",
+            "నరక చతుర్దశి"
+          ],
+          [
+            "2026-11-08",
+            "Deepavali",
+            "దీపావళి"
+          ]
+        ],
+        [
+          [
+            "2027-10-28",
+            "Naraka Chaturdashi",
+            "నరక చతుర్దశి"
+          ],
+          [
+            "2027-10-29",
+            "Deepavali",
+            "దీపావళి"
+          ]
+        ]
+      ]
+    },
+    {
+      "id": "karthika",
+      "name": "Karthika Masam",
+      "te": "కార్తీక మాసం",
+      "colors": [
+        "#24204d",
+        "#b8792a"
+      ],
+      "lead": 0,
+      "season": true,
+      "banner": {
+        "pattern": "waves",
+        "decor": "🥥",
+        "dim": 45
+      },
+      "before": {
+        "title": "Karthika Masam begins soon",
+        "titleTe": "కార్తీక మాసం",
+        "text": "Deepams every evening for the holy month."
+      },
+      "day": {
+        "title": "Karthika Masam: light a deepam every evening",
+        "titleTe": "కార్తీక మాస శుభాకాంక్షలు!",
+        "text": "Matti pramidalu, deepam oil, neyyi, and poo, tamara and neyyi vattulu for the whole month, 365 vattulu for Karthika Pournami, plus karpuram, agarbatti and kobbari kaya for the Karthika puja."
+      },
+      "items": [
+        "365-vattulu",
+        "clay-diyas",
+        "akhanda-deepam",
+        "deepam-oil",
+        "ghee-wicks",
+        "round-wicks",
+        "lotus-stem-wicks",
+        "long-wicks",
+        "neyyi-deepam",
+        "ghee",
+        "camphor-tablets",
+        "sandal-agarbatti",
+        "pooja-coconut",
+        "tamalapaku",
+        "wheat-atta",
+        "sandalwood-stick"
+      ],
+      "dates": [
+        [
+          [
+            "2026-11-09",
+            "Karthika Masam",
+            "కార్తీక మాసం"
+          ],
+          [
+            "2026-11-24",
+            "Karthika Pournami",
+            "కార్తీక పౌర్ణమి",
+            "Happy Karthika Pournami!"
+          ],
+          [
+            "2026-12-08",
+            "Karthika Masam",
+            "కార్తీక మాసం"
+          ]
+        ],
+        [
+          [
+            "2027-10-30",
+            "Karthika Masam",
+            "కార్తీక మాసం"
+          ],
+          [
+            "2027-11-27",
+            "Karthika Masam",
+            "కార్తీక మాసం"
+          ]
+        ]
+      ]
+    }
+  ]
+}

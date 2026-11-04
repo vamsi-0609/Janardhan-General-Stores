@@ -1,0 +1,2501 @@
+{
+  "sections": [
+    {
+      "slug": "kirana",
+      "name": "Kirana",
+      "te": "కిరాణా",
+      "title": "Kirana & Groceries",
+      "blurb": "Everyday groceries for an Andhra kitchen — rice, dals, oils, spices, dry fruits and household needs.",
+      "blurbTe": "బియ్యం, పప్పులు, నూనెలు, మసాలాలు మరియు ఇంటి అవసరాలు.",
+      "theme": "kirana"
+    },
+    {
+      "slug": "puja-samagri",
+      "name": "Puja Samagri",
+      "te": "పూజా సామగ్రి",
+      "title": "Puja Samagri",
+      "blurb": "Items for daily puja, kalasam, vratams and homams — kumkum, sugandhalu, coconuts, camphor, agarbatti, clay diyas and more.",
+      "blurbTe": "నిత్య పూజ, వ్రతాలు మరియు పండుగలకు కావలసిన సామగ్రి.",
+      "theme": "puja"
+    }
+  ],
+  "categories": [
+    {
+      "section": "kirana",
+      "slug": "rice",
+      "name": "Rice",
+      "te": "బియ్యం",
+      "blurb": "Masoori, basmati and uppudu biyyam — in packets or loose by the kg.",
+      "products": [
+        {
+          "slug": "sona-masoori-rice",
+          "name": "Masoori Rice",
+          "te": "మసూరి బియ్యం",
+          "aliases": [
+            "sona masoori",
+            "sona masuri",
+            "masura rice",
+            "masuri biyyam",
+            "normal rice",
+            "biyyam",
+            "rice",
+            "rice packet",
+            "rice bag"
+          ],
+          "desc": "Everyday medium-grain rice for daily meals — in packets or loose by the kg.",
+          "q": "Sona Masuri rice grains",
+          "brands": [
+            "NS",
+            "Aahar",
+            "CSR",
+            "Lakshmi",
+            "Arshiya Black"
+          ],
+          "sizes": "Packets · loose by the kg"
+        },
+        {
+          "slug": "basmati-rice",
+          "name": "Basmati Rice",
+          "te": "బాస్మతి బియ్యం",
+          "aliases": [
+            "basmathi",
+            "biryani rice",
+            "long grain",
+            "rice packet"
+          ],
+          "desc": "Long-grain aromatic rice for biryani, pulao and fried rice — in packets or loose by the kg.",
+          "q": "basmati rice uncooked",
+          "brands": [
+            "Unity",
+            "India Gate"
+          ],
+          "sizes": "Packets · loose by the kg"
+        },
+        {
+          "slug": "boiled-rice",
+          "name": "Uppudu Biyyam (Boiled Rice)",
+          "te": "ఉప్పుడు బియ్యం",
+          "aliases": [
+            "uppudu biyyam",
+            "boiled rice",
+            "parboiled rice",
+            "rice packet"
+          ],
+          "desc": "Parboiled rice with firm grains that stay separate after cooking — in packets or loose by the kg.",
+          "q": "parboiled rice",
+          "sizes": "Packets · loose by the kg"
+        }
+      ]
+    },
+    {
+      "section": "kirana",
+      "slug": "pulses-dals",
+      "name": "Pulses & Dals",
+      "te": "పప్పులు",
+      "blurb": "Dals, whole pulses and gram.",
+      "products": [
+        {
+          "slug": "toor-dal",
+          "name": "Toor Dal (Kandi Pappu)",
+          "te": "కంది పప్పు",
+          "aliases": [
+            "kandi pappu",
+            "kandipappu",
+            "arhar",
+            "tuvar",
+            "pigeon pea"
+          ],
+          "desc": "Split pigeon peas — the everyday dal for pappu, sambar and rasam.",
+          "q": "toor dal pigeon pea split"
+        },
+        {
+          "slug": "moong-dal",
+          "name": "Moong Dal (Pesara Pappu)",
+          "te": "పెసర పప్పు",
+          "aliases": [
+            "pesara pappu",
+            "pesarapappu",
+            "mung dal",
+            "yellow moong"
+          ],
+          "desc": "Split, husked green gram that cooks quickly.",
+          "q": "moong dal yellow split"
+        },
+        {
+          "slug": "green-gram",
+          "name": "Green Gram (Pesalu)",
+          "te": "పెసలు",
+          "aliases": [
+            "pesalu",
+            "whole moong",
+            "mung beans"
+          ],
+          "desc": "Whole green gram, used for pesarattu, sprouts and curries.",
+          "q": "mung beans green gram"
+        },
+        {
+          "slug": "urad-dal",
+          "name": "Urad Dal (Minapa Pappu)",
+          "te": "మినప పప్పు",
+          "aliases": [
+            "minapa pappu",
+            "minappappu",
+            "black gram",
+            "urad",
+            "uddi bedalu"
+          ],
+          "desc": "Husked black gram, essential for idli, dosa, vada and tempering.",
+          "q": "urad dal white split"
+        },
+        {
+          "slug": "chana-dal",
+          "name": "Chana Dal (Senaga Pappu)",
+          "te": "శనగ బేడలు",
+          "aliases": [
+            "senaga bedalu",
+            "chenaga bedalu"
+          ],
+          "desc": "Split Bengal gram for dals, tempering and sweets.",
+          "q": "chana dal"
+        },
+        {
+          "slug": "kabuli-chana",
+          "name": "Manchi pappulu (Chickpeas)",
+          "te": "మంచి పప్పులు",
+          "aliases": [
+            "chickpeas",
+            "chole",
+            "white chana",
+            "senagalu"
+          ],
+          "desc": "Large white chickpeas for chole, curries and salads.",
+          "q": "chickpeas dried"
+        },
+        {
+          "slug": "black-chana",
+          "name": "Black Chickpeas",
+          "te": "నల్ల శనగలు",
+          "aliases": [
+            "kala chana",
+            "nalla senagalu",
+            "brown chana"
+          ],
+          "desc": "Small dark chickpeas, often used for guggillu and curries.",
+          "q": "kala chana black chickpeas"
+        },
+        {
+          "slug": "masoor-dal",
+          "name": "Masoor Dal (Red Lentils)",
+          "te": "మసూర్ పప్పు",
+          "aliases": [
+            "masoor",
+            "red lentils",
+            "erra pappu"
+          ],
+          "desc": "Split red lentils that cook soft and fast.",
+          "q": "red lentils masoor"
+        },
+        {
+          "slug": "roasted-gram",
+          "name": "Roasted Gram (Putnala Pappu)",
+          "te": "పుట్నాల పప్పు",
+          "aliases": [
+            "putnalu",
+            "putnala pappu",
+            "dalia",
+            "pappulu"
+          ],
+          "desc": "Roasted split gram for chutneys and snacks.",
+          "q": "roasted chana dalia"
+        },
+        {
+          "slug": "horse-gram",
+          "name": "Horse Gram (Ulavalu)",
+          "te": "ఉలవలు",
+          "aliases": [
+            "ulavalu",
+            "kulthi",
+            "horsegram"
+          ],
+          "desc": "A traditional pulse used for ulava charu and rasam.",
+          "q": "horse gram seeds"
+        },
+        {
+          "slug": "groundnuts",
+          "name": "Groundnuts (Palli)",
+          "te": "వేరుశనగ పప్పు",
+          "aliases": [
+            "palli",
+            "pallilu",
+            "peanuts",
+            "verusenaga"
+          ],
+          "desc": "Raw peanuts for chutneys, tempering, snacks and chikki.",
+          "q": "raw peanuts"
+        }
+      ]
+    },
+    {
+      "section": "kirana",
+      "slug": "flours",
+      "name": "Atta & Flours",
+      "te": "పిండి రకాలు",
+      "blurb": "Wheat atta, besan, rice flour and millet flours.",
+      "products": [
+        {
+          "slug": "wheat-atta",
+          "name": "Wheat Flour (Atta)",
+          "te": "గోధుమ పిండి",
+          "aliases": [
+            "godhuma pindi",
+            "atta",
+            "chapati flour"
+          ],
+          "desc": "Whole wheat flour for chapati, roti and puri.",
+          "q": "whole wheat flour atta",
+          "brands": [
+            "Aashirvaad"
+          ]
+        },
+        {
+          "slug": "maida",
+          "name": "Maida (Refined Flour)",
+          "te": "మైదా పిండి",
+          "aliases": [
+            "maida",
+            "all purpose flour",
+            "refined flour"
+          ],
+          "desc": "Refined wheat flour for parotta, baking and snacks.",
+          "q": "flour heap white"
+        },
+        {
+          "slug": "besan",
+          "name": "Besan (Gram Flour)",
+          "te": "శనగ పిండి",
+          "aliases": [
+            "senaga pindi",
+            "gram flour",
+            "chickpea flour"
+          ],
+          "desc": "Gram flour for bajji, pakodi, kadhi and sweets.",
+          "q": "besan gram flour"
+        },
+        {
+          "slug": "rice-flour",
+          "name": "Rice Flour",
+          "te": "బియ్యపు పిండి",
+          "aliases": [
+            "biyyam pindi",
+            "biyyapu pindi"
+          ],
+          "desc": "Fine rice flour for murukulu, rotti and traditional sweets.",
+          "q": "rice flour"
+        },
+        {
+          "slug": "ragi-flour",
+          "name": "Ragi Flour",
+          "te": "రాగి పిండి",
+          "aliases": [
+            "ragi",
+            "finger millet",
+            "ragulu"
+          ],
+          "desc": "Finger millet flour for ragi sangati, malt and rotti.",
+          "q": "ragi finger millet"
+        },
+        {
+          "slug": "jowar-flour",
+          "name": "Jowar Flour",
+          "te": "జొన్న పిండి",
+          "aliases": [
+            "jonna pindi",
+            "jonnalu",
+            "sorghum"
+          ],
+          "desc": "Sorghum flour for jonna rotte.",
+          "q": "sorghum grain jowar"
+        },
+        {
+          "slug": "corn-flour",
+          "name": "Corn Flour",
+          "te": "మొక్కజొన్న పిండి",
+          "aliases": [
+            "mokkajonna pindi",
+            "cornflour",
+            "corn starch"
+          ],
+          "desc": "Corn starch used for thickening and frying batters.",
+          "q": "cornmeal maize flour"
+        }
+      ]
+    },
+    {
+      "section": "kirana",
+      "slug": "cooking-oils",
+      "name": "Cooking Oils & Ghee",
+      "te": "వంట నూనెలు & నెయ్యి",
+      "blurb": "Groundnut, sunflower, sesame and other oils, plus ghee.",
+      "products": [
+        {
+          "slug": "groundnut-oil",
+          "name": "Groundnut Oil",
+          "te": "వేరుశనగ నూనె",
+          "aliases": [
+            "palli nune",
+            "peanut oil",
+            "verusenaga nune",
+            "oil packet",
+            "oil can",
+            "15 litre can"
+          ],
+          "desc": "Groundnut oil for everyday Andhra cooking — in 1 litre packets and 15 litre cans.",
+          "q": "peanut oil bottle",
+          "brands": [
+            "Freedom",
+            "Priya",
+            "Gold Drop"
+          ],
+          "sizes": "1 litre packets · 15 litre cans"
+        },
+        {
+          "slug": "sunflower-oil",
+          "name": "Sunflower Oil",
+          "te": "పొద్దుతిరుగుడు నూనె",
+          "aliases": [
+            "sunflower nune",
+            "refined oil",
+            "oil packet",
+            "oil can",
+            "15 litre can"
+          ],
+          "desc": "Refined sunflower oil for cooking and frying — in 1 litre packets and 15 litre cans.",
+          "q": "sunflower oil",
+          "brands": [
+            "Freedom",
+            "Priya",
+            "Gold Drop"
+          ],
+          "sizes": "1 litre packets · 15 litre cans"
+        },
+        {
+          "slug": "rice-bran-oil",
+          "name": "Rice Bran Oil",
+          "te": "రైస్ బ్రాన్ నూనె",
+          "aliases": [
+            "rice bran"
+          ],
+          "desc": "An oil extracted from rice bran, used for cooking and frying.",
+          "q": "cooking oil bottle glass"
+        },
+        {
+          "slug": "sesame-oil",
+          "name": "Sesame Oil (Gingelly)",
+          "te": "నువ్వుల నూనె",
+          "aliases": [
+            "nuvvula nune",
+            "til oil",
+            "gingelly oil"
+          ],
+          "desc": "Sesame oil used for pickles, podis and traditional cooking.",
+          "q": "sesame oil"
+        },
+        {
+          "slug": "coconut-oil",
+          "name": "Coconut Oil",
+          "te": "కొబ్బరి నూనె",
+          "aliases": [
+            "kobbari nune"
+          ],
+          "desc": "Coconut oil for cooking and household use.",
+          "q": "coconut oil jar"
+        },
+        {
+          "slug": "palmolein-oil",
+          "name": "Palm Oil (Palmolein)",
+          "te": "పామాయిల్",
+          "aliases": [
+            "palm oil",
+            "pamoil",
+            "palmolein",
+            "oil packet",
+            "oil can",
+            "15 litre can"
+          ],
+          "desc": "An economical refined oil for cooking and frying — in 1 litre packets and 15 litre cans.",
+          "q": "palm oil",
+          "brands": [
+            "Freedom",
+            "Priya",
+            "Gold Drop"
+          ],
+          "sizes": "1 litre packets · 15 litre cans"
+        },
+        {
+          "slug": "mustard-oil",
+          "name": "Mustard Oil",
+          "te": "ఆవ నూనె",
+          "aliases": [
+            "ava nune",
+            "sarson oil"
+          ],
+          "desc": "A pungent oil used in pickles and some regional cooking.",
+          "q": "mustard oil"
+        },
+        {
+          "slug": "ghee",
+          "name": "Ghee",
+          "te": "నెయ్యి",
+          "aliases": [
+            "neyyi",
+            "clarified butter"
+          ],
+          "desc": "Clarified butter for rice, sweets, tempering and puja.",
+          "q": "ghee clarified butter"
+        }
+      ]
+    },
+    {
+      "section": "kirana",
+      "slug": "spices-masalas",
+      "name": "Spices & Masalas",
+      "te": "మసాలా దినుసులు",
+      "blurb": "Whole spices, powders and masala blends.",
+      "products": [
+        {
+          "slug": "red-chilli-powder",
+          "name": "Red Chilli Powder",
+          "te": "కారం పొడి",
+          "aliases": [
+            "karam",
+            "kaaram",
+            "mirchi powder",
+            "chilli powder"
+          ],
+          "desc": "Ground dried red chillies for everyday curries and pickles.",
+          "q": "red chili powder"
+        },
+        {
+          "slug": "dry-red-chillies",
+          "name": "Dry Red Chillies",
+          "te": "ఎండు మిరపకాయలు",
+          "aliases": [
+            "endu mirapakayalu",
+            "endu mirchi",
+            "guntur chillies"
+          ],
+          "desc": "Whole dried chillies for tempering, podis and pickles.",
+          "q": "dried red chillies"
+        },
+        {
+          "slug": "turmeric-powder",
+          "name": "Turmeric Powder",
+          "te": "పసుపు పొడి",
+          "aliases": [
+            "pasupu",
+            "haldi",
+            "tumeric",
+            "turmeric"
+          ],
+          "desc": "Ground turmeric used daily in cooking.",
+          "q": "turmeric powder"
+        },
+        {
+          "slug": "coriander-powder",
+          "name": "Coriander Powder",
+          "te": "ధనియాల పొడి",
+          "aliases": [
+            "dhaniyala podi",
+            "dhania powder"
+          ],
+          "desc": "Ground coriander seeds for curries and masalas.",
+          "q": "coriander powder"
+        },
+        {
+          "slug": "coriander-seeds",
+          "name": "Coriander Seeds",
+          "te": "ధనియాలు",
+          "aliases": [
+            "dhaniyalu",
+            "dhania"
+          ],
+          "desc": "Whole coriander seeds for podis and masala blends.",
+          "q": "coriander seeds"
+        },
+        {
+          "slug": "cumin-seeds",
+          "name": "Cumin Seeds (Jeera)",
+          "te": "జీలకర్ర",
+          "aliases": [
+            "jeelakarra",
+            "jeera",
+            "jira",
+            "jilakara",
+            "jeelakara"
+          ],
+          "desc": "Whole cumin for tempering, rasam and jeera rice.",
+          "q": "cumin seeds"
+        },
+        {
+          "slug": "mustard-seeds",
+          "name": "Mustard Seeds",
+          "te": "ఆవాలు",
+          "aliases": [
+            "avalu",
+            "rai",
+            "mustard",
+            "aavalu"
+          ],
+          "desc": "Small black mustard seeds — the start of most tadkas.",
+          "q": "black mustard seeds"
+        },
+        {
+          "slug": "fenugreek-seeds",
+          "name": "Fenugreek Seeds",
+          "te": "మెంతులు",
+          "aliases": [
+            "menthulu",
+            "methi"
+          ],
+          "desc": "Used in dosa batter, pickles and tempering.",
+          "q": "fenugreek seeds"
+        },
+        {
+          "slug": "white-sesame",
+          "name": "White Sesame Seeds (Nuvvulu)",
+          "te": "తెల్ల నువ్వులు",
+          "aliases": [
+            "nuvvulu",
+            "tella nuvvulu",
+            "nuvulu",
+            "white til",
+            "sesame"
+          ],
+          "desc": "White sesame seeds for chikki, podis, laddus and tempering.",
+          "q": "white sesame seeds"
+        },
+        {
+          "slug": "black-sesame",
+          "name": "Black Sesame Seeds (Nalla Nuvvulu)",
+          "te": "నల్ల నువ్వులు",
+          "aliases": [
+            "nalla nuvvulu",
+            "nuvvulu",
+            "nuvulu",
+            "black til",
+            "sesame"
+          ],
+          "desc": "Black sesame seeds, used in cooking and also in some rituals.",
+          "q": "black sesame seeds"
+        },
+        {
+          "slug": "black-pepper",
+          "name": "Black Pepper",
+          "te": "మిరియాలు",
+          "aliases": [
+            "miriyalu",
+            "pepper",
+            "kali mirch",
+            "miriyali"
+          ],
+          "desc": "Whole black peppercorns for rasam and seasoning.",
+          "q": "black peppercorns"
+        },
+        {
+          "slug": "cardamom",
+          "name": "Cardamom",
+          "te": "యాలకులు",
+          "aliases": [
+            "yalakulu",
+            "elaichi",
+            "elachi",
+            "biryani spices",
+            "yalakalu"
+          ],
+          "desc": "Green cardamom pods for sweets, tea and biryani.",
+          "q": "green cardamom pods"
+        },
+        {
+          "slug": "cloves",
+          "name": "Cloves",
+          "te": "లవంగాలు",
+          "aliases": [
+            "lavangalu",
+            "laung",
+            "biryani spices"
+          ],
+          "desc": "Whole cloves for biryani, masalas and tea.",
+          "q": "cloves spice"
+        },
+        {
+          "slug": "cinnamon",
+          "name": "Cinnamon",
+          "te": "దాల్చిన చెక్క",
+          "aliases": [
+            "dalchina chekka",
+            "dalchini",
+            "biryani spices"
+          ],
+          "desc": "Cinnamon bark for biryani and garam masala.",
+          "q": "cinnamon sticks"
+        },
+        {
+          "slug": "garam-masala",
+          "name": "Garam Masala",
+          "te": "గరం మసాలా",
+          "aliases": [
+            "garam masala powder"
+          ],
+          "desc": "A warm blend of ground spices for curries and biryani.",
+          "q": "garam masala spices"
+        },
+        {
+          "slug": "sambar-powder",
+          "name": "Sambar Powder",
+          "te": "సాంబార్ పొడి",
+          "aliases": [
+            "sambar podi",
+            "sambhar masala"
+          ],
+          "desc": "A ground spice blend for sambar.",
+          "q": "spice powder bowl"
+        },
+        {
+          "slug": "asafoetida",
+          "name": "Asafoetida (Hing)",
+          "te": "ఇంగువ",
+          "aliases": [
+            "inguva",
+            "hing",
+            "asafetida"
+          ],
+          "desc": "A strong-flavoured resin powder used in small amounts for tempering.",
+          "q": "asafoetida"
+        },
+        {
+          "slug": "tamarind",
+          "name": "Tamarind",
+          "te": "చింతపండు",
+          "aliases": [
+            "chintapandu",
+            "imli"
+          ],
+          "desc": "Tamarind for pulusu, rasam, sambar and chutneys.",
+          "q": "tamarind pulp"
+        },
+        {
+          "slug": "star-anise",
+          "name": "Star Anise",
+          "te": "అనాస పువ్వు",
+          "aliases": [
+            "anasa puvvu",
+            "chakri phool",
+            "biryani spices",
+            "anasa puvvu"
+          ],
+          "desc": "Star-shaped whole spice used in biryani and masalas.",
+          "q": "star anise"
+        },
+        {
+          "slug": "bay-leaves",
+          "name": "Bay Leaves",
+          "te": "బిర్యానీ ఆకు",
+          "aliases": [
+            "biryani aku",
+            "tej patta",
+            "biryani spices",
+            "biriyani aku"
+          ],
+          "desc": "Dried leaves used whole in biryani and pulao.",
+          "q": "bay leaves dried"
+        }
+      ]
+    },
+    {
+      "section": "kirana",
+      "slug": "sugar-salt-jaggery",
+      "name": "Sugar, Salt & Jaggery",
+      "te": "చక్కెర, ఉప్పు & బెల్లం",
+      "blurb": "Sweeteners and salt for every kitchen.",
+      "products": [
+        {
+          "slug": "sugar",
+          "name": "Sugar",
+          "te": "చక్కెర",
+          "aliases": [
+            "panchadara",
+            "chakkera",
+            "cheeni"
+          ],
+          "desc": "White crystal sugar for tea, coffee and sweets.",
+          "q": "white sugar crystals"
+        },
+        {
+          "slug": "salt",
+          "name": "Iodised Salt",
+          "te": "ఉప్పు",
+          "aliases": [
+            "uppu",
+            "table salt"
+          ],
+          "desc": "Fine iodised salt for daily cooking.",
+          "q": "table salt"
+        },
+        {
+          "slug": "crystal-salt",
+          "name": "Crystal Salt",
+          "te": "రాళ్ల ఉప్పు",
+          "aliases": [
+            "kallu uppu",
+            "rallu uppu",
+            "sea salt"
+          ],
+          "desc": "Coarse crystal salt used for pickles and cooking.",
+          "q": "coarse sea salt crystals"
+        },
+        {
+          "slug": "rock-salt",
+          "name": "Rock Salt",
+          "te": "సైంధవ లవణం",
+          "aliases": [
+            "saindhava lavanam",
+            "sendha namak",
+            "pink salt"
+          ],
+          "desc": "Mineral rock salt, often used during fasting.",
+          "q": "rock salt himalayan"
+        },
+        {
+          "slug": "jaggery",
+          "name": "Jaggery",
+          "te": "బెల్లం",
+          "aliases": [
+            "bellam",
+            "gud",
+            "gur"
+          ],
+          "desc": "Unrefined cane sugar in blocks, used for sweets and payasam.",
+          "q": "jaggery"
+        },
+        {
+          "slug": "jaggery-powder",
+          "name": "Jaggery Powder",
+          "te": "బెల్లం పొడి",
+          "aliases": [
+            "bellam podi",
+            "gud powder"
+          ],
+          "desc": "Powdered jaggery that dissolves easily.",
+          "q": "jaggery powder"
+        },
+        {
+          "slug": "sugar-candy",
+          "name": "Sugar Candy (Patika Bellam)",
+          "te": "పటిక బెల్లం",
+          "aliases": [
+            "patika bellam",
+            "misri",
+            "kalkandu"
+          ],
+          "desc": "Crystallised sugar lumps, also used as naivedyam.",
+          "q": "rock sugar crystals"
+        },
+        {
+          "slug": "palm-jaggery",
+          "name": "Palm Jaggery",
+          "te": "తాటి బెల్లం",
+          "aliases": [
+            "tati bellam",
+            "karupatti"
+          ],
+          "desc": "Jaggery made from palm sap.",
+          "q": "palm jaggery"
+        }
+      ]
+    },
+    {
+      "section": "kirana",
+      "slug": "dry-fruits",
+      "name": "Dry Fruits & Nuts",
+      "te": "డ్రై ఫ్రూట్స్",
+      "blurb": "Cashews, badam, pista, dry dates and raisins.",
+      "products": [
+        {
+          "slug": "cashew-nuts",
+          "name": "Cashew Nuts",
+          "te": "జీడిపప్పు",
+          "aliases": [
+            "jeedipappu",
+            "kaju",
+            "cashew",
+            "jeedi pappu"
+          ],
+          "desc": "Whole cashews for sweets, biryani and snacking.",
+          "q": "cashew nuts"
+        },
+        {
+          "slug": "almonds",
+          "name": "Almonds",
+          "te": "బాదం పప్పు",
+          "aliases": [
+            "badam",
+            "badam pappu"
+          ],
+          "desc": "Whole almonds for snacking and sweets.",
+          "q": "almonds"
+        },
+        {
+          "slug": "raisins",
+          "name": "Raisins",
+          "te": "ఎండు ద్రాక్ష",
+          "aliases": [
+            "kismis",
+            "kishmish",
+            "endu draksha",
+            "yendu draksha"
+          ],
+          "desc": "Dried grapes for payasam, kesari and sweets.",
+          "q": "raisins"
+        },
+        {
+          "slug": "dates",
+          "name": "Dry Dates (Endu Kharjuram)",
+          "te": "ఎండు ఖర్జూరం",
+          "aliases": [
+            "kharjuram",
+            "khajur",
+            "yendu kajjuram",
+            "endu kharjuram",
+            "yendu karjuram"
+          ],
+          "desc": "Soft dried dates.",
+          "q": "dates fruit dried"
+        },
+        {
+          "slug": "pistachios",
+          "name": "Pistachios",
+          "te": "పిస్తా",
+          "aliases": [
+            "pista"
+          ],
+          "desc": "Pistachio nuts for sweets and snacking.",
+          "q": "pistachios"
+        }
+      ]
+    },
+    {
+      "section": "kirana",
+      "slug": "beverages",
+      "name": "Tea, Coffee & Drinks",
+      "te": "టీ, కాఫీ & పానీయాలు",
+      "blurb": "Tea powder, instant coffee, soft drinks and drinking water bottles.",
+      "products": [
+        {
+          "slug": "tea-powder",
+          "name": "Tea Powder",
+          "te": "టీ పొడి",
+          "aliases": [
+            "chai",
+            "tea dust",
+            "tea leaves",
+            "tea podi"
+          ],
+          "desc": "Black tea for everyday chai.",
+          "q": "black tea leaves CTC"
+        },
+        {
+          "slug": "instant-coffee",
+          "name": "Instant Coffee Powder",
+          "te": "ఇన్‌స్టంట్ కాఫీ పొడి",
+          "aliases": [
+            "coffee",
+            "coffee powder",
+            "coffee podi",
+            "nescafe"
+          ],
+          "desc": "Soluble coffee powder for a quick cup.",
+          "q": "instant coffee granules",
+          "brands": [
+            "Bru",
+            "Nescafe",
+            "Continental"
+          ],
+          "sizes": "Rs 2 Sachets - Half KG packets"
+        },
+        {
+          "slug": "soft-drinks",
+          "name": "Soft Drinks",
+          "te": "కూల్ డ్రింక్స్",
+          "aliases": [
+            "cool drinks",
+            "soda",
+            "cold drink"
+          ],
+          "desc": "Carbonated soft drinks.",
+          "q": "soft drink glass bottles"
+        },
+        {
+          "slug": "packaged-water",
+          "name": "Packaged Drinking Water",
+          "te": "మంచినీళ్ల బాటిల్",
+          "aliases": [
+            "water bottle",
+            "mineral water",
+            "neellu",
+            "drinking water"
+          ],
+          "desc": "Bottled drinking water.",
+          "q": "drinking water bottle"
+        }
+      ]
+    },
+    {
+      "section": "kirana",
+      "slug": "rava-poha-vermicelli",
+      "name": "Rava, Poha & Vermicelli",
+      "te": "రవ్వ, అటుకులు & సేమియా",
+      "blurb": "Breakfast staples for upma, idli and more.",
+      "products": [
+        {
+          "slug": "bombay-rava",
+          "name": "Bombay Rava (Sooji)",
+          "te": "బొంబాయి రవ్వ",
+          "aliases": [
+            "upma rava",
+            "sooji",
+            "suji",
+            "semolina"
+          ],
+          "desc": "Fine semolina for upma, kesari and rava dosa.",
+          "q": "semolina"
+        },
+        {
+          "slug": "idli-rava",
+          "name": "Idli Rava",
+          "te": "ఇడ్లీ రవ్వ",
+          "aliases": [
+            "idly rava",
+            "rice rava"
+          ],
+          "desc": "Coarse rice rava for soft idlis.",
+          "q": "idli rava"
+        },
+        {
+          "slug": "wheat-rava",
+          "name": "Wheat Rava (Godhuma Rava)",
+          "te": "గోధుమ రవ్వ",
+          "aliases": [
+            "godhuma rava",
+            "dalia",
+            "broken wheat"
+          ],
+          "desc": "Broken wheat for upma and kichdi.",
+          "q": "broken wheat bulgur"
+        },
+        {
+          "slug": "poha",
+          "name": "Poha (Atukulu)",
+          "te": "అటుకులు",
+          "aliases": [
+            "atukulu",
+            "beaten rice",
+            "flattened rice",
+            "aval"
+          ],
+          "desc": "Flattened rice for poha, upma and snacks.",
+          "q": "poha flattened rice"
+        },
+        {
+          "slug": "vermicelli",
+          "name": "Vermicelli (Semiya)",
+          "te": "సేమియా",
+          "aliases": [
+            "semiya",
+            "seviyan",
+            "sevai"
+          ],
+          "desc": "Thin wheat noodles for payasam and upma.",
+          "q": "vermicelli",
+          "brands": [
+            "Bambino"
+          ]
+        },
+        {
+          "slug": "macaroni",
+          "name": "Macaroni",
+          "te": "మాక్రోని",
+          "aliases": [
+            "macroni",
+            "macaroni",
+            "pasta"
+          ],
+          "desc": "Short pasta tubes, often cooked Indian-style with vegetables and masala.",
+          "q": "macaroni pasta uncooked"
+        },
+        {
+          "slug": "sago",
+          "name": "Sago (Saggubiyyam)",
+          "te": "సగ్గుబియ్యం",
+          "aliases": [
+            "saggubiyyam",
+            "sabudana",
+            "javvarisi"
+          ],
+          "desc": "Sago pearls for payasam, vada and khichdi.",
+          "q": "sago pearls tapioca"
+        },
+        {
+          "slug": "puffed-rice",
+          "name": "Puffed Rice (Borugulu)",
+          "te": "బొరుగులు",
+          "aliases": [
+            "borugulu",
+            "maramaralu",
+            "murmura"
+          ],
+          "desc": "Light puffed rice for snacks and bhel.",
+          "q": "puffed rice"
+        }
+      ]
+    },
+    {
+      "section": "kirana",
+      "slug": "household-cleaning",
+      "name": "Household Cleaning",
+      "te": "ఇంటి శుభ్రత",
+      "blurb": "Laundry, dishwashing and home cleaning.",
+      "products": [
+        {
+          "slug": "detergent-powder",
+          "name": "Detergent Powder (Surf)",
+          "te": "సర్ఫ్ / డిటర్జెంట్ పౌడర్",
+          "aliases": [
+            "surf",
+            "surf packet",
+            "washing powder",
+            "detergent",
+            "battala powder"
+          ],
+          "desc": "Washing powder for clothes, from small ₹10 packets up to 1 kg and 3 kg packs.",
+          "q": "laundry detergent powder",
+          "brands": [
+            "Tide",
+            "Rin",
+            "Ariel"
+          ],
+          "sizes": "₹10 packets · 1 kg · 3 kg"
+        },
+        {
+          "slug": "washing-bar",
+          "name": "Washing Bar Soap (Battala Sabbu)",
+          "te": "బట్టల సబ్బు",
+          "aliases": [
+            "battala sabbu",
+            "battala sabbulu",
+            "detergent bar",
+            "washing soap",
+            "cloth soap"
+          ],
+          "desc": "Bar soaps for washing clothes.",
+          "q": "laundry soap bar"
+        },
+        {
+          "slug": "dishwash-bar",
+          "name": "Utensil Soap (Bokula Sabbu)",
+          "te": "బోకుల సబ్బు",
+          "aliases": [
+            "bokula sabbu",
+            "bokula sabbulu",
+            "ginnela sabbu",
+            "vessel soap",
+            "dishwash bar",
+            "utensil bar"
+          ],
+          "desc": "Bar soap for washing utensils and vessels.",
+          "q": "dishwashing bar soap"
+        },
+        {
+          "slug": "dishwash-liquid",
+          "name": "Dishwash Liquid",
+          "te": "బోకులు కడిగే లిక్విడ్",
+          "aliases": [
+            "vim liquid",
+            "dish wash gel",
+            "vessel liquid",
+            "utensil liquid",
+            "bokula liquid"
+          ],
+          "desc": "Liquid cleaner for washing utensils.",
+          "q": "dishwashing liquid bottle",
+          "brands": [
+            "Vim"
+          ]
+        },
+        {
+          "slug": "floor-cleaner",
+          "name": "Floor Cleaner (Lizol)",
+          "te": "ఫ్లోర్ క్లీనర్",
+          "aliases": [
+            "lizol",
+            "floor liquid",
+            "floor cleaner",
+            "mopping liquid"
+          ],
+          "desc": "Fragrant floor-cleaning liquid for mopping.",
+          "q": "floor mop bucket cleaning",
+          "brands": [
+            "Lizol"
+          ]
+        },
+        {
+          "slug": "phenyl",
+          "name": "Phenyl (Penoil)",
+          "te": "ఫినాయిల్",
+          "aliases": [
+            "phenyl",
+            "phenoyl",
+            "penoil",
+            "finayil",
+            "white phenyl"
+          ],
+          "desc": "White phenyl for mopping floors and cleaning drains.",
+          "q": "phenyl bottle"
+        },
+        {
+          "slug": "toilet-cleaner",
+          "name": "Toilet Cleaner",
+          "te": "టాయిలెట్ క్లీనర్",
+          "aliases": [
+            "toilet liquid",
+            "harpic",
+            "toilet cleaning"
+          ],
+          "desc": "Thick liquid cleaner for toilet bowls.",
+          "q": "cleaning products bottles"
+        },
+        {
+          "slug": "bathroom-cleaner",
+          "name": "Bathroom Cleaner",
+          "te": "బాత్‌రూమ్ క్లీనర్",
+          "aliases": [
+            "bathroom liquid",
+            "tile cleaner",
+            "harpic bathroom"
+          ],
+          "desc": "Liquid cleaner for bathroom tiles, taps and floors.",
+          "q": "bathroom cleaner bottle"
+        },
+        {
+          "slug": "bleaching-powder",
+          "name": "Bleaching Powder",
+          "te": "బ్లీచింగ్ పౌడర్",
+          "aliases": [
+            "bleach"
+          ],
+          "desc": "Disinfecting powder for drains and outdoor cleaning.",
+          "q": "calcium hypochlorite powder"
+        },
+        {
+          "slug": "broom",
+          "name": "Broom",
+          "te": "చీపురు",
+          "aliases": [
+            "cheepuru",
+            "jhadu",
+            "kattalu"
+          ],
+          "desc": "Traditional grass and coconut-stick brooms.",
+          "q": "indian broom"
+        },
+        {
+          "slug": "scrub-pad",
+          "name": "Scrub Pad & Steel Wool",
+          "te": "స్క్రబ్బర్",
+          "aliases": [
+            "scrubber",
+            "steel wool",
+            "sponge"
+          ],
+          "desc": "Scrubbers for cleaning vessels.",
+          "q": "scouring pad sponge"
+        },
+        {
+          "slug": "mosquito-coil",
+          "name": "Mosquito Repellent Coil",
+          "te": "దోమల కాయిల్",
+          "aliases": [
+            "domala coil",
+            "mosquito coil",
+            "jet coil"
+          ],
+          "desc": "Slow-burning coil to keep mosquitoes away.",
+          "q": "mosquito coil",
+          "brands": [
+            "Jet"
+          ]
+        },
+        {
+          "slug": "insect-spray",
+          "name": "Insect Spray",
+          "te": "దోమలు, బొద్దింకల స్ప్రే",
+          "aliases": [
+            "hit spray",
+            "mosquito spray",
+            "cockroach spray",
+            "insect killer",
+            "domala spray"
+          ],
+          "desc": "Sprays for mosquitoes, flies and cockroaches.",
+          "q": "insecticide spray",
+          "brands": [
+            "HIT"
+          ]
+        },
+        {
+          "slug": "acid-bottle",
+          "name": "Acid Bottle",
+          "te": "బాత్రూమ్ క్లీనింగ్ యాసిడ్‌",
+          "aliases": [
+            "Acid",
+            "7 hills",
+            "bathroom cleaner"
+          ],
+          "desc": "Used for cleaning the toilets to flush out and remove dirty marks and smell",
+          "caution": "Use safely acid is highly corrosive and dangerous\n(Keep children away from them)"
+        }
+      ]
+    },
+    {
+      "section": "kirana",
+      "slug": "personal-care",
+      "name": "Personal Care",
+      "te": "వ్యక్తిగత సంరక్షణ",
+      "blurb": "Soaps, shampoo sachets, seekakaya, toothpaste, brushes and sanitary pads.",
+      "products": [
+        {
+          "slug": "bath-soap",
+          "name": "Bath Soap (Ollu Sabbu)",
+          "te": "ఒళ్ళు సబ్బు",
+          "aliases": [
+            "ollu sabbu",
+            "ollu sabbulu",
+            "snanam sabbu",
+            "sabbu",
+            "soap",
+            "bathing soap",
+            "body soap"
+          ],
+          "desc": "Soap bars for bathing.",
+          "q": "bar of soap",
+          "brands": [
+            "Cinthol",
+            "Mysore Sandal",
+            "Santoor"
+          ]
+        },
+        {
+          "slug": "shampoo",
+          "name": "Shampoo Sachets",
+          "te": "షాంపూ ప్యాకెట్లు",
+          "aliases": [
+            "shampoo",
+            "shampoo packet",
+            "shampoo sachet",
+            "hair wash"
+          ],
+          "desc": "Shampoo in small single-use sachets.",
+          "q": "shampoo sachets",
+          "brands": [
+            "Chik",
+            "Clinic Plus",
+            "Head & Shoulders",
+            "Meera",
+            "Karthika"
+          ],
+          "sizes": "Sachets"
+        },
+        {
+          "slug": "shikakai",
+          "name": "Seekakaya Powder (Shikakai)",
+          "te": "శీకాకాయ పొడి",
+          "aliases": [
+            "seekakaya",
+            "sheekaya",
+            "shikakai",
+            "hair wash powder"
+          ],
+          "desc": "Traditional herbal hair-wash powder.",
+          "q": "shikakai"
+        },
+        {
+          "slug": "toothpaste",
+          "name": "Toothpaste",
+          "te": "టూత్‌పేస్ట్",
+          "aliases": [
+            "paste",
+            "tooth paste"
+          ],
+          "desc": "Toothpaste for daily oral care.",
+          "q": "toothpaste on toothbrush"
+        },
+        {
+          "slug": "toothbrush",
+          "name": "Toothbrush",
+          "te": "టూత్‌బ్రష్",
+          "aliases": [
+            "brush",
+            "tooth brush",
+            "brushes"
+          ],
+          "desc": "Toothbrushes in different sizes.",
+          "q": "toothbrushes"
+        },
+        {
+          "slug": "sanitary-pads",
+          "name": "Sanitary Pads",
+          "te": "శానిటరీ ప్యాడ్స్",
+          "aliases": [
+            "pads",
+            "sanitary napkins",
+            "women pads",
+            "napkin"
+          ],
+          "desc": "Sanitary pads for women.",
+          "q": "sanitary napkin"
+        }
+      ]
+    },
+    {
+      "section": "kirana",
+      "slug": "daily-essentials",
+      "name": "Daily Essentials",
+      "te": "నిత్యావసరాలు",
+      "blurb": "Noodles, appalalu, vadiyalu, matchboxes and other daily needs.",
+      "products": [
+        {
+          "slug": "papad",
+          "name": "Papad (Appalalu / Appadalu)",
+          "te": "అప్పళాలు / అప్పడాలు",
+          "aliases": [
+            "appalalu",
+            "appadalu",
+            "appalam",
+            "papadam",
+            "papad"
+          ],
+          "desc": "Sun-dried lentil wafers to roast or fry and serve with meals.",
+          "q": "papadum"
+        },
+        {
+          "slug": "vadiyalu",
+          "name": "Vadiyalu",
+          "te": "వడియాలు",
+          "aliases": [
+            "vadiyalu",
+            "vadagalu",
+            "fryums"
+          ],
+          "desc": "Sun-dried fryums to fry and serve with meals.",
+          "q": "sun dried vadam"
+        },
+        {
+          "slug": "instant-noodles",
+          "name": "Instant Noodles",
+          "te": "నూడుల్స్",
+          "aliases": [
+            "noodles",
+            "maggi",
+            "maggie",
+            "yippee",
+            "yipee",
+            "noodles packet"
+          ],
+          "desc": "Quick-cooking noodles, from small single packs to large family packs.",
+          "q": "instant noodles cooked",
+          "brands": [
+            "Maggi",
+            "Yippee"
+          ],
+          "sizes": "Small single packs to large family packs"
+        },
+        {
+          "slug": "baking-soda",
+          "name": "Baking Soda",
+          "te": "వంట సోడా",
+          "aliases": [
+            "tinepu soda",
+            "soda uppu",
+            "cooking soda"
+          ],
+          "desc": "Sodium bicarbonate for batters and baking.",
+          "q": "baking soda sodium bicarbonate"
+        },
+        {
+          "slug": "matchboxes",
+          "name": "Matchboxes",
+          "te": "అగ్గిపెట్టె",
+          "aliases": [
+            "aggipette",
+            "match box",
+            "matches"
+          ],
+          "desc": "Safety matches for the kitchen and puja.",
+          "q": "matchsticks"
+        },
+        {
+          "slug": "candles",
+          "name": "Candles",
+          "te": "కొవ్వొత్తులు",
+          "aliases": [
+            "kovvottulu",
+            "candle",
+            "diwali candles",
+            "deepavali candles"
+          ],
+          "desc": "Candles for Deepavali, power cuts and daily use.",
+          "q": "white candles burning"
+        },
+        {
+          "slug": "batteries",
+          "name": "Batteries",
+          "te": "బ్యాటరీలు",
+          "aliases": [
+            "cells",
+            "AA battery",
+            "battery"
+          ],
+          "desc": "Common household battery sizes.",
+          "q": "AA batteries"
+        }
+      ]
+    },
+    {
+      "section": "kirana",
+      "slug": "paper-plates-cups",
+      "name": "Plates, Cups & Dhonnelu",
+      "te": "ప్లేట్లు, కప్పులు & దొన్నెలు",
+      "blurb": "Buffet plates, paper plates, tea cups, paper glasses and leaf dhonnelu for marriages, functions and prasadam.",
+      "products": [
+        {
+          "slug": "buffet-plates",
+          "name": "Buffet Plates",
+          "te": "బఫే ప్లేట్లు",
+          "aliases": [
+            "buffae plates",
+            "buffet plate",
+            "paper plates",
+            "disposable plates",
+            "marriage plates",
+            "function plates",
+            "leaf plates"
+          ],
+          "desc": "Disposable buffet plates for marriages, functions and parties.",
+          "q": "paper plates",
+          "caution": "Use only for cool or room-temperature food and drinks. These have a very thin polythene layer inside, so regular use with hot items is not recommended.",
+          "cautionTe": "చల్లని లేదా సాధారణ ఉష్ణోగ్రత ఉన్న పదార్థాలకు మాత్రమే వాడండి. లోపల చాలా పలుచని పాలిథీన్ పొర ఉంటుంది, కాబట్టి వేడి పదార్థాలకు తరచుగా వాడటం మంచిది కాదు."
+        },
+        {
+          "slug": "paper-tea-cups",
+          "name": "Paper Tea Cups",
+          "te": "పేపర్ టీ కప్పులు",
+          "aliases": [
+            "tea cups",
+            "paper cups",
+            "paper tea cup",
+            "disposable cups",
+            "chai cups"
+          ],
+          "desc": "Small disposable paper cups for functions and gatherings.",
+          "q": "paper cups",
+          "caution": "Use only for cool or room-temperature food and drinks. These have a very thin polythene layer inside, so regular use with hot items is not recommended.",
+          "cautionTe": "చల్లని లేదా సాధారణ ఉష్ణోగ్రత ఉన్న పదార్థాలకు మాత్రమే వాడండి. లోపల చాలా పలుచని పాలిథీన్ పొర ఉంటుంది, కాబట్టి వేడి పదార్థాలకు తరచుగా వాడటం మంచిది కాదు."
+        },
+        {
+          "slug": "paper-plates",
+          "name": "Paper Plates",
+          "te": "పేపర్ ప్లేట్లు",
+          "aliases": [
+            "paper plate",
+            "disposable plates",
+            "party plates",
+            "plain paper plates"
+          ],
+          "desc": "Plain disposable paper plates for everyday use and small functions.",
+          "q": "paper plates"
+        },
+        {
+          "slug": "paper-glasses",
+          "name": "Paper Glasses",
+          "te": "పేపర్ గ్లాసులు",
+          "aliases": [
+            "paper glass",
+            "paper cups",
+            "disposable glasses",
+            "water glasses"
+          ],
+          "desc": "Disposable paper glasses for water and drinks at functions.",
+          "q": "paper cups"
+        },
+        {
+          "slug": "prasadam-cups",
+          "name": "Prasadam Cups (Dhonnelu)",
+          "te": "ప్రసాదం దొన్నెలు",
+          "aliases": [
+            "dhonnelu",
+            "donnelu",
+            "donne",
+            "dhonne",
+            "prasadam cups",
+            "prasadam cup",
+            "leaf cups",
+            "leaf bowls",
+            "aaku dhonnelu",
+            "vistari"
+          ],
+          "desc": "Small bowls made from dried leaves, used for serving prasadam, at temples and at functions.",
+          "q": "leaf bowls"
+        }
+      ]
+    },
+    {
+      "section": "puja-samagri",
+      "slug": "kumkum-turmeric",
+      "name": "Kumkum & Turmeric",
+      "te": "కుంకుమ & పసుపు",
+      "blurb": "Red and maroon kumkuma, pasupu and sindoor.",
+      "products": [
+        {
+          "slug": "kumkum",
+          "name": "Red Kumkuma",
+          "te": "ఎర్ర కుంకుమ",
+          "aliases": [
+            "kumkum",
+            "kumkuma",
+            "kunkuma",
+            "roli",
+            "red kumkum"
+          ],
+          "desc": "Bright red kumkuma powder for tilak and daily puja.",
+          "q": "kumkum powder"
+        },
+        {
+          "slug": "maroon-kumkum",
+          "name": "Maroon Kumkuma",
+          "te": "ముదురు ఎరుపు కుంకుమ",
+          "aliases": [
+            "kumkum",
+            "kumkuma",
+            "kunkuma",
+            "maroon kumkum",
+            "dark red kumkum"
+          ],
+          "desc": "Deep maroon-red kumkuma powder for tilak and puja.",
+          "q": "kumkum powder"
+        },
+        {
+          "slug": "puja-pasupu",
+          "name": "Pasupu (Turmeric for Puja)",
+          "te": "పసుపు",
+          "aliases": [
+            "pasupu",
+            "haldi",
+            "turmeric"
+          ],
+          "desc": "Turmeric powder for puja, vratams and auspicious occasions.",
+          "q": "turmeric powder heap"
+        },
+        {
+          "slug": "turmeric-sticks",
+          "name": "Turmeric Sticks (Pasupu Kommulu)",
+          "te": "పసుపు కొమ్ములు",
+          "aliases": [
+            "pasupu kommulu",
+            "turmeric root",
+            "haldi gaanth"
+          ],
+          "desc": "Dried turmeric roots used in puja and for grinding.",
+          "q": "dried turmeric fingers"
+        },
+        {
+          "slug": "sindoor",
+          "name": "Sindoor",
+          "te": "సింధూరం",
+          "aliases": [
+            "sinduram",
+            "sindhoor"
+          ],
+          "desc": "Orange-red sindoor powder used in worship.",
+          "q": "sindoor powder"
+        },
+        {
+          "slug": "pasupu-kumkum-set",
+          "name": "Pasupu-Kumkum Set",
+          "te": "పసుపు కుంకుమ సెట్",
+          "aliases": [
+            "vayanam",
+            "haldi kumkum"
+          ],
+          "desc": "Pasupu and kumkum together, often offered to guests and during vratams.",
+          "q": "haldi kumkum"
+        }
+      ]
+    },
+    {
+      "section": "puja-samagri",
+      "slug": "kalasam-sugandhalu",
+      "name": "Kalasam Sugandhalu",
+      "te": "కలశం సుగంధాలు",
+      "blurb": "Kalasam samanlu — pacha karpuram, jajikaya, japathri, lavangalu and yalakulu.",
+      "products": [
+        {
+          "slug": "pacha-karpuram",
+          "name": "Pacha Karpuram",
+          "te": "పచ్చ కర్పూరం",
+          "aliases": [
+            "pacha karpuram",
+            "pachha karpooram",
+            "edible camphor",
+            "bhimseni",
+            "sugandhalu"
+          ],
+          "desc": "Edible camphor — one of the sugandhalu added to the kalasam and used in small amounts in prasadam.",
+          "q": "camphor crystals"
+        },
+        {
+          "slug": "jajikaya",
+          "name": "Jajikaya (Nutmeg)",
+          "te": "జాజికాయ",
+          "aliases": [
+            "jajikaya",
+            "jaji kaya",
+            "nutmeg",
+            "jaiphal",
+            "sugandhalu",
+            "biryani spices"
+          ],
+          "desc": "Whole nutmeg, one of the sugandhalu placed in the kalasam water.",
+          "q": "nutmeg whole"
+        },
+        {
+          "slug": "japathri",
+          "name": "Japathri (Mace)",
+          "te": "జాపత్రి",
+          "aliases": [
+            "japathri",
+            "japatri",
+            "mace",
+            "javitri",
+            "sugandhalu"
+          ],
+          "desc": "Mace — the fragrant covering of nutmeg, used among the kalasam sugandhalu.",
+          "q": "mace spice javitri"
+        },
+        {
+          "slug": "puja-lavangalu",
+          "name": "Lavangalu (Cloves) for Kalasam",
+          "te": "లవంగాలు",
+          "aliases": [
+            "lavangalu",
+            "cloves",
+            "laung",
+            "sugandhalu"
+          ],
+          "desc": "Cloves used among the sugandhalu for the kalasam.",
+          "q": "cloves spice"
+        },
+        {
+          "slug": "puja-yalakulu",
+          "name": "Yalakulu (Cardamom) for Kalasam",
+          "te": "యాలకులు",
+          "aliases": [
+            "yalakulu",
+            "yalakalu",
+            "elaichi",
+            "cardamom",
+            "sugandhalu"
+          ],
+          "desc": "Cardamom pods used among the sugandhalu for the kalasam.",
+          "q": "green cardamom pods"
+        },
+        {
+          "slug": "kalasam-samanlu-set",
+          "name": "Kalasam Samanlu (Sugandhalu Set)",
+          "te": "కలశం సామాన్లు",
+          "aliases": [
+            "kalasam samanlu",
+            "kalisam samanlu",
+            "sugandhalu",
+            "sugandha dravyalu"
+          ],
+          "desc": "Pacha karpuram, jajikaya, japathri, lavangalu and yalakulu together for the kalasam. Ask the shop for the current set.",
+          "q": "whole spices"
+        }
+      ]
+    },
+    {
+      "section": "puja-samagri",
+      "slug": "coconuts",
+      "name": "Coconuts",
+      "te": "కొబ్బరికాయలు",
+      "blurb": "Tenkaya / kobbari kaya for puja and peechu tenkaya for the kalasam.",
+      "products": [
+        {
+          "slug": "pooja-coconut",
+          "name": "Coconut (Tenkaya / Kobbari Kaya)",
+          "te": "కొబ్బరికాయ / టెంకాయ",
+          "aliases": [
+            "tenkaya",
+            "tenkayalu",
+            "kobbarikaya",
+            "kobbari kaya",
+            "nariyal",
+            "coconut"
+          ],
+          "desc": "Husked coconuts for offering and breaking during puja. Priced by size.",
+          "q": "coconut whole husked",
+          "price": "₹30 – ₹45, depending on size",
+          "priceTe": "₹30 – ₹45, సైజును బట్టి"
+        },
+        {
+          "slug": "kalasam-kayalu",
+          "name": "Kalasam Kayalu (Peechu Tenkaya)",
+          "te": "కలశం కాయలు / పీచు టెంకాయ",
+          "aliases": [
+            "kalasam kayalu",
+            "kalisam kayalu",
+            "kalisam kaya",
+            "peechu tenkaya",
+            "peechu kobbarikaya",
+            "kalasa kobbari kaya",
+            "coconut with husk",
+            "juttu kobbarikaya"
+          ],
+          "desc": "Mature coconuts with their fibre (juttu) left on — the kind placed on top of the kalasam. Not tender green coconuts.",
+          "q": "coconut with husk fibre"
+        }
+      ]
+    },
+    {
+      "section": "puja-samagri",
+      "slug": "camphor",
+      "name": "Camphor",
+      "te": "కర్పూరం",
+      "blurb": "Karpuram billalu (camphor tablets) and gadda karpuram for harathi.",
+      "products": [
+        {
+          "slug": "camphor-tablets",
+          "name": "Camphor Tablets (Karpuram Billalu)",
+          "te": "కర్పూరం బిళ్ళలు",
+          "aliases": [
+            "karpuram billalu",
+            "kampooram billalu",
+            "karpuram",
+            "karpooram",
+            "kapur",
+            "camphor",
+            "camphor tablets"
+          ],
+          "desc": "Small camphor tablets for harathi.",
+          "q": "camphor tablets"
+        },
+        {
+          "slug": "camphor-cubes",
+          "name": "Gadda Karpuram",
+          "te": "గడ్డ కర్పూరం",
+          "aliases": [
+            "gadda karpuram",
+            "gadda karpooram",
+            "camphor block",
+            "camphor cubes",
+            "karpuram",
+            "camphor"
+          ],
+          "desc": "Camphor in larger lumps for harathi and homam.",
+          "q": "camphor burning aarti"
+        }
+      ]
+    },
+    {
+      "section": "puja-samagri",
+      "slug": "incense-sticks",
+      "name": "Incense Sticks",
+      "te": "అగరబత్తీలు",
+      "blurb": "Agarbatti in many fragrances, and loose packets from 150 g to 500 g.",
+      "products": [
+        {
+          "slug": "sandal-agarbatti",
+          "name": "Sandalwood Incense Sticks",
+          "te": "గంధం అగరబత్తీలు",
+          "aliases": [
+            "agarbatti",
+            "agarbathi",
+            "agarabatti",
+            "chandan"
+          ],
+          "desc": "Agarbatti with a sandalwood fragrance.",
+          "q": "incense sticks burning"
+        },
+        {
+          "slug": "rose-agarbatti",
+          "name": "Rose Incense Sticks",
+          "te": "గులాబీ అగరబత్తీలు",
+          "aliases": [
+            "agarbatti",
+            "gulabi",
+            "rose"
+          ],
+          "desc": "Agarbatti with a rose fragrance.",
+          "q": "incense sticks smoke"
+        },
+        {
+          "slug": "jasmine-agarbatti",
+          "name": "Jasmine Incense Sticks",
+          "te": "మల్లె అగరబత్తీలు",
+          "aliases": [
+            "agarbatti",
+            "malle",
+            "mogra"
+          ],
+          "desc": "Agarbatti with a jasmine fragrance.",
+          "q": "incense sticks holder"
+        },
+        {
+          "slug": "sambrani-agarbatti",
+          "name": "Sambrani Incense Sticks",
+          "te": "సాంబ్రాణి అగరబత్తీలు",
+          "aliases": [
+            "agarbatti",
+            "sambrani sticks",
+            "sambrani agarbatti"
+          ],
+          "desc": "Agarbatti with a sambrani (benzoin) fragrance.",
+          "q": "incense sticks"
+        },
+        {
+          "slug": "assorted-agarbatti",
+          "name": "Assorted Fragrance Incense",
+          "te": "వివిధ సువాసనల అగరబత్తీలు",
+          "aliases": [
+            "agarbatti",
+            "mixed fragrance",
+            "flavour sticks"
+          ],
+          "desc": "Agarbatti in a mix of fragrances and colours.",
+          "q": "incense sticks bundle"
+        },
+        {
+          "slug": "loose-agarbatti",
+          "name": "Loose Incense Sticks (Packets)",
+          "te": "లూజ్ అగరబత్తీలు",
+          "aliases": [
+            "loose agarbatti",
+            "loose packets",
+            "agarbatti packet",
+            "agarbathi",
+            "normal agarbatti",
+            "incense sticks"
+          ],
+          "desc": "Plain incense sticks sold as loose packets for everyday puja.",
+          "q": "incense sticks bundle",
+          "sizes": "150 g to 500 g packets"
+        }
+      ]
+    },
+    {
+      "section": "puja-samagri",
+      "slug": "dhoop-sambrani",
+      "name": "Dhoop & Sambrani",
+      "te": "ధూపం & సాంబ్రాణి",
+      "blurb": "Dhoop sticks, cones, sambrani and guggilam.",
+      "products": [
+        {
+          "slug": "dhoop-sticks",
+          "name": "Dhoop Sticks",
+          "te": "ధూప్ స్టిక్స్",
+          "aliases": [
+            "dhoop",
+            "dhoopam",
+            "dhup batti"
+          ],
+          "desc": "Thick, bamboo-less incense sticks.",
+          "q": "dhoop sticks"
+        },
+        {
+          "slug": "dhoop-cones",
+          "name": "Dhoop Cones",
+          "te": "ధూప్ కోన్లు",
+          "aliases": [
+            "dhoop cone",
+            "incense cone"
+          ],
+          "desc": "Cone-shaped dhoop for a short, fragrant burn.",
+          "q": "incense cones"
+        },
+        {
+          "slug": "sambrani-cups",
+          "name": "Sambrani Cups",
+          "te": "సాంబ్రాణి కప్పులు",
+          "aliases": [
+            "sambrani",
+            "sambrani cup",
+            "dhoop cup"
+          ],
+          "desc": "Ready-to-light sambrani cups.",
+          "q": "sambrani dhoop"
+        },
+        {
+          "slug": "sambrani",
+          "name": "Sambrani (Loban)",
+          "te": "సాంబ్రాణి",
+          "aliases": [
+            "sambrani",
+            "loban",
+            "benzoin"
+          ],
+          "desc": "Benzoin resin burnt on coal for fragrant smoke.",
+          "q": "benzoin resin"
+        },
+        {
+          "slug": "guggilam",
+          "name": "Guggilam (Resin)",
+          "te": "గుగ్గిలం",
+          "aliases": [
+            "guggilam",
+            "guggul",
+            "dammar"
+          ],
+          "desc": "Aromatic resin used in dhoopam and homam.",
+          "q": "frankincense resin"
+        }
+      ]
+    },
+    {
+      "section": "puja-samagri",
+      "slug": "wicks-deepam-oil",
+      "name": "Wicks & Deepam Oil",
+      "te": "వత్తులు & దీపం నూనె",
+      "blurb": "Cotton wicks and oils for lighting the deepam.",
+      "products": [
+        {
+          "slug": "round-wicks",
+          "name": "Round Cotton Wicks (Poo Vattulu)",
+          "te": "పూ వత్తులు",
+          "aliases": [
+            "poo vattulu",
+            "vattulu",
+            "wicks"
+          ],
+          "desc": "Small round cotton wicks for diyas.",
+          "q": "cotton wicks diya"
+        },
+        {
+          "slug": "long-wicks",
+          "name": "Long Cotton Wicks",
+          "te": "పొడవు వత్తులు",
+          "aliases": [
+            "vattulu",
+            "long wicks",
+            "batti"
+          ],
+          "desc": "Long cotton wicks for deepam.",
+          "q": "cotton wick"
+        },
+        {
+          "slug": "365-vattulu",
+          "name": "365 Vattulu (Karthika Pournami Wicks)",
+          "te": "365 వత్తులు",
+          "aliases": [
+            "365 vattulu",
+            "365 vathulu",
+            "365 vothulu",
+            "365 wicks",
+            "karthika pournami vattulu",
+            "vattulu",
+            "wicks"
+          ],
+          "desc": "A bundle of 365 cotton wicks tied together and lit as one deepam on Karthika Pournami, one wick for every day of the year.",
+          "q": "cotton wick"
+        },
+        {
+          "slug": "ghee-wicks",
+          "name": "Ghee Wicks",
+          "te": "నెయ్యి వత్తులు",
+          "aliases": [
+            "neyyi vattulu",
+            "ghee batti"
+          ],
+          "desc": "Cotton wicks pre-soaked in ghee.",
+          "q": "ghee lamp wick"
+        },
+        {
+          "slug": "lotus-stem-wicks",
+          "name": "Lotus Stem Wicks",
+          "te": "తామర వత్తులు",
+          "aliases": [
+            "tamara vattulu",
+            "lotus wicks"
+          ],
+          "desc": "Traditional wicks made from lotus stem fibre.",
+          "q": "oil lamp wick"
+        },
+        {
+          "slug": "deepam-oil",
+          "name": "Deepam Oil",
+          "te": "దీపం నూనె",
+          "aliases": [
+            "deepam oil",
+            "deepam nune",
+            "deepam noone",
+            "lamp oil",
+            "pooja oil",
+            "puja oil",
+            "diya oil"
+          ],
+          "desc": "Oil for lighting the deepam, sold separately in bottles.",
+          "q": "oil lamp burning"
+        },
+        {
+          "slug": "castor-oil",
+          "name": "Castor Oil (Amudam)",
+          "te": "ఆముదం",
+          "aliases": [
+            "amudam",
+            "castor"
+          ],
+          "desc": "Traditional lamp oil.",
+          "q": "castor oil"
+        }
+      ]
+    },
+    {
+      "section": "puja-samagri",
+      "slug": "clay-diyas",
+      "name": "Clay Diyas & Deepams",
+      "te": "మట్టి ప్రమిదలు & దీపాలు",
+      "blurb": "Plain matti pramidalu, small and large, and ready neyyi deepams.",
+      "products": [
+        {
+          "slug": "clay-diyas",
+          "name": "Small Matti Pramidalu",
+          "te": "చిన్న మట్టి ప్రమిదలు",
+          "aliases": [
+            "matti pramidalu",
+            "matti pramidhalu",
+            "pramidalu",
+            "pramida",
+            "matti deepalu",
+            "mud diya",
+            "clay diya",
+            "diya",
+            "karthika deepam"
+          ],
+          "desc": "Plain small terracotta pramidas for daily deepam, Karthika masam and Deepavali.",
+          "q": "clay diya lamps"
+        },
+        {
+          "slug": "akhanda-deepam",
+          "name": "Large Matti Pramidalu",
+          "te": "పెద్ద మట్టి ప్రమిదలు",
+          "aliases": [
+            "big matti pramidalu",
+            "pedda pramida",
+            "big pramida",
+            "akhanda deepam",
+            "matti pramidalu",
+            "clay diya"
+          ],
+          "desc": "Bigger plain clay pramidas that hold more oil or ghee for a longer-burning deepam.",
+          "q": "clay diya"
+        },
+        {
+          "slug": "neyyi-deepam",
+          "name": "Neyyi Deepam (Ghee Deepam)",
+          "te": "నెయ్యి దీపం",
+          "aliases": [
+            "neyyi deepam",
+            "ghee deepam",
+            "ghee diya",
+            "nei deepam"
+          ],
+          "desc": "A clay pramida that comes filled with ghee and a wick — ready to light.",
+          "q": "ghee lamp"
+        }
+      ]
+    },
+    {
+      "section": "puja-samagri",
+      "slug": "pooja-kits",
+      "name": "Pooja & Homam Kits",
+      "te": "పూజా & హోమం కిట్లు",
+      "blurb": "Grouped samagri for common pujas, vratams and homams.",
+      "products": [
+        {
+          "slug": "daily-pooja-kit",
+          "name": "Daily Pooja Kit",
+          "te": "నిత్య పూజా కిట్",
+          "aliases": [
+            "pooja kit",
+            "puja kit"
+          ],
+          "desc": "Common items for everyday puja. Contents vary — please ask the shop.",
+          "q": "puja items"
+        },
+        {
+          "slug": "satyanarayana-kit",
+          "name": "Satyanarayana Vratham Kit",
+          "te": "సత్యనారాయణ వ్రతం కిట్",
+          "aliases": [
+            "satyanarayana swamy vratham",
+            "vratham kit"
+          ],
+          "desc": "Samagri commonly needed for Satyanarayana Vratham. Contents vary — please ask the shop.",
+          "q": "satyanarayana puja"
+        },
+        {
+          "slug": "varalakshmi-kit",
+          "name": "Varalakshmi Vratham Kit",
+          "te": "వరలక్ష్మీ వ్రతం కిట్",
+          "aliases": [
+            "varalakshmi vratham",
+            "lakshmi puja"
+          ],
+          "desc": "Samagri commonly needed for Varalakshmi Vratham. Contents vary — please ask the shop.",
+          "q": "varalakshmi vratam"
+        },
+        {
+          "slug": "gruhapravesam-kit",
+          "name": "Gruhapravesam Kit",
+          "te": "గృహప్రవేశం కిట్",
+          "aliases": [
+            "gruhapravesam",
+            "house warming",
+            "griha pravesh"
+          ],
+          "desc": "Samagri commonly used for a house-warming puja. Contents vary — please ask the shop.",
+          "q": "griha pravesh puja"
+        },
+        {
+          "slug": "vinayaka-chavithi-kit",
+          "name": "Vinayaka Chavithi Kit",
+          "te": "వినాయక చవితి కిట్",
+          "aliases": [
+            "ganesh chaturthi",
+            "vinayaka chavithi"
+          ],
+          "desc": "Samagri commonly needed for Vinayaka Chavithi. Contents vary — please ask the shop.",
+          "q": "ganesh chaturthi puja items"
+        },
+        {
+          "slug": "homam-kit",
+          "name": "Homam Samagri Kit",
+          "te": "హోమం సామగ్రి కిట్",
+          "aliases": [
+            "homam",
+            "havan samagri",
+            "homa"
+          ],
+          "desc": "Items commonly used for homam. Contents vary — please ask the shop.",
+          "q": "havan samagri"
+        },
+        {
+          "slug": "purnahuthi-set",
+          "name": "Purnahuthi Set",
+          "te": "పూర్ణాహుతి సెట్",
+          "aliases": [
+            "purnahuthi",
+            "poornahuti",
+            "purnahuti set",
+            "homam"
+          ],
+          "desc": "Items offered at the purnahuthi at the end of a homam. Contents vary — please ask the shop.",
+          "q": "havan fire offering"
+        },
+        {
+          "slug": "bhumi-puja-set",
+          "name": "Bhumi Puja Set",
+          "te": "భూమి పూజ సెట్",
+          "aliases": [
+            "bhumi puja",
+            "bhoomi pooja",
+            "navadhanyalu",
+            "navaratnalu",
+            "nava ratnalu",
+            "navaratna",
+            "pancha lohalu",
+            "panchaloha",
+            "shankusthapana",
+            "foundation puja"
+          ],
+          "desc": "A set for bhumi puja (shankusthapana) with navadhanyalu, navaratnalu and pancha lohalu. Ask the shop about the current set.",
+          "q": "navaratna nine gems"
+        },
+        {
+          "slug": "deepavali-kit",
+          "name": "Deepavali Lakshmi Pooja Kit",
+          "te": "దీపావళి లక్ష్మీ పూజా కిట్",
+          "aliases": [
+            "diwali puja",
+            "deepavali",
+            "lakshmi puja"
+          ],
+          "desc": "Samagri commonly needed for Deepavali Lakshmi Puja. Contents vary — please ask the shop.",
+          "q": "diwali puja thali"
+        }
+      ]
+    },
+    {
+      "section": "puja-samagri",
+      "slug": "sandalwood",
+      "name": "Sandalwood Products",
+      "te": "గంధం ఉత్పత్తులు",
+      "blurb": "Gandham powder, sticks and attar.",
+      "products": [
+        {
+          "slug": "sandalwood-powder",
+          "name": "Sandalwood Powder (Gandham)",
+          "te": "గంధం పొడి",
+          "aliases": [
+            "gandham",
+            "chandan",
+            "chandanam"
+          ],
+          "desc": "Sandalwood powder for tilak and puja.",
+          "q": "sandalwood powder"
+        },
+        {
+          "slug": "sandalwood-stick",
+          "name": "Sandalwood Stick",
+          "te": "గంధపు చెక్క",
+          "aliases": [
+            "gandham chekka",
+            "chandan stick"
+          ],
+          "desc": "A piece of sandalwood to rub into paste.",
+          "q": "sandalwood",
+          "brands": [
+            "Natural chandan"
+          ],
+          "sizes": "1 piece",
+          "price": "200 and above"
+        },
+        {
+          "slug": "ashtagandham",
+          "name": "Ashtagandham",
+          "te": "అష్టగంధం",
+          "aliases": [
+            "ashtagandha",
+            "astagandham"
+          ],
+          "desc": "A fragrant powder used for tilak and puja.",
+          "q": "ashtagandha powder"
+        }
+      ]
+    },
+    {
+      "section": "puja-samagri",
+      "slug": "festival-essentials",
+      "name": "Festival Essentials",
+      "te": "పండుగ సామగ్రి",
+      "blurb": "Muggu powder and rangoli colours for festival muggulu.",
+      "products": [
+        {
+          "slug": "muggu-powder",
+          "name": "Muggu Powder",
+          "te": "ముగ్గు పిండి",
+          "aliases": [
+            "muggu",
+            "rangoli powder",
+            "kolam"
+          ],
+          "desc": "White powder for drawing muggulu.",
+          "q": "kolam rangoli white"
+        },
+        {
+          "slug": "rangoli-colours",
+          "name": "Rangoli Colours",
+          "te": "ముగ్గు రంగులు",
+          "aliases": [
+            "muggu rangulu",
+            "rangoli colors"
+          ],
+          "desc": "Coloured powders for festival muggulu.",
+          "q": "rangoli colours powder"
+        }
+      ]
+    },
+    {
+      "section": "puja-samagri",
+      "slug": "other-devotional",
+      "name": "Homam & Other Puja Items",
+      "te": "హోమం & ఇతర పూజా వస్తువులు",
+      "blurb": "Homam pullalu, go muthram, ganga jalam, vakkalu, tamalapaku, prasadam dhonnelu, vibhuti and more.",
+      "products": [
+        {
+          "slug": "samidhalu",
+          "name": "Homam Pullalu (Samidhalu)",
+          "te": "హోమం పుల్లలు",
+          "aliases": [
+            "homam pullalu",
+            "homa pullalu",
+            "samidhalu",
+            "samidha",
+            "havan sticks"
+          ],
+          "desc": "Small sticks offered into the homam fire.",
+          "q": "havan wood sticks"
+        },
+        {
+          "slug": "darbha",
+          "name": "Darbha Grass",
+          "te": "దర్భ",
+          "aliases": [
+            "darbha",
+            "darba",
+            "kusha grass",
+            "dharbai"
+          ],
+          "desc": "Sacred grass used in rituals and homam.",
+          "q": "kusha grass"
+        },
+        {
+          "slug": "go-muthram",
+          "name": "Go Muthram (Cow Urine)",
+          "te": "గోమూత్రం",
+          "aliases": [
+            "go muthram",
+            "gomutram",
+            "gomutra",
+            "cow muthram",
+            "cow urine"
+          ],
+          "desc": "Go muthram in bottles, used for purification in puja and homam.",
+          "q": "bottle"
+        },
+        {
+          "slug": "ganga-jalam",
+          "name": "Ganga Jalam",
+          "te": "గంగా జలం",
+          "aliases": [
+            "ganga jalam",
+            "ganga jal",
+            "gangajal",
+            "holy water",
+            "ganga water"
+          ],
+          "desc": "Bottled Ganga water for puja, kalasam and purification.",
+          "q": "Ganga jal bottle"
+        },
+        {
+          "slug": "navadhanyalu",
+          "name": "Navadhanyalu (Nine Grains)",
+          "te": "నవధాన్యాలు",
+          "aliases": [
+            "navadhanyam",
+            "nine grains",
+            "navagraha"
+          ],
+          "desc": "Nine grains offered in navagraha puja and homam.",
+          "q": "navadhanya nine grains"
+        },
+        {
+          "slug": "vakkalu",
+          "name": "Betel Nuts (Vakkalu)",
+          "te": "వక్కలు",
+          "aliases": [
+            "vakkalu",
+            "supari",
+            "areca nut",
+            "poka chekka"
+          ],
+          "desc": "Areca nuts offered with betel leaves in tambulam.",
+          "q": "areca nut"
+        },
+        {
+          "slug": "tamalapaku",
+          "name": "Tamalapaku (Betel Leaves)",
+          "te": "తమలపాకు",
+          "aliases": [
+            "tamalapaku",
+            "tamala paku",
+            "tamalapakulu",
+            "betel leaves",
+            "paan",
+            "tambulam"
+          ],
+          "desc": "Fresh betel leaves for tambulam and puja.",
+          "q": "betel leaves"
+        },
+        {
+          "slug": "puja-prasadam-cups",
+          "name": "Prasadam Cups (Dhonnelu)",
+          "te": "ప్రసాదం దొన్నెలు",
+          "aliases": [
+            "dhonnelu",
+            "donnelu",
+            "donne",
+            "dhonne",
+            "prasadam cups",
+            "prasadam cup",
+            "leaf cups",
+            "leaf bowls",
+            "aaku dhonnelu",
+            "vistari"
+          ],
+          "desc": "Small bowls made from dried leaves, used for serving prasadam, at temples and at functions.",
+          "q": "leaf bowls",
+          "photo": "prasadam-cups"
+        },
+        {
+          "slug": "vibhuti",
+          "name": "Vibhuti",
+          "te": "విభూతి",
+          "aliases": [
+            "vibhudi",
+            "veebhudhi",
+            "bhasmam",
+            "sacred ash"
+          ],
+          "desc": "Sacred ash applied on the forehead.",
+          "q": "vibhuti sacred ash"
+        },
+        {
+          "slug": "vibhuti-pandu",
+          "name": "Vibhuti Pandu",
+          "te": "విభూతి పండు",
+          "aliases": [
+            "vibhuti pandu",
+            "veebhudi pandu",
+            "vibhudi pandu",
+            "vibhuti balls",
+            "bhasmam balls"
+          ],
+          "desc": "Vibhuti pressed into balls, crushed fresh to apply.",
+          "q": "vibhuti"
+        },
+        {
+          "slug": "panneer",
+          "name": "Rose Water (Panneer)",
+          "te": "పన్నీరు",
+          "aliases": [
+            "panneer",
+            "rose water",
+            "gulab jal"
+          ],
+          "desc": "Rose water for puja and sprinkling.",
+          "q": "rose water"
+        },
+        {
+          "slug": "honey",
+          "name": "Honey",
+          "te": "తేనె",
+          "aliases": [
+            "thene",
+            "shahad"
+          ],
+          "desc": "Honey, used in panchamrutham.",
+          "q": "honey jar"
+        }
+      ]
+    }
+  ]
+}

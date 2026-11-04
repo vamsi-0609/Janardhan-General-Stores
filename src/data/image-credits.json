@@ -22,11 +22,12 @@
     "source": "https://commons.wikimedia.org/wiki/File:Riso_parboiled.jpg"
   },
   "toor-dal": {
-    "file": "File:Tur Dal.JPG",
-    "author": "Miansari66",
-    "license": "Public domain",
+    "own": true,
+    "file": "toor-dal.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
     "licenseUrl": "",
-    "source": "https://commons.wikimedia.org/wiki/File:Tur_Dal.JPG"
+    "source": ""
   },
   "moong-dal": {
     "file": "File:Moong Dal.jpg",
@@ -43,18 +44,20 @@
     "source": "https://commons.wikimedia.org/wiki/File:Mung_beans_(Vigna_radiata).jpg"
   },
   "urad-dal": {
-    "file": "File:Black gram with skin.jpg",
-    "author": "Thamizhpparithi Maari",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Black_gram_with_skin.jpg"
+    "own": true,
+    "file": "urad-dal.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "chana-dal": {
-    "file": "File:Chana Ko Dal.jpg",
-    "author": "Gaurav Dhwaj Khadka",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Chana_Ko_Dal.jpg"
+    "own": true,
+    "file": "chana-dal.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "kabuli-chana": {
     "file": "File:Chickpeas (2) (3150326752).jpg",
@@ -91,13 +94,6 @@
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
     "source": "https://commons.wikimedia.org/wiki/File:Macrotyloma_uniflorum-1-market-yercaud-salem-India.JPG"
   },
-  "rajma": {
-    "file": "File:Red kidney beans 2024-11-27.jpg",
-    "author": "Bean appreciator",
-    "license": "CC0",
-    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "source": "https://commons.wikimedia.org/wiki/File:Red_kidney_beans_2024-11-27.jpg"
-  },
   "groundnuts": {
     "file": "File:Raw peanuts with skin on white plate.jpg",
     "author": "Undeka 11",
@@ -120,11 +116,12 @@
     "source": "https://commons.wikimedia.org/wiki/File:Rice_flour.jpg"
   },
   "besan": {
-    "file": "File:Gram flour AvL.jpg",
-    "author": "AlexanderVanLoon",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Gram_flour_AvL.jpg"
+    "own": true,
+    "file": "besan.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "rice-flour": {
     "file": "File:Rice flour 2.jpg",
@@ -466,11 +463,12 @@
     "source": ""
   },
   "bombay-rava": {
-    "file": "File:Sa semolina far.jpg",
-    "author": "Sanjay ach",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-    "source": "https://commons.wikimedia.org/wiki/File:Sa_semolina_far.jpg"
+    "own": true,
+    "file": "bombay-rava.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "idli-rava": {
     "file": "File:Rava idli (south Indian dishes).jpg",
@@ -571,11 +569,12 @@
     "source": ""
   },
   "broom": {
-    "file": "File:Indian home made brooms for cleaning outdoor, 2011-2.jpg",
-    "author": "Thamizhpparithi Maari",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Indian_home_made_brooms_for_cleaning_outdoor,_2011-2.jpg"
+    "own": true,
+    "file": "broom.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "scrub-pad": {
     "own": true,
@@ -934,25 +933,12 @@
     "source": ""
   },
   "sandalwood-stick": {
-    "file": "File:Sandal and tulsi wood cut pieceU.jpg",
-    "author": "Nistha.aslp",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Sandal_and_tulsi_wood_cut_pieceU.jpg"
-  },
-  "sandal-attar": {
-    "file": "File:Camel skin Perfume Bottles from Kannauj.jpg",
-    "author": "David Prasad",
-    "license": "CC BY-SA 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Camel_skin_Perfume_Bottles_from_Kannauj.jpg"
-  },
-  "gopi-chandan": {
-    "file": "File:Tilak Mati - Nadia 2017-08-15 2116.JPG",
-    "author": "Biswarup Ganguly",
-    "license": "CC BY 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Tilak_Mati_-_Nadia_2017-08-15_2116.JPG"
+    "own": true,
+    "file": "sandalwood-stick.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "muggu-powder": {
     "file": "File:Rangoli before and after colouring.jpg",
@@ -1246,6 +1232,22 @@
   "prasadam-cups": {
     "own": true,
     "file": "prasadam-cups.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
+  },
+  "365-vattulu": {
+    "own": true,
+    "file": "365-vattulu.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
+  },
+  "acid-bottle": {
+    "own": true,
+    "file": "acid-bottle.jpg",
     "author": "Janardhan General Stores and Puja Samagri",
     "license": "Supplied by the shop",
     "licenseUrl": "",

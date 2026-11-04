@@ -4,12 +4,14 @@
  *
  *   SITE_URL=https://shop.myconnect.sbs node scripts/build.mjs
  */
-import { rm, mkdir, cp, readFile, writeFile, access } from 'node:fs/promises'
+import { rm, mkdir, cp, readFile, writeFile, access, readdir } from 'node:fs/promises'
+import { existsSync } from 'node:fs'
 import { createHash } from 'node:crypto'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { shop, telHref, mailHref, whatsappHref } from '../src/data/shop.mjs'
 import { sections, categories, products, categoriesOf, sectionOf, categoryOf } from '../src/data/catalogue.mjs'
+import { festivals } from '../src/data/festivals.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const dist = join(root, 'dist')
@@ -30,9 +32,12 @@ const productUrl = (p) => `/${p.section}/${p.category}/${p.slug}/`
 const img = (slug) => `/img/products/${slug}.webp`
 const thumb = (slug) => `/img/products/thumb/${slug}.webp`
 
+// Products without a photo yet (e.g. just added in the editor) get a placeholder in dist/ — never a broken image.
+const missingPhoto = []
 for (const p of products) {
-  if (!credits[p.photo || p.slug] || !(await exists(join(root, 'public', img(p.photo || p.slug))))) throw new Error(`Missing photo/credit for ${p.slug}`)
+  if (!(await exists(join(root, 'public', img(p.photo || p.slug))))) missingPhoto.push(p.photo || p.slug)
 }
+if (missingPhoto.length) console.warn(`⚠ No photo yet for: ${[...new Set(missingPhoto)].join(', ')} (showing a placeholder).`)
 const slugs = new Set()
 for (const p of products) {
   if (slugs.has(p.slug)) throw new Error(`Duplicate product slug ${p.slug}`)
@@ -62,6 +67,10 @@ const icon = (name, size = '') => name === 'whatsapp'
 await rm(dist, { recursive: true, force: true })
 await mkdir(join(dist, 'assets'), { recursive: true })
 await cp(join(root, 'public'), dist, { recursive: true })
+for (const slug of new Set(missingPhoto)) {
+  await cp(join(root, 'public', 'img', 'placeholder.webp'), join(dist, img(slug)))
+  await cp(join(root, 'public', 'img', 'placeholder.webp'), join(dist, thumb(slug)))
+}
 
 async function asset(src, ext) {
   const body = await readFile(join(root, src), 'utf8')
@@ -78,6 +87,17 @@ const searchIndex = products.map((p) => {
   const c = categoryOf(p.category)
   return { n: p.name, t: p.te, a: [...p.aliases, ...(p.brands || [])], b: p.brands || [], c: c.name, ct: c.te, s: sectionLabelShort(p.section), sec: p.section, u: productUrl(p), i: thumb(p.photo || p.slug) }
 })
+// Categories are searchable ("dal" → Pulses & Dals).
+for (const c of categories) {
+  const cover = c.products[0]
+  searchIndex.push({ k: 'c', n: c.name, t: c.te, a: [], b: [], c: 'Category', ct: '', s: sectionLabelShort(c.section), sec: c.section, u: categoryUrl(c), i: thumb(cover.photo || cover.slug), cnt: c.products.length })
+}
+// Festivals are searchable too ("diwali", "sankranthi", "దసరా" …) and open the festival page.
+for (const f of festivals) {
+  const first = products.find((p) => p.slug === f.items[0])
+  searchIndex.push({ f: 1, n: f.name, t: f.te, a: [...(f.aliases || []), 'festival', 'pandaga', 'పండుగ'], b: [], c: 'Festival', ct: 'పండుగ', s: 'Festivals', sec: 'festivals',
+    u: `/festivals/${f.id}/`, i: first ? thumb(first.photo || first.slug) : '', col: f.colors, cnt: f.items.length })
+}
 const indexJson = JSON.stringify(searchIndex)
 const SEARCH_INDEX = `/assets/search-index.${hash(indexJson)}.json`
 await writeFile(join(dist, SEARCH_INDEX), indexJson)
@@ -122,6 +142,7 @@ const NAV = [
   ['home', '/', 'Home', 'హోమ్'],
   ['kirana', '/kirana/', 'Kirana', 'కిరాణా'],
   ['puja-samagri', '/puja-samagri/', 'Puja Samagri', 'పూజా సామగ్రి'],
+  ['festivals', '/festivals/', 'Festivals', 'పండుగలు'],
   ['visit', '/visit/', 'Visit', 'సందర్శించండి'],
   ['about', '/about/', 'About', 'మా గురించి'],
   ['contact', '/contact/', 'Contact', 'సంప్రదించండి'],
@@ -192,6 +213,7 @@ function footer() {
       <ul>
         <li><a href="/kirana/">Kirana · ${te('కిరాణా')}</a></li>
         <li><a href="/puja-samagri/">Puja Samagri · ${te('పూజా సామగ్రి')}</a></li>
+        <li><a href="/festivals/">Festivals · ${te('పండుగలు')}</a></li>
         <li><a href="/search/">Search the catalogue</a></li>
       </ul>
     </div>
@@ -225,7 +247,7 @@ async function page(path, { title, description, current = '', themeName = 'kiran
   const url = `${SITE}${path}`
   const og = ogImage ? `${SITE}${ogImage}` : `${SITE}/brand/logo.jpg`
   const html = `<!doctype html>
-<html lang="en" data-open="${shop.hours.open}" data-close="${shop.hours.close}">
+<html lang="en" data-open="${shop.hours.open}" data-close="${shop.hours.close}" data-search-index="${SEARCH_INDEX}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -249,7 +271,8 @@ ${noindex ? '<meta name="robots" content="noindex">' : `<link rel="canonical" hr
 <meta name="twitter:card" content="summary_large_image">
 ${jsonld.map(ld).join('\n')}
 <script src="${SITE_JS}" defer></script>
-${scripts.map((s) => `<script src="${s}" defer></script>`).join('\n')}
+<script src="${SEARCH_JS}" defer></script>
+${scripts.filter((s) => s !== SEARCH_JS).map((s) => `<script src="${s}" defer></script>`).join('\n')}
 </head>
 <body data-theme="${themeName}">
 ${header(current)}
@@ -264,6 +287,39 @@ ${footer()}
   await mkdir(dirname(out), { recursive: true })
   await writeFile(out, html)
   if (!noindex) sitemap.push(path)
+}
+
+// ───────────────────────── product photo galleries ─────────────────────────
+// Main photo: img/products/<slug>.webp. Extra photos: <slug>-2.webp, <slug>-3.webp … (from shop-photos/).
+const productFiles = new Set(await readdir(join(root, 'public', 'img', 'products')))
+function photosOf(p) {
+  const base = p.photo || p.slug
+  const extras = [...productFiles]
+    .map((f) => f.match(/^(.+)-(\d{1,2})\.webp$/))
+    .filter((m) => m && m[1] === base)
+    .map((m) => [Number(m[2]), `${base}-${m[2]}`])
+    .sort((a, b) => a[0] - b[0])
+    .map(([, name]) => name)
+  return [base, ...extras]
+}
+
+function gallery(p) {
+  const photos = photosOf(p)
+  if (photos.length === 1) {
+    return `<div class="ph"><img src="${img(photos[0])}" alt="${esc(p.name)}" width="640" height="640" fetchpriority="high" decoding="async"></div>`
+  }
+  const n = photos.length
+  return `<div class="gallery" data-gallery>
+        <div class="g-track ph" tabindex="0" role="region" aria-roledescription="carousel" aria-label="${esc(p.name)} photos (${n}). Swipe or use the arrow keys.">
+          ${photos.map((ph, i) => `<figure class="g-slide" id="g-${i + 1}" aria-label="Photo ${i + 1} of ${n}"><img src="${img(ph)}" alt="${esc(p.name)}${i ? ` – photo ${i + 1}` : ''}" width="640" height="640" ${i ? 'loading="lazy"' : 'fetchpriority="high"'} decoding="async"></figure>`).join('')}
+        </div>
+        <span class="g-count" data-g-count aria-hidden="true">1 / ${n}</span>
+        <button class="g-nav g-prev" type="button" data-g-prev aria-label="Previous photo" hidden>${icon('arrow')}</button>
+        <button class="g-nav g-next" type="button" data-g-next aria-label="Next photo" hidden>${icon('arrow')}</button>
+        <div class="g-thumbs" role="group" aria-label="Choose a photo">
+          ${photos.map((ph, i) => `<a class="g-thumb" href="#g-${i + 1}" data-g-thumb="${i}"${i ? '' : ' aria-current="true"'} aria-label="Show photo ${i + 1} of ${n}"><img src="${thumb(ph)}" alt="" width="80" height="80" loading="lazy" decoding="async"></a>`).join('')}
+        </div>
+      </div>`
 }
 
 // ───────────────────────── components ─────────────────────────
@@ -315,6 +371,92 @@ const askStrip = (msg) => `<section class="container section" aria-labelledby="a
   </div>
 </section>`
 
+// ───────────────────────── festival recommendations ─────────────────────────
+// Home page: every upcoming festival is pre-rendered (hidden) and site.js shows the one that matches today (IST).
+// Festival pages (/festivals/<id>/): the same block, showing the festival's next date.
+const todayIST = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(new Date())
+const addDays = (iso, n) => { const d = new Date(iso + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10) }
+const fmtDay = (iso, year = false) => new Intl.DateTimeFormat('en-IN', { weekday: 'short', day: 'numeric', month: 'short', ...(year ? { year: 'numeric' } : {}), timeZone: 'UTC' }).format(new Date(iso + 'T00:00:00Z'))
+const festivalUrl = (f) => `/festivals/${f.id}/`
+const festItems = (f) => f.items.map((slug) => {
+  const p = products.find((x) => x.slug === slug)
+  if (!p) throw new Error(`Festival ${f.id} uses unknown product ${slug}`)
+  return p
+})
+function festDateLine(f, days, year = false) {
+  const start = days[0][0], end = days[days.length - 1][0]
+  if (f.season || days.length > 3) return `${fmtDay(start, year)} – ${fmtDay(end, year)}`
+  return days.map(([d, en]) => (days.length > 1 ? `${en} ${fmtDay(d, year)}` : fmtDay(d, year))).join(' · ')
+}
+const upcomingOccs = (f) => f.dates.filter((days) => days[days.length - 1][0] >= todayIST)
+for (const f of festivals) for (const days of f.dates) for (const [d] of days) if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) throw new Error(`Festival ${f.id}: bad date ${d}`)
+
+// Banner design chosen in the editor: pattern, decoration symbol, background photo (+ darkness), texts.
+const PATTERNS = new Set(['dots', 'sparkle', 'waves', 'rangoli', 'none'])
+const festImage = (f) => (existsSync(join(root, 'public', 'img', 'festivals', `${f.id}.webp`)) ? `/img/festivals/${f.id}.webp` : '')
+function festStyle(f) {
+  const b = f.banner || {}
+  const image = festImage(f)
+  const dim = Math.min(80, Math.max(0, Number.isFinite(b.dim) ? b.dim : 45)) / 100
+  const style = `--fa:${f.colors[0]};--fb:${f.colors[1]}${image ? `;--fimg:url('${image}');--fdim:${dim}` : ''}`
+  const cls = `pat-${PATTERNS.has(b.pattern) ? b.pattern : 'dots'}${image ? ' has-img' : ''}`
+  return { style, cls }
+}
+const festDecor = (f) => (f.banner?.decor ? `<span class="fest-decor" aria-hidden="true">${esc(f.banner.decor)}</span>` : '')
+
+/** One festival block. `days` = one occurrence (or null for the "dates coming soon" fallback). */
+function festBlock(f, days, { id, hidden = true, onPage = false } = {}) {
+  const items = festItems(f)
+  const b = f.banner || {}
+  const look = festStyle(f)
+  let attrs = ''
+  let dateText = ''
+  if (days) {
+    const start = days[0][0], end = days[days.length - 1][0]
+    const named = f.season ? days.slice(1, -1) : days
+    const daysAttr = JSON.stringify(named.map(([d, en, tel, title]) => ({ d, en, te: tel, ...(title ? { title } : {}) })))
+    attrs = ` data-fest data-from="${addDays(start, -f.lead)}" data-start="${start}" data-end="${end}"${f.season ? ' data-season' : ''} data-days="${esc(daysAttr)}"`
+    dateText = `${esc(f.name)} · ${esc(festDateLine(f, days, onPage))}`
+  } else {
+    attrs = ' data-fest-fallback'
+    dateText = `${esc(f.name)} · dates for the next ${f.season ? 'season' : 'festival'} will be added soon`
+  }
+  return `<section class="fest ${look.cls}${onPage ? ' fest-page' : ''}" id="${id}" aria-label="${esc(f.name)}"${attrs} style="${look.style}"${hidden ? ' hidden' : ''}>
+  ${festDecor(f)}
+  <div class="container fest-inner">
+    <div class="fest-copy">
+      <p class="fest-kicker"><span class="fest-pill" data-fest-when>${days ? 'Coming up' : 'Festival'}</span><span class="fest-date">${dateText}</span></p>
+      <div data-phase="before"><h2>${esc(f.before.title)}</h2>${te(f.before.titleTe, 'p', 'te fest-te')}<p class="fest-text">${esc(f.before.text)}</p></div>
+      <div data-phase="day" hidden><h2 data-fest-title>${esc(f.day.title)}</h2>${te(f.day.titleTe, 'p', 'te fest-te')}<p class="fest-text">${esc(f.day.text)}</p></div>
+      <div class="fest-actions">
+        <a class="btn btn-gold" href="${whatsappHref(`Hello Janardhan General Stores, I need items for ${f.name}: `)}" target="_blank" rel="noopener">${icon('whatsapp')}${esc(b.waText || `Send your ${f.name} list`)}</a>
+        ${b.hideCall ? '' : `<a class="btn btn-on-dark" href="${telHref}">${icon('phone')}Call</a>`}
+      </div>
+    </div>
+    <div class="fest-items">
+      <p class="fest-items-h">${esc(b.itemsTitle || (f.season ? 'For the month' : `Get these for ${f.name}`))} <span>· ${items.length} items</span>${onPage ? '' : ` <a class="fest-all" href="${festivalUrl(f)}">See all ${icon('arrow')}</a>`}</p>
+      <ul class="product-grid fest-rail">${items.map((p) => productCard(p)).join('')}</ul>
+    </div>
+  </div>
+</section>`
+}
+
+function festivalSections() {
+  let lastEnd = ''
+  const out = []
+  for (const f of festivals) {
+    f.dates.forEach((days, i) => {
+      const end = days[days.length - 1][0]
+      if (end > lastEnd) lastEnd = end
+      if (end < todayIST) return // already over
+      out.push(festBlock(f, days, { id: `fest-${f.id}-${i}` }))
+    })
+  }
+  const daysLeft = (Date.parse(lastEnd) - Date.parse(todayIST)) / 864e5
+  if (daysLeft < 120) console.warn(`⚠ Festival dates run out on ${lastEnd} (${Math.round(daysLeft)} days). Add next year's dates in the editor (Festivals tab).`)
+  return out.join('\n')
+}
+
 // ───────────────────────── pages ─────────────────────────
 // Home
 {
@@ -337,7 +479,8 @@ const askStrip = (msg) => `<section class="container section" aria-labelledby="a
     description: 'Browse everyday Kirana groceries and Puja Samagri at Janardhan General Stores, Main Road, Rajampet. Open every day 6 AM – 10 PM. Call or WhatsApp 97050 06062.',
     current: 'home',
     jsonld: [storeLd],
-    body: `<section class="hero on-dark" aria-labelledby="hero-h">
+    body: `${festivalSections()}
+<section class="hero on-dark" aria-labelledby="hero-h">
   <div class="container hero-inner">
     <div>
       <p class="eyebrow"><span>${esc(shop.fullName)}</span><span class="sep"></span><span>${icon('pin')} Main Road, Rajampet</span><span class="sep"></span><span class="hide-sm">Open every day · 6 AM – 10 PM</span><span class="open-badge" data-open-badge hidden></span></p>
@@ -454,7 +597,7 @@ for (const p of products) {
   <div style="padding-top:14px">${crumbs([['Home', '/'], [s.name, sectionUrl(s.slug)], [c.name, categoryUrl(c)], [p.name, productUrl(p)]], true)}</div>
   <article class="pdp">
     <div class="pdp-media">
-      <div class="ph"><img src="${img(p.photo || p.slug)}" alt="${esc(p.name)}" width="640" height="640" fetchpriority="high" decoding="async"></div>
+      ${gallery(p)}
     </div>
     <div class="pdp-info">
       <a class="chip" href="${categoryUrl(c)}">${esc(c.name)} · ${te(c.te)}</a>
@@ -464,6 +607,10 @@ for (const p of products) {
       ${p.price ? `<p class="price-tag"><span class="lbl">Price at the shop</span><strong>${esc(p.price)}</strong>${te(p.priceTe, 'span', 'te')}</p>` : ''}
       ${p.brands || p.sizes ? `<div class="stock-info">${p.brands ? `<div class="aka"><h2>Brands at the shop</h2><ul class="brand-list">${p.brands.map((b) => `<li><a href="/search/?q=${encodeURIComponent(b)}">${esc(b)}</a></li>`).join('')}</ul></div>` : ''}${p.sizes ? `<p class="sizes"><span>Pack sizes</span> ${esc(p.sizes)}</p>` : ''}</div>` : ''}
       ${p.aliases.length ? `<div class="aka"><h2>Also known as</h2><ul>${p.aliases.map((a) => `<li>${esc(a)}</li>`).join('')}</ul></div>` : ''}
+      ${(() => {
+        const fs = festivals.filter((f) => f.items.includes(p.slug) || (p.photo && f.items.includes(p.photo)))
+        return fs.length ? `<div class="aka fest-for"><h2>Suggested for</h2><ul>${fs.map((f) => `<li><a href="${festivalUrl(f)}" style="--fa:${f.colors[0]}">${esc(f.name)} ${icon('arrow')}</a></li>`).join('')}</ul></div>` : ''
+      })()}
       <div class="ask">
         <h2>Want this item?</h2>
         <p>Ask the shop about availability, brands and pack sizes, then pick it up in person.</p>
@@ -484,6 +631,67 @@ ${related.length ? `<section class="container section" aria-labelledby="rel-h">
   <ul class="product-grid related">${related.map((x) => productCard(x)).join('')}</ul>
 </section>` : ''}`,
   })
+}
+
+// Festivals: list + one page per festival (same horizontal item strip as the home page).
+{
+  const nextOcc = (f) => upcomingOccs(f)[0]
+  const sorted = [...festivals].sort((a, b) => (nextOcc(a)?.[0][0] || '9999').localeCompare(nextOcc(b)?.[0][0] || '9999'))
+  await page('/festivals/', {
+    title: 'Festivals – what to buy for every Telugu festival | Janardhan General Stores',
+    description: 'Sankranti, Ugadi, Sri Rama Navami, Varalakshmi Vratham, Vinayaka Chavithi, Dasara, Deepavali and Karthika Masam: the puja samagri and kirana items you need, at Janardhan General Stores, Rajampet.',
+    current: 'festivals',
+    jsonld: [crumbLd([['Home', '/'], ['Festivals', '/festivals/']])],
+    body: `<section class="page-hero" data-theme="puja"><div class="container">
+  ${crumbs([['Home', '/'], ['Festivals', '/festivals/']])}
+  <h1>Festivals</h1>${te('పండుగలు', 'p', 'te')}
+  <p class="sub">Everything you need for each festival, from puja samagri to kirana for the sweets, in one place.</p>
+</div></section>
+<section class="container section" aria-label="Festivals">
+  <ul class="fest-list">${sorted.map((f) => {
+    const occ = nextOcc(f)
+    const items = festItems(f)
+    const look = festStyle(f)
+    return `<li><a class="fest-tile ${look.cls}" href="${festivalUrl(f)}" style="${look.style}">${festDecor(f)}
+      <span class="ft-copy"><span class="ft-name">${esc(f.name)}</span>${te(f.te, 'span', 'ft-te')}
+        <span class="ft-date">${occ ? esc(festDateLine(f, occ, true)) : 'Dates coming soon'}</span>
+        <span class="ft-count">${items.length} items ${icon('arrow')}</span></span>
+      <span class="ft-thumbs" aria-hidden="true">${items.slice(0, 3).map((p) => `<img src="${thumb(p.photo || p.slug)}" alt="" width="80" height="80" loading="lazy" decoding="async">`).join('')}</span>
+    </a></li>`
+  }).join('')}</ul>
+</section>
+${askStrip('Hello Janardhan General Stores, I need items for a festival: ')}`,
+  })
+
+  for (const f of festivals) {
+    const occs = upcomingOccs(f)
+    const items = festItems(f)
+    await page(festivalUrl(f), {
+      title: `${f.name} (${f.te}) – puja samagri & items to buy | Janardhan General Stores Rajampet`,
+      description: `${f.before.text} ${items.length} items for ${f.name} at Janardhan General Stores, Rajampet.`.slice(0, 300),
+      current: 'festivals',
+      ogImage: items[0] ? img(items[0].photo || items[0].slug) : undefined,
+      jsonld: [crumbLd([['Home', '/'], ['Festivals', '/festivals/'], [f.name, festivalUrl(f)]])],
+      body: `<div class="container fest-page-head">
+  ${crumbs([['Home', '/'], ['Festivals', '/festivals/'], [f.name, festivalUrl(f)]], true)}
+  <h1>${esc(f.name)} ${te(f.te, 'span', 'te')}</h1>
+</div>
+<div data-fest-page>
+${occs.map((days, i) => festBlock(f, days, { id: `fest-${f.id}-${i}`, onPage: true })).join('\n')}
+${festBlock(f, null, { id: `fest-${f.id}-soon`, hidden: false, onPage: true })}
+</div>
+${occs.length ? `<section class="container section" aria-labelledby="dates-h">
+  <h2 id="dates-h" class="fest-dates-h">Dates</h2>
+  <ul class="fest-dates">${occs.map((days) => `<li>${esc(festDateLine(f, days, true))}</li>`).join('')}</ul>
+  <p class="hint">Dates follow the Telugu panchangam and may differ by a day in some calendars.</p>
+</section>` : ''}
+<section class="container section" aria-labelledby="all-h" style="padding-top:0">
+  <div class="section-head"><div><h2 id="all-h">All ${items.length} items for ${esc(f.name)}</h2></div></div>
+  <ul class="product-grid">${items.map((p) => productCard(p, { showCat: true })).join('')}</ul>
+</section>
+${askStrip(`Hello Janardhan General Stores, I need items for ${f.name}: `)}`,
+    })
+  }
 }
 
 // About
@@ -642,7 +850,7 @@ await page('/search/', {
 
 // Image credits (one overall page; licences for Commons photos require author + licence + source)
 {
-  const commons = products.filter((p) => !p.photo && !credits[p.slug].own)
+  const commons = products.filter((p) => !p.photo && credits[p.slug] && !credits[p.slug].own && !missingPhoto.includes(p.slug))
   await page('/credits/', {
     title: 'Image credits | Janardhan General Stores',
     description: 'Credits for the photos and fonts used on the Janardhan General Stores catalogue website.',

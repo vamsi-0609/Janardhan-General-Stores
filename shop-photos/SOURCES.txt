@@ -69,3 +69,12 @@ paper-tea-cups.jpg	<- tea cups.jpg
 soft-drinks.jpg	<- soft drinks.jpg
 packaged-water.jpg	<- packaged water bottles.jpg
 prasadam-cups.jpg	<- dhonnelu.jpg
+365-vattulu.jpg	<- 365 vathulu.jpg
+bath-soap-2.jpg	<- cinthol lime soap.jpg
+besan.png	<- Besan or senaga pindi.png (added in editor)
+bombay-rava.png	<- bombay ravva.png (added in editor)
+sandalwood-stick.jpg	<- gandham chekka.jpg (added in editor)
+chana-dal.jpg	<- senaga bedalu.jpg (added in editor)
+toor-dal.jpg	<- toor dal.jpg (added in editor)
+urad-dal.jpg	<- urad dal.jpg (added in editor)
+broom.jpg	<- cheepuri.jpg

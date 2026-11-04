@@ -28,9 +28,19 @@ The build uses only Node's standard library. It needs no network access and no e
 | `public/` | Copied as-is: product photos, logo, fonts, `_headers`, `_redirects` |
 | `scripts/fetch-images.mjs`, `image-candidates.mjs`, `image-overrides.mjs`, `make-thumbs.mjs` | Photo sourcing pipeline (maintenance only) |
 
+### Catalogue editor (local only)
+
+Double-click **`Open Editor.cmd`** (or run `npm run editor`). It opens http://localhost:4300, where you can add and edit products (names, Telugu names, also-known-as names, brands, sizes, price, notes, multiple photos), categories and festivals (items, messages, dates). Every save rebuilds the site, and **View in browser** opens the preview at http://localhost:4173. The editor only runs on this computer and is never deployed. Data is stored in `src/data/catalogue.json` and `src/data/festivals.json`. Nothing goes live until the changes are committed and pushed.
+
+### Festival recommendations (home page)
+
+The top of the home page shows the next festival automatically, using today's date in India: items to buy for a few days before it, then a greeting on the festival day. Festivals, dates, greetings and items are in `src/data/festivals.mjs`. **Add next year's dates there once a year** (the build warns when fewer than 120 days of dates are left). Preview any day with `/?fest-date=YYYY-MM-DD`.
+
 ### Using your own shop photos (recommended)
 
-Save a photo as `shop-photos/<product-slug>.jpg` (the slug is the last part of the product URL, e.g. `/kirana/personal-care/bath-soap/` → `bath-soap.jpg`), then run `npm run shop-photos && npm run build`. Photos are trimmed, fitted to a square without cutting labels, optimised to WebP and never overwritten by the stock-photo scripts. `shop-photos/` is not deployed. Only the processed images in `public/img/products/` are. `shop-photos/SOURCES.txt` lists the original file names.
+Save a photo as `shop-photos/<product-slug>.jpg` (the slug is the last part of the product URL, e.g. `/kirana/personal-care/bath-soap/` → `bath-soap.jpg`), then run `npm run shop-photos && npm run build`. **More than one photo for a product:** name the extra photos `<slug>-2.jpg`, `<slug>-3.jpg` and so on (e.g. `bath-soap-2.jpg`). The product page then shows a swipeable gallery with arrows and thumbnails. Cards and lists keep using the main photo. Deleting an extra photo from `shop-photos/` removes it from the site at the next `npm run shop-photos`.
+
+Photos are trimmed, fitted to a square without cutting labels, optimised to WebP and never overwritten by the stock-photo scripts. `shop-photos/` is not deployed. Only the processed images in `public/img/products/` are. `shop-photos/SOURCES.txt` lists the original file names.
 
 ### Adding or changing a product
 

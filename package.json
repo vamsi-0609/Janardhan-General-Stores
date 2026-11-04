@@ -4,14 +4,18 @@
   "private": true,
   "description": "Janardhan General Stores and Puja Samagri public catalogue — fully static site for Cloudflare Pages. Independent of the main app.",
   "type": "module",
-  "engines": { "node": ">=18" },
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "build": "node scripts/build.mjs",
     "preview": "node scripts/serve.mjs",
     "images": "node scripts/fetch-images.mjs && node scripts/make-thumbs.mjs",
     "verify": "node scripts/verify.mjs",
     "verify:quick": "node scripts/verify.mjs --quick",
-    "shop-photos": "node scripts/import-shop-photos.mjs"
+    "shop-photos": "node scripts/import-shop-photos.mjs",
+    "editor": "node editor/server.mjs",
+    "local": "node scripts/open-local.mjs"
   },
   "devDependencies": {
     "playwright-core": "^1.48.0",

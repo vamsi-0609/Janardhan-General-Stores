@@ -7,6 +7,7 @@
 import { spawn } from 'node:child_process'
 import { readFile, readdir, mkdir, access } from 'node:fs/promises'
 import { join, dirname } from 'node:path'
+import { readFileSync, existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { chromium } from 'playwright-core'
 
@@ -70,6 +71,17 @@ for (const f of htmlFiles) {
 }
 console.log(`Static: ${htmlFiles.length} HTML files, ${linkCount} internal links/assets checked, ${checked.size} unique.`)
 
+// --static: links, wording and forms only (a few seconds). Used by the editor's "Publish" button.
+if (process.argv.includes('--static')) {
+  server.kill()
+  if (failures.length) {
+    console.log(`\n✗ ${failures.length} problem(s):\n` + failures.slice(0, 40).map((f) => `  - ${f}`).join('\n'))
+    process.exit(1)
+  }
+  console.log('✓ Static checks passed.')
+  process.exit(0)
+}
+
 // 2. Browser checks.
 const browser = await chromium.launch({ executablePath })
 const keyRoutes = ['/', '/kirana/', '/puja-samagri/', '/kirana/spices-masalas/', '/puja-samagri/pooja-kits/', '/kirana/pulses-dals/toor-dal/', '/puja-samagri/kumkum-turmeric/kumkum/', '/about/', '/visit/', '/contact/', '/search/?q=agarbatti', '/credits/', '/this-page-does-not-exist']
@@ -131,7 +143,7 @@ for (const w of WIDTHS) {
         if (!el.offsetParent) return false
         const b = el.getBoundingClientRect()
         return b.width > 0 && (b.right > window.innerWidth + 1 || b.left < -1)
-      }).filter((el) => !el.closest('.hero-collage, .page-hero::after, .map-card')).map((el) => el.className || el.tagName).slice(0, 5)
+      }).filter((el) => !el.closest('.hero-collage, .page-hero::after, .map-card, .fest-rail, .g-track, .g-thumbs')).map((el) => el.className || el.tagName).slice(0, 5)
       const small = [...document.querySelectorAll('header a, header button, header summary, .btn, .chip, .cat-tile, .card, .seg button, .menu-panel a, footer li a')]
         .filter((el) => el.offsetParent)
         .filter((el) => { const b = el.getBoundingClientRect(); return b.height < 40 || b.width < 40 })
@@ -182,6 +194,14 @@ await page.press('#q-mobile', 'Enter')
 await page.waitForURL(/\/search\/\?q=ghee/)
 await page.waitForFunction(() => document.querySelectorAll('[data-results] li').length > 0)
 console.log('  header search → /search/?q=ghee OK')
+// Live suggestions while typing (header, any page)
+await page.goto(`${BASE}/kirana/`)
+await page.click('#q-mobile')
+await page.keyboard.type('kand', { delay: 30 })
+await page.waitForFunction(() => { const b = document.querySelector('#q-mobile').closest('form').querySelector('.suggest-box'); return b && !b.hidden && b.querySelector('.sg-n') }, null, { timeout: 4000 }).catch(() => fail('live search', 'no suggestions while typing "kand"'))
+const firstSugg = await page.$eval('#q-mobile', (i) => i.closest('form').querySelector('.sg-n')?.textContent || '')
+if (!/kandi pappu/i.test(firstSugg)) fail('live search', `"kand" first suggestion is "${firstSugg}"`)
+else console.log(`  live suggestions: "kand" → ${firstSugg}`)
 // Category filter
 await page.goto(`${BASE}/kirana/spices-masalas/`)
 await page.fill('[data-filter]', 'jeera')
@@ -208,6 +228,37 @@ for (const [from, to] of [['/pooja', '/puja-samagri/'], ['/directions', '/visit/
   if (new URL(r.url()).pathname !== to) fail('redirect', `${from} → ${r.url()}`)
 }
 console.log('  redirects OK')
+// Festival recommendations: for every pre-rendered festival, check the lead-in, the festival day and the day before the lead-in.
+await page.goto(`${BASE}/`)
+const fests = await page.$$eval('[data-fest]', (els) => els.map((e) => ({ id: e.id, from: e.dataset.from, start: e.dataset.start, end: e.dataset.end })))
+if (!fests.length) fail('festival', 'no festival sections rendered on the home page')
+const shift = (iso, n) => { const d = new Date(iso + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10) }
+const festAt = (d) => page.goto(`${BASE}/?fest-date=${d}`).then(() => page.evaluate(() => {
+  const s = [...document.querySelectorAll('[data-fest]')].find((x) => !x.hidden)
+  return s ? { id: s.id, today: s.classList.contains('is-today'), when: s.querySelector('[data-fest-when]').textContent } : null
+}))
+for (const f of fests) {
+  const lead = await festAt(f.from)
+  const day = await festAt(f.start)
+  const last = await festAt(f.end)
+  if (f.from < f.start && (!lead || lead.id !== f.id || lead.today)) fail('festival', `${f.id}: lead-in on ${f.from} shows ${JSON.stringify(lead)}`)
+  if (!day || day.id !== f.id || !day.today) fail('festival', `${f.id}: festival day ${f.start} shows ${JSON.stringify(day)}`)
+  if (!last || last.id !== f.id) fail('festival', `${f.id}: last day ${f.end} shows ${JSON.stringify(last)}`)
+}
+const gapDay = shift(fests.reduce((a, f) => (f.from < a ? f.from : a), '9999-12-31'), -1)
+if (await festAt(gapDay) && !fests.some((f) => f.from <= gapDay && gapDay <= f.end)) fail('festival', `something shown on ${gapDay} (no festival)`)
+console.log(`  festival recommendations OK for ${fests.length} upcoming festival dates`)
+// Product photo galleries (only products that have extra photos).
+const galleryRoutes = routes.filter((r) => existsSync(join(dist, r, 'index.html')) && /data-gallery/.test(readFileSync(join(dist, r, 'index.html'), 'utf8')))
+for (const r of galleryRoutes.slice(0, 3)) {
+  await page.goto(BASE + r)
+  const n = await page.$$eval('.g-slide', (s) => s.length)
+  await page.click('[data-g-next]')
+  await page.waitForFunction(() => document.querySelector('[data-g-count]').textContent.startsWith('2 /'), null, { timeout: 3000 }).catch(() => fail('gallery', `${r}: next arrow did not move to photo 2`))
+  await page.click(`[data-g-thumb="${n - 1}"]`)
+  await page.waitForFunction((k) => document.querySelector('[data-g-count]').textContent.startsWith(`${k} /`), n, { timeout: 3000 }).catch(() => fail('gallery', `${r}: thumbnail did not jump to the last photo`))
+}
+console.log(`  photo galleries: ${galleryRoutes.length} product(s) with several photos${galleryRoutes.length ? ', swipe/arrows/thumbnails OK' : ''}`)
 
 await browser.close()
 server.kill()

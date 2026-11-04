@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Catalogue editor · Janardhan General Stores</title>
+  <link rel="icon" href="/logo.webp">
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand"><img src="/logo.webp" alt="" width="40" height="40"><div><strong>Catalogue editor</strong><span>Janardhan General Stores · only on this computer</span></div></div>
+    <nav class="tabs" aria-label="Sections">
+      <button type="button" data-tab="products" aria-current="page">Products</button>
+      <button type="button" data-tab="categories">Categories</button>
+      <button type="button" data-tab="festivals">Festivals</button>
+      <button type="button" data-tab="help">Help</button>
+    </nav>
+    <div class="top-actions">
+      <button type="button" class="status" id="status" title="Website preview status">…</button>
+      <a class="btn primary" id="view-site" href="http://localhost:4173/" target="_blank" rel="noopener">View in browser ↗</a>
+      <button type="button" class="btn gold" id="publish">🚀 Publish to website</button>
+    </div>
+  </header>
+  <main id="main" tabindex="-1"></main>
+  <div class="drawer-backdrop" id="backdrop" hidden></div>
+  <aside class="drawer" id="drawer" aria-modal="true" role="dialog" aria-labelledby="drawer-title" hidden></aside>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <script src="/app.js" defer></script>
+</body>
+</html>
