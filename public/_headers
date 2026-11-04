@@ -20,6 +20,14 @@
   Cache-Control: public, max-age=31536000, immutable
 /brand/*
   Cache-Control: public, max-age=604800
+/icons/*
+  Cache-Control: public, max-age=604800
+
+# App (PWA): the service worker and manifest must always be re-checked so updates reach phones quickly.
+/sw.js
+  Cache-Control: no-cache
+/site.webmanifest
+  Cache-Control: no-cache
 
 # Keep *.pages.dev preview/production aliases out of search results (only the custom domain is indexed).
 https://:project.pages.dev/*

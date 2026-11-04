@@ -190,9 +190,9 @@ else console.log(`  search "oil" all=${all} kirana=${kir} puja=${puj}`)
 // Brand searches show that brand's own photo (or a brand tile), never another brand's photo
 // (photo N of a product is <slug>.webp for the main photo, <slug>-N.webp for the others)
 const soap = JSON.parse(readFileSync(join(root, 'src', 'data', 'catalogue.json'), 'utf8')).categories.flatMap((c) => c.products).find((p) => p.slug === 'bath-soap')
-const ci = (soap?.photoBrands || []).indexOf('Cinthol')
-const cintholPhoto = ci < 0 ? 'TILE' : ci === 0 ? 'bath-soap.webp' : `bath-soap-${ci + 1}.webp`
-for (const [q, want] of [['cinthol', cintholPhoto], ['సింథాల్ సబ్బు', cintholPhoto], ['santoor', 'TILE'], ['candy pappu', 'toor-dal.webp']]) {
+const brandPhoto = (b) => { const i = (soap?.photoBrands || []).indexOf(b); return i < 0 ? 'TILE' : i === 0 ? 'bath-soap.webp' : `bath-soap-${i + 1}.webp` }
+const cintholPhoto = brandPhoto('Cinthol')
+for (const [q, want] of [['cinthol', cintholPhoto], ['సింథాల్ సబ్బు', cintholPhoto], ['santoor', brandPhoto('Santoor')], ['candy pappu', 'toor-dal.webp']]) {
   await page.goto(`${BASE}/search/?q=${encodeURIComponent(q)}`)
   await page.waitForFunction(() => document.querySelector('[data-results] li'), null, { timeout: 4000 }).catch(() => {})
   const got = await page.$eval('[data-results] li', (l) => (l.querySelector('.brand-tile') ? 'TILE' : (l.querySelector('.ph img')?.getAttribute('src') || '').split('/').pop().split('?')[0].replace(/\.[0-9a-f]{8}\.webp$/, '.webp'))).catch(() => 'none')

@@ -15,10 +15,12 @@
     "verify:quick": "node scripts/verify.mjs --quick",
     "shop-photos": "node scripts/import-shop-photos.mjs",
     "editor": "node editor/server.mjs",
-    "local": "node scripts/open-local.mjs"
+    "local": "node scripts/open-local.mjs",
+    "brand-assets": "node scripts/make-brand-assets.mjs"
   },
   "devDependencies": {
     "playwright-core": "^1.48.0",
+    "qrcode": "^1.5.4",
     "sharp": "^0.33.5"
   }
 }

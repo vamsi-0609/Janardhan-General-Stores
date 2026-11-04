@@ -79,6 +79,7 @@ const ICONS = {
   chat: '<path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.5A8.4 8.4 0 1 1 21 11.5Z"/>',
   list: '<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
   store: '<path d="M3 9h18l-1.5-5h-15L3 9Zm0 0v11h18V9M9 20v-6h6v6"/>',
+  print: '<path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="7" rx="1"/>',
   mic: '<rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3.5M8.5 21.5h7"/>',
 }
 const WA_PATH = '<path class="icon-fill" d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3ZM12 2a10 10 0 0 0-8.6 15l-1.4 5 5.1-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/>'
@@ -277,6 +278,8 @@ function footer() {
         <li><a href="/visit/">Visit &amp; directions</a></li>
         <li><a href="/about/">About Janardhan General Stores</a></li>
         <li><a href="/contact/">Contact</a></li>
+        <li><a href="/about/#qr-poster">Shop QR code</a></li>
+        <li><a href="/about/#app" data-app-link>Get the app</a></li>
       </ul>
     </div>
     <div>
@@ -312,6 +315,9 @@ ${noindex ? '<meta name="robots" content="noindex">' : `<link rel="canonical" hr
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Janardhan">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <link rel="preload" href="/fonts/fraunces-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="${CSS}">
 <meta property="og:type" content="website">
@@ -770,6 +776,73 @@ await page('/about/', {
       </div>
     </div>
   </div>
+</section>
+<section class="container section" id="qr-poster">
+  <div class="section-head"><div>
+    <h2>Shop QR code ${te('షాప్ QR కోడ్')}</h2>
+    <p>Scan it with any phone camera to open this catalogue. Print the poster for the counter or the shop front, or share the QR image on WhatsApp.</p>
+  </div></div>
+  <div class="poster-wrap">
+    <article class="poster" aria-label="Printable shop poster with QR code">
+      <header class="poster-top">
+        <img src="/brand/logo.jpg" alt="" width="96" height="96" loading="lazy">
+        <p class="poster-name">Janardhan</p>
+        <p class="poster-sub">General Stores &amp; Puja Samagri</p>
+        ${te(shop.fullNameTe, 'p', 'poster-te')}
+      </header>
+      <div class="poster-body">
+        <p class="poster-cta">Scan to see all our items</p>
+        ${te('మా అన్ని వస్తువులు చూడటానికి స్కాన్ చేయండి', 'p', 'poster-cta-te')}
+        <div class="poster-qr"><img src="/brand/qr-site.svg" alt="QR code that opens shop.myconnect.sbs" width="320" height="320"></div>
+        <p class="poster-url">shop.myconnect.sbs</p>
+        <ul class="poster-facts">
+          <li>${icon('phone')}<span>Call / WhatsApp <strong>${esc(shop.phoneDisplay)}</strong></span></li>
+          <li>${icon('clock')}<span>${esc(shop.hours.label)}</span></li>
+          <li>${icon('pin')}<span>${esc(shop.address.lines.join(', '))}</span></li>
+        </ul>
+      </div>
+      <footer class="poster-foot">Kirana &amp; Puja Samagri — all at one place · ${te('అన్నీ ఒకే చోట')}</footer>
+    </article>
+    <div class="poster-actions">
+      <button class="btn btn-primary" type="button" data-print-poster hidden>${icon('print')}Print poster (A4)</button>
+      <a class="btn btn-light" href="/brand/qr-site.png" download="janardhan-general-stores-qr.png">Download QR image</a>
+      <p>The poster prints on one A4 page. Keep the QR at least 3 cm wide so phones read it at a glance.</p>
+    </div>
+  </div>
+</section>
+<section class="container section" id="app">
+  <div class="install-card">
+    <img src="/icons/icon-192.png" alt="" width="72" height="72" loading="lazy">
+    <div>
+      <h2>Janardhan Stores app ${te('యాప్')}</h2>
+      <p>Add this catalogue to your phone or computer like an app. It opens in one tap from your home screen, opens instantly and works even with weak or no internet for pages you have opened before. There’s nothing to download from a store.</p>
+      <p class="install-done" data-installed hidden>✓ You are using the app.</p>
+      <div class="actions">
+        <button class="btn btn-primary" type="button" data-install hidden>Install the app</button>
+      </div>
+      <div class="install-help" data-install-help hidden>
+        <p data-help="ios" hidden><strong>iPhone / iPad (Safari):</strong> tap the Share button <span aria-hidden="true">⎋</span> → <strong>Add to Home Screen</strong> → Add.</p>
+        <p data-help="other" hidden><strong>Android (Chrome):</strong> menu ⋮ → <strong>Add to Home screen</strong> / <strong>Install app</strong>. <strong>Computer (Chrome / Edge):</strong> click the install icon at the right end of the address bar, or menu → <strong>Install Janardhan Stores</strong>.</p>
+      </div>
+    </div>
+  </div>
+</section>`,
+})
+
+// Offline fallback (shown by the app/service worker when a page that was never opened is requested without internet)
+await page('/offline/', {
+  title: 'You are offline | Janardhan General Stores',
+  description: 'No internet connection.',
+  noindex: true,
+  body: `<section class="container nf">
+  <p class="code" aria-hidden="true">⚡</p>
+  <h1>You’re offline</h1>
+  ${te('ఇంటర్నెట్ కనెక్షన్ లేదు.', 'p')}
+  <p style="color:var(--muted)">This page hasn’t been saved on your device yet. Pages you opened before still work. You can still call the shop.</p>
+  <div class="actions">
+    <a class="btn btn-primary" href="/">Home</a>
+    <a class="btn btn-light" href="${telHref}">${icon('phone')}Call ${esc(shop.phoneDisplay)}</a>
+  </div>
 </section>`,
 })
 
@@ -992,9 +1065,119 @@ ${sitemap.map((p) => `  <url><loc>${SITE}${p}</loc></url>`).join('\n')}
 </urlset>
 `)
 await writeFile(join(dist, 'robots.txt'), `User-agent: *\nAllow: /\nDisallow: /search/\n\nSitemap: ${SITE}/sitemap.xml\n`)
+// ───────────────────────── App (PWA) ─────────────────────────
+// Installable on Android, iPhone and Windows/Mac (Chrome/Edge). Icons come from `npm run brand-assets`.
 await writeFile(join(dist, 'site.webmanifest'), JSON.stringify({
-  name: 'Janardhan General Stores and Puja Samagri', short_name: 'Janardhan Stores', start_url: '/', display: 'browser',
-  background_color: '#f6f6f2', theme_color: '#3a1512', icons: [{ src: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
+  id: '/',
+  name: 'Janardhan General Stores and Puja Samagri',
+  short_name: 'Janardhan Stores',
+  description: 'Kirana & Puja Samagri catalogue of Janardhan General Stores, Main Road, Rajampet.',
+  lang: 'en-IN',
+  start_url: '/',
+  scope: '/',
+  display: 'standalone',
+  display_override: ['standalone', 'minimal-ui'],
+  background_color: '#2a0e0b',
+  theme_color: '#3a1512',
+  categories: ['shopping', 'food', 'lifestyle'],
+  icons: [
+    { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+    { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+    { src: '/icons/maskable-192.png', sizes: '192x192', type: 'image/png', purpose: 'maskable' },
+    { src: '/icons/maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+  ],
+  shortcuts: [
+    { name: 'Kirana', short_name: 'Kirana', url: '/kirana/', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
+    { name: 'Puja Samagri', short_name: 'Puja', url: '/puja-samagri/', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
+    { name: 'Search items', short_name: 'Search', url: '/search/', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
+    { name: 'Visit & directions', short_name: 'Visit', url: '/visit/', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
+  ],
 }, null, 2))
+
+// Service worker: pages = network first (always the latest catalogue when online, saved copy when offline or slow),
+// hashed CSS/JS/photos/fonts = cache first (they never change under the same name). A new build = a new version,
+// and old caches are deleted.
+const PRECACHE = ['/', '/offline/', '/about/', '/visit/', '/contact/', '/kirana/', '/puja-samagri/', '/search/', CSS, SITE_JS, SEARCH_JS, SEARCH_INDEX,
+  '/brand/logo-mark.webp', '/fonts/fraunces-latin.woff2', '/fonts/noto-sans-telugu.woff2', '/icons/icon-192.png']
+const htmlHash = hash(sitemap.join('|') + (await readFile(join(dist, 'index.html'), 'utf8')))
+const SW_VERSION = hash(PRECACHE.join('|') + htmlHash)
+await writeFile(join(dist, 'sw.js'), `// Janardhan General Stores — service worker (generated by scripts/build.mjs; do not edit dist/sw.js).
+const VERSION = '${SW_VERSION}'
+const CORE = 'core-' + VERSION
+const PAGES = 'pages-v1'
+const FILES = 'files-v1'
+const PRECACHE = ${JSON.stringify(PRECACHE)}
+const MAX_PAGES = 120
+const MAX_FILES = 400
+const PAGE_TIMEOUT = 3500
+
+self.addEventListener('install', (e) => {
+  e.waitUntil(caches.open(CORE).then((c) => c.addAll(PRECACHE.map((u) => new Request(u, { cache: 'reload' })))).then(() => self.skipWaiting()))
+})
+self.addEventListener('activate', (e) => {
+  e.waitUntil((async () => {
+    for (const k of await caches.keys()) if (k.startsWith('core-') && k !== CORE) await caches.delete(k)
+    if (self.registration.navigationPreload) await self.registration.navigationPreload.enable()
+    await self.clients.claim()
+  })())
+})
+
+async function trim(name, max) {
+  const c = await caches.open(name)
+  const keys = await c.keys()
+  for (let i = 0; i < keys.length - max; i++) await c.delete(keys[i])
+}
+const ok = (r) => r && r.ok && r.type === 'basic'
+
+async function page(e) {
+  const req = e.request
+  const key = new URL(req.url)
+  key.search = ''
+  const net = (async () => {
+    const r = (await e.preloadResponse) || (await fetch(req))
+    if (ok(r) && !r.redirected) {
+      const c = await caches.open(PAGES)
+      await c.put(key.href, r.clone())
+      trim(PAGES, MAX_PAGES)
+    }
+    return r
+  })()
+  e.waitUntil(net.catch(() => {}))
+  const saved = async () => (await caches.match(key.href, { cacheName: PAGES })) || (await caches.match(key.pathname, { cacheName: CORE }))
+  try {
+    // Online: the live page. Very slow network: the saved copy (if there is one) after a few seconds.
+    return await Promise.race([net, new Promise((res, rej) => setTimeout(async () => { const s = await saved(); s ? res(s) : rej() }, PAGE_TIMEOUT))])
+  } catch {
+    return (await saved().catch(() => null)) || (await net.catch(() => null)) || (await caches.match('/offline/', { cacheName: CORE })) || Response.error()
+  }
+}
+
+async function file(req) {
+  const hit = await caches.match(req)
+  if (hit) return hit
+  const r = await fetch(req)
+  if (ok(r)) {
+    const c = await caches.open(FILES)
+    await c.put(req, r.clone())
+    trim(FILES, MAX_FILES)
+  }
+  return r
+}
+
+self.addEventListener('fetch', (e) => {
+  const req = e.request
+  if (req.method !== 'GET') return
+  const url = new URL(req.url)
+  if (url.origin !== location.origin) return
+  if (req.mode === 'navigate') return e.respondWith(page(e))
+  if (/^\\/(assets|img|fonts)\\//.test(url.pathname)) return e.respondWith(file(req))
+  // Logo, QR and icons keep the same name when changed: show the saved copy, refresh it in the background.
+  if (/^\\/(icons|brand)\\//.test(url.pathname)) {
+    const fresh = fetch(req).then(async (r) => { if (ok(r)) await (await caches.open(FILES)).put(req, r.clone()); return r })
+    e.waitUntil(fresh.catch(() => {}))
+    return e.respondWith(caches.match(req).then((hit) => hit || fresh))
+  }
+})
+`)
 
 console.log(`Built ${sitemap.length + 2} pages (${products.length} products, ${categories.length} categories) → dist/  [SITE_URL=${SITE}]`)

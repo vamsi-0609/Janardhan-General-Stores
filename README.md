@@ -36,6 +36,11 @@ Double-click **`Open Editor.cmd`** (or run `npm run editor`). It opens http://lo
 
 The top of the home page shows the next festival automatically, using today's date in India: items to buy for a few days before it, then a greeting on the festival day. Festivals, dates, greetings and items are in `src/data/festivals.mjs`. **Add next year's dates there once a year** (the build warns when fewer than 120 days of dates are left). Preview any day with `/?fest-date=YYYY-MM-DD`.
 
+### Shop QR poster and app (PWA)
+
+* **About page → Shop QR code:** a printable poster (one A4 page via *Print poster*) and a *Download QR image* button. The QR (logo in the middle, error correction H) is `public/brand/qr-site.svg` / `.png`. App icons are in `public/icons/`. Both are made by `npm run brand-assets` and committed. Re-run it only if the logo or web address changes (`QR_URL=… npm run brand-assets`).
+* **App:** the site can be installed on Android, iPhone and Windows/Mac. See *About → Janardhan Stores app*, the footer link *Get the app*, or the browser's own install option. The build writes `dist/site.webmanifest` and `dist/sw.js`. Pages are network first, so customers always see the latest catalogue when online and saved copies when offline. Photos, CSS and JS are cache first. A page never opened before shows `/offline/` when there's no internet. Each publish creates a new service worker version, so installed apps update automatically.
+
 ### Using your own shop photos (recommended)
 
 Save a photo as `shop-photos/<product-slug>.jpg` (the slug is the last part of the product URL, e.g. `/kirana/personal-care/bath-soap/` → `bath-soap.jpg`), then run `npm run shop-photos && npm run build`. **More than one photo for a product:** name the extra photos `<slug>-2.jpg`, `<slug>-3.jpg` and so on (e.g. `bath-soap-2.jpg`). The product page then shows a swipeable gallery with arrows and thumbnails. Cards and lists keep using the main photo. Deleting an extra photo from `shop-photos/` removes it from the site at the next `npm run shop-photos`.

@@ -149,4 +149,51 @@
       empty.hidden = shown !== 0
     })
   }
+
+  // 6. App (PWA): offline support + "Install the app" button.
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+    addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}))
+  }
+  const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+  const installBtns = document.querySelectorAll('[data-install]')
+  const help = document.querySelector('[data-install-help]')
+  let deferred = null
+  const showHelp = () => {
+    if (!help) return
+    help.hidden = false
+    help.querySelector(`[data-help="${ios ? 'ios' : 'other'}"]`).hidden = false
+  }
+  if (standalone) {
+    document.querySelectorAll('[data-installed]').forEach((el) => (el.hidden = false))
+  } else {
+    installBtns.forEach((b) => {
+      b.hidden = false
+      b.addEventListener('click', async () => {
+        if (!deferred) return showHelp()
+        deferred.prompt()
+        const choice = await deferred.userChoice.catch(() => null)
+        deferred = null
+        if (choice && choice.outcome === 'accepted') installBtns.forEach((x) => (x.hidden = true))
+      })
+    })
+    addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferred = e })
+    addEventListener('appinstalled', () => {
+      installBtns.forEach((x) => (x.hidden = true))
+      if (help) help.hidden = true
+      document.querySelectorAll('[data-installed]').forEach((el) => { el.hidden = false; el.textContent = '✓ Installed. Open it from your home screen or apps list.' })
+    })
+  }
+  if (standalone) document.querySelectorAll('[data-app-link]').forEach((a) => a.closest('li').remove())
+
+  // 7. Shop QR poster: print only the poster.
+  const printBtn = document.querySelector('[data-print-poster]')
+  if (printBtn) {
+    printBtn.hidden = false
+    printBtn.addEventListener('click', () => {
+      document.documentElement.classList.add('print-poster')
+      addEventListener('afterprint', () => document.documentElement.classList.remove('print-poster'), { once: true })
+      print()
+    })
+  }
 })()
