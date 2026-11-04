@@ -241,3 +241,10 @@ legend { font-weight: 700; color: var(--forest-d); padding: 0 6px; }
 /* Which brand a photo shows */
 .photo .pbrand { display: flex; padding: 0 6px 8px; flex-direction: column; gap: 2px; font-size: .72rem; color: var(--muted); }
 .photo .pbrand select { min-height: 30px; padding: 2px 6px; border: 1px solid var(--line); border-radius: 8px; background: #fff; font-size: .8rem; }
+/* help: troubleshooting */
+.help .callout-ok { margin: 10px 0 14px; padding: 10px 16px; border-radius: 12px; background: #e8f4ec; border: 1px solid #b9d3c2; }
+.help .callout-ok p { margin: 6px 0; }
+.help details.trouble { margin: 8px 0; border: 1px solid var(--line); border-radius: 12px; background: #fffdf8; }
+.help details.trouble summary { cursor: pointer; padding: 12px 16px; font-weight: 700; color: var(--maroon-d); }
+.help details.trouble[open] summary { border-bottom: 1px solid var(--line); }
+.help details.trouble > div { padding: 4px 16px 10px; }

@@ -23,29 +23,31 @@
   },
   "toor-dal": {
     "own": true,
-    "file": "toor-dal.jpg",
+    "file": "toor-dal.png",
     "author": "Janardhan General Stores and Puja Samagri",
     "license": "Supplied by the shop",
     "licenseUrl": "",
     "source": ""
   },
   "moong-dal": {
-    "file": "File:Moong Dal.jpg",
-    "author": "Sudeshna Banerjee",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Moong_Dal.jpg"
+    "own": true,
+    "file": "moong-dal.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "green-gram": {
-    "file": "File:Mung beans (Vigna radiata).jpg",
-    "author": "Ivar Leidus",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Mung_beans_(Vigna_radiata).jpg"
+    "own": true,
+    "file": "green-gram.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "urad-dal": {
     "own": true,
-    "file": "urad-dal.jpg",
+    "file": "urad-dal.png",
     "author": "Janardhan General Stores and Puja Samagri",
     "license": "Supplied by the shop",
     "licenseUrl": "",
@@ -53,60 +55,59 @@
   },
   "chana-dal": {
     "own": true,
-    "file": "chana-dal.jpg",
+    "file": "chana-dal.png",
     "author": "Janardhan General Stores and Puja Samagri",
     "license": "Supplied by the shop",
     "licenseUrl": "",
     "source": ""
   },
   "kabuli-chana": {
-    "file": "File:Chickpeas (2) (3150326752).jpg",
-    "author": "Harsha K R from Bangalore, India",
-    "license": "CC BY-SA 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Chickpeas_(2)_(3150326752).jpg"
+    "own": true,
+    "file": "kabuli-chana.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "black-chana": {
-    "file": "File:Chickpea in black colour.jpg",
-    "author": "Thamizhpparithi Maari",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Chickpea_in_black_colour.jpg"
-  },
-  "masoor-dal": {
-    "file": "File:Masoor dal.JPG",
-    "author": "Rydia~commonswiki",
-    "license": "CC BY-SA 2.5",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5",
-    "source": "https://commons.wikimedia.org/wiki/File:Masoor_dal.JPG"
+    "own": true,
+    "file": "black-chana.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "roasted-gram": {
-    "file": "File:Roasted grams.JPG",
-    "author": "Mokkie",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Roasted_grams.JPG"
+    "own": true,
+    "file": "roasted-gram.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "horse-gram": {
-    "file": "File:Macrotyloma uniflorum-1-market-yercaud-salem-India.JPG",
-    "author": "Yercaud-elango",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Macrotyloma_uniflorum-1-market-yercaud-salem-India.JPG"
+    "own": true,
+    "file": "horse-gram.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "groundnuts": {
-    "file": "File:Raw peanuts with skin on white plate.jpg",
-    "author": "Undeka 11",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Raw_peanuts_with_skin_on_white_plate.jpg"
+    "own": true,
+    "file": "groundnuts.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "wheat-atta": {
-    "file": "File:Whole wheat grain flour being scooped.jpg",
-    "author": "Margaret Hoogstrate",
-    "license": "CC BY 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Whole_wheat_grain_flour_being_scooped.jpg"
+    "own": true,
+    "file": "wheat-atta.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "maida": {
     "file": "File:Rice flour.jpg",
@@ -124,32 +125,36 @@
     "source": ""
   },
   "rice-flour": {
-    "file": "File:Rice flour 2.jpg",
-    "author": "경빈마마",
-    "license": "CC BY 2.0 kr",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0/kr/deed.en",
-    "source": "https://commons.wikimedia.org/wiki/File:Rice_flour_2.jpg"
+    "own": true,
+    "file": "rice-flour.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "ragi-flour": {
-    "file": "File:Food grain finger millet.jpg",
-    "author": "Sengai Podhuvan",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Food_grain_finger_millet.jpg"
+    "own": true,
+    "file": "ragi-flour.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "jowar-flour": {
-    "file": "File:Sorghum bicolor Moderne MHNT.BOT.2015.34.152.jpg",
-    "author": "Roger Culos",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Sorghum_bicolor_Moderne_MHNT.BOT.2015.34.152.jpg"
+    "own": true,
+    "file": "jowar-flour.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "corn-flour": {
-    "file": "File:Polenta uncooked.jpg",
-    "author": "Popo le Chien",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Polenta_uncooked.jpg"
+    "own": true,
+    "file": "corn-flour.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "groundnut-oil": {
     "own": true,
@@ -1099,14 +1104,6 @@
     "licenseUrl": "",
     "source": ""
   },
-  "buffet-plates": {
-    "own": true,
-    "file": "buffet-plates.jpg",
-    "author": "Janardhan General Stores and Puja Samagri",
-    "license": "Supplied by the shop",
-    "licenseUrl": "",
-    "source": ""
-  },
   "bhumi-puja-set": {
     "file": "File:Navaratna gemstones.png",
     "author": "Unknown authorUnknown author",
@@ -1248,6 +1245,46 @@
   "acid-bottle": {
     "own": true,
     "file": "acid-bottle.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
+  },
+  "whole-pegion-peas": {
+    "own": true,
+    "file": "whole-pegion-peas.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
+  },
+  "paddy-grains": {
+    "own": true,
+    "file": "paddy-grains.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
+  },
+  "whole-black-gram": {
+    "own": true,
+    "file": "whole-black-gram.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
+  },
+  "red-millet": {
+    "own": true,
+    "file": "red-millet.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
+  },
+  "pearl-millet": {
+    "own": true,
+    "file": "pearl-millet.png",
     "author": "Janardhan General Stores and Puja Samagri",
     "license": "Supplied by the shop",
     "licenseUrl": "",

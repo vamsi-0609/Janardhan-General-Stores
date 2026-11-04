@@ -173,8 +173,8 @@
         },
         {
           "slug": "black-chana",
-          "name": "Black Chickpeas",
-          "te": "నల్ల శనగలు",
+          "name": "Red Chickpeas",
+          "te": "ఎర్ర శనగలు",
           "aliases": [
             "kala chana",
             "nalla senagalu",
@@ -184,21 +184,9 @@
           "q": "kala chana black chickpeas"
         },
         {
-          "slug": "masoor-dal",
-          "name": "Masoor Dal (Red Lentils)",
-          "te": "మసూర్ పప్పు",
-          "aliases": [
-            "masoor",
-            "red lentils",
-            "erra pappu"
-          ],
-          "desc": "Split red lentils that cook soft and fast.",
-          "q": "red lentils masoor"
-        },
-        {
           "slug": "roasted-gram",
-          "name": "Roasted Gram (Putnala Pappu)",
-          "te": "పుట్నాల పప్పు",
+          "name": "White chickpeas (Senagalu)",
+          "te": "తెల్ల శెనగలు",
           "aliases": [
             "putnalu",
             "putnala pappu",
@@ -232,6 +220,45 @@
           ],
           "desc": "Raw peanuts for chutneys, tempering, snacks and chikki.",
           "q": "raw peanuts"
+        },
+        {
+          "slug": "whole-pegion-peas",
+          "name": "Whole pegion peas",
+          "te": "కందులు",
+          "aliases": [
+            "kandhulu"
+          ],
+          "desc": "Used in Navadhanyalu"
+        },
+        {
+          "slug": "paddy-grains",
+          "name": "Paddy Grains",
+          "te": "వడ్లు",
+          "aliases": [
+            "vadlu"
+          ],
+          "desc": "Used in Navadhanyalu"
+        },
+        {
+          "slug": "whole-black-gram",
+          "name": "Whole black gram",
+          "te": "మినుములు",
+          "aliases": [],
+          "desc": "Used in Navadhanyalu"
+        },
+        {
+          "slug": "red-millet",
+          "name": "Red Millet",
+          "te": "రాగులు",
+          "aliases": [],
+          "desc": "Red Millets were used to make Ragi powder in much more food items."
+        },
+        {
+          "slug": "pearl-millet",
+          "name": "Pearl Millet",
+          "te": "సజ్జలు సొద్దలు",
+          "aliases": [],
+          "desc": "Used to feed birds and animals."
         }
       ]
     },
@@ -254,6 +281,9 @@
           "desc": "Whole wheat flour for chapati, roti and puri.",
           "q": "whole wheat flour atta",
           "brands": [
+            "Aashirvaad"
+          ],
+          "photoBrands": [
             "Aashirvaad"
           ]
         },
@@ -799,8 +829,8 @@
         },
         {
           "slug": "sugar-candy",
-          "name": "Sugar Candy (Patika Bellam)",
-          "te": "పటిక బెల్లం",
+          "name": "Sugar Candy",
+          "te": "కలకండ",
           "aliases": [
             "patika bellam",
             "misri",
@@ -1507,24 +1537,6 @@
       "te": "ప్లేట్లు, కప్పులు & దొన్నెలు",
       "blurb": "Buffet plates, paper plates, tea cups, paper glasses and leaf dhonnelu for marriages, functions and prasadam.",
       "products": [
-        {
-          "slug": "buffet-plates",
-          "name": "Buffet Plates",
-          "te": "బఫే ప్లేట్లు",
-          "aliases": [
-            "buffae plates",
-            "buffet plate",
-            "paper plates",
-            "disposable plates",
-            "marriage plates",
-            "function plates",
-            "leaf plates"
-          ],
-          "desc": "Disposable buffet plates for marriages, functions and parties.",
-          "q": "paper plates",
-          "caution": "Use only for cool or room-temperature food and drinks. These have a very thin polythene layer inside, so regular use with hot items is not recommended.",
-          "cautionTe": "చల్లని లేదా సాధారణ ఉష్ణోగ్రత ఉన్న పదార్థాలకు మాత్రమే వాడండి. లోపల చాలా పలుచని పాలిథీన్ పొర ఉంటుంది, కాబట్టి వేడి పదార్థాలకు తరచుగా వాడటం మంచిది కాదు."
-        },
         {
           "slug": "paper-tea-cups",
           "name": "Paper Tea Cups",

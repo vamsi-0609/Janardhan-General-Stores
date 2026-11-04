@@ -723,7 +723,7 @@
       stepsBox.replaceChildren(...p.steps.map((s) => h('li', { class: `pub-step ${s.status}` },
         h('span', { class: 'ico', 'aria-hidden': 'true' }, { running: '⏳', done: '✅', error: '❌', warn: '⚠️' }[s.status] || '•'),
         h('span', {}, h('strong', {}, s.label), s.detail ? h('span', { class: 'pub-detail' }, s.detail) : ''))))
-      if (p.error) result.replaceChildren(h('p', { class: 'pub-error' }, p.error))
+      if (p.error) result.replaceChildren(h('p', { class: 'pub-error' }, p.error), h('button', { class: 'btn', type: 'button', onclick: () => { closeDrawer(true); switchTab('help'); setTimeout(() => document.getElementById('if-publishing-fails')?.scrollIntoView({ block: 'start' }), 50) } }, '❓ What should I do? (Help)'))
       else if (p.live === 'live') result.replaceChildren(h('p', { class: 'pub-ok' }, '🎉 Your changes are live! ', h('a', { href: p.liveUrl || 'https://shop.myconnect.sbs/', target: '_blank', rel: 'noopener' }, 'Open shop.myconnect.sbs ↗')))
       else if (p.live === 'slow') result.replaceChildren(h('p', { class: 'pub-error' }, 'Uploaded, but the live site has not updated yet. Open Cloudflare → Workers & Pages → janardhan-general-stores → Deployments to see why.'))
       else result.replaceChildren()
@@ -758,24 +758,69 @@
 
   // ───────── HELP ─────────
   function renderHelp() {
+    const s = (t) => h('strong', {}, t)
+    const ext = (href, text) => h('a', { href, target: '_blank', rel: 'noopener' }, text)
+    const problem = (title, open, ...body) => h('details', { class: 'trouble', open: open || null }, h('summary', {}, title), h('div', {}, ...body))
     $('#main').replaceChildren(h('div', { class: 'help' },
       h('h2', {}, 'How this editor works'),
       h('p', {}, 'This editor runs only on this computer. It changes the website’s files here and rebuilds a preview automatically after every save.'),
       h('ol', {},
         h('li', {}, 'Add or edit products, photos, categories and festivals here.'),
-        h('li', {}, 'Click ', h('strong', {}, 'View in browser'), ' (top right) to check the website exactly as visitors will see it.'),
-        h('li', {}, 'When you are happy, ask Claude to ', h('strong', {}, 'review and push'), '. Only then do the changes go live on shop.myconnect.sbs.')),
+        h('li', {}, 'Click ', s('View in browser'), ' (top right) to check the website exactly as visitors will see it.'),
+        h('li', {}, 'When you are happy, click ', s('🚀 Publish to website'), ', then ', s('Publish now'), '. The website is rebuilt, checked, saved and uploaded. Wait for ', s('“🎉 Your changes are live!”'), ' (usually 1–2 minutes).')),
+
+      h('h2', {}, 'Telugu typing'),
+      h('ul', {},
+        h('li', {}, 'In any Telugu box, type the word in English letters: ', h('code', {}, 'kandi pappu'), ' becomes ', h('span', { lang: 'te' }, 'కంది పప్పు'), '.'),
+        h('li', {}, s('Space'), ' uses the first spelling, ', s('1–6'), ' (or a click) picks another one, ', s('Esc'), ' keeps the English word.'),
+        h('li', {}, 'Turn it on or off with the ', s('అ Telugu typing'), ' button at the top, or press ', s('Ctrl+G'), '.')),
+
       h('h2', {}, 'Photos'),
       h('ul', {},
         h('li', {}, 'Add several photos per product. The first one is the main photo (cards, lists, search).'),
-        h('li', {}, 'Use ← → to reorder, ', h('strong', {}, 'Make main'), ' to move a photo to the front, 🗑 to delete.'),
-        h('li', {}, 'Photos are cropped to a square automatically; tall or wide pack shots are fitted whole so labels are not cut off.'),
+        h('li', {}, 'Use ← → to reorder, ', s('Make main'), ' to move a photo to the front, 🗑 to delete, ', s('✂ Adjust / crop'), ' to choose the part that shows.'),
+        h('li', {}, s('Brand in this photo:'), ' choose the brand the photo shows (e.g. Cinthol). When someone searches that brand, they see that photo. Leave ', s('General / all brands'), ' for photos that are not one brand.'),
+        h('li', {}, 'A brand without its own photo shows a coloured name tile in search, never another brand’s photo. Add a photo of that brand to replace the tile.'),
         h('li', {}, 'Use your own photos or brand pack shots. Avoid copying photos from shopping websites.')),
+
       h('h2', {}, 'Festivals'),
       h('ul', {},
         h('li', {}, 'Each festival has its suggested items, a "before" message, a festival-day greeting, and dates for each year.'),
-        h('li', {}, h('strong', {}, 'Once a year'), ', open each festival and click "Add next year", then correct the dates from the panchangam. Festivals without an upcoming date are marked "needs a new date".'),
+        h('li', {}, s('Once a year'), ', open each festival and click "Add next year", then correct the dates from the panchangam. Festivals without an upcoming date are marked "needs a new date".'),
         h('li', {}, 'Preview any day by opening ', h('code', {}, `${PREVIEW()}/?fest-date=2027-01-14`), '.')),
+
+      h('h2', { id: 'if-publishing-fails' }, 'If publishing fails'),
+      h('div', { class: 'callout-ok' },
+        h('p', {}, s('Your work is never lost. '), 'Once “Saving this version ✅” is ticked, your changes are safe on this computer, even if the upload fails.'),
+        h('p', {}, s('Trying again is always safe. '), 'Pressing Publish again never duplicates or breaks anything. You can keep editing while you wait; the next publish sends everything together.')),
+      h('p', {}, 'Read the red message at the bottom of the Publish window and open the matching problem below:'),
+      problem('“GitHub is having a problem right now (not your fault)”', true,
+        h('p', {}, 'GitHub (where the website is stored) is having a short outage. The editor already tried 3 times.'),
+        h('ol', {},
+          h('li', {}, 'Wait 15–30 minutes. Do nothing else.'),
+          h('li', {}, 'Click ', s('🚀 Publish to website'), ' → ', s('Publish now'), ' again. It will list “saved version(s) waiting to be uploaded”, which is normal.'),
+          h('li', {}, 'Still failing? Open ', ext('https://www.githubstatus.com/', 'githubstatus.com'), '. If it is not all green, GitHub is still down: try again later (even the next day is fine).'))),
+      problem('“GitHub needs you to sign in again”', false,
+        h('ol', {},
+          h('li', {}, 'Open the ', h('code', {}, 'static-site'), ' folder in File Explorer.'),
+          h('li', {}, 'Click the address bar, type ', h('code', {}, 'cmd'), ' and press Enter. A black window opens.'),
+          h('li', {}, 'Type ', h('code', {}, 'git push'), ' and press Enter. A GitHub sign-in window opens: sign in.'),
+          h('li', {}, 'Come back here and publish again.'))),
+      problem('“No internet connection to GitHub”', false,
+        h('p', {}, 'Check the Wi-Fi or mobile data on this computer, then publish again.')),
+      problem('“GitHub has newer changes than this computer”', false,
+        h('p', {}, 'Someone changed the website directly on GitHub or from another computer. ', s('Do not try to fix this yourself.'), ' Ask Claude to “sync the static site”; it will merge both safely. Your changes here stay saved.')),
+      problem('“Uploaded, but the live site has not updated yet”', false,
+        h('p', {}, 'GitHub received your changes, but Cloudflare (which shows the website) has not put them live yet.'),
+        h('ol', {},
+          h('li', {}, 'Wait 5 minutes and refresh ', ext('https://shop.myconnect.sbs/', 'shop.myconnect.sbs'), '.'),
+          h('li', {}, 'Still old? Open ', ext('https://dash.cloudflare.com/', 'dash.cloudflare.com'), ' → ', s('Workers & Pages'), ' → ', s('janardhan-general-stores'), ' → ', s('Deployments'), '.'),
+          h('li', {}, 'If the newest one says ', s('Failed'), ', open it and click ', s('Retry deployment'), '. If Cloudflare itself has problems (', ext('https://www.cloudflarestatus.com/', 'cloudflarestatus.com'), '), just wait.'))),
+      problem('“The website could not be built” or “The check found problems”', false,
+        h('p', {}, 'Nothing was published, so the live website is untouched. Usually a box was left empty or a photo is broken. Take a screenshot of the Publish window and send it to Claude.')),
+      problem('Something else, or not sure', false,
+        h('p', {}, 'Take a screenshot of the whole Publish window (including the red text) and send it to Claude. Your changes are safe in the meantime.')),
+
       h('h2', {}, 'Closing'),
       h('p', {}, 'Close the black editor window (or press Ctrl+C in it) when you are done. Your changes are already saved.'),
     ))

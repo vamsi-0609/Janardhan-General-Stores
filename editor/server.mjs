@@ -338,7 +338,11 @@ async function changeSummary() {
   if (count(/^public\/img\/festivals\//)) lines.push('Festival banner photo(s) changed')
   const code = files.filter((f) => !/^(src\/data\/(catalogue|festivals|image-credits)\.json|public\/img\/|shop-photos\/)/.test(f.path)).length
   if (code) lines.push(`${code} website design/code file(s) changed`)
-  return { files: files.length, lines }
+  // Versions saved here but not uploaded yet (e.g. GitHub was down last time).
+  const ahead = await run('git', ['rev-list', '--count', 'origin/main..HEAD'])
+  const unpushed = ahead.ok ? Number(ahead.out) || 0 : 0
+  if (unpushed) lines.push(`${unpushed} saved version(s) waiting to be uploaded (the last upload did not finish)`)
+  return { files: files.length + unpushed, lines }
 }
 
 async function liveMatches() {
@@ -391,9 +395,16 @@ async function doPublish(note) {
     }
 
     step('Uploading to GitHub')
-    const p = await run('git', ['push', 'origin', 'HEAD:main'], { timeout: 180000 })
+    // GitHub sometimes has short outages ("Internal Server Error"): try up to 3 times before giving up.
+    let p
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      p = await run('git', ['push', 'origin', 'HEAD:main'], { timeout: 180000 })
+      if (p.ok || /fetch first|non-fast-forward|Authentication|credential|could not read Username|403|401/i.test(p.out)) break
+      if (attempt < 3) { step('Uploading to GitHub', 'running', `GitHub did not accept the upload, trying again (${attempt + 1} of 3)…`); await new Promise((r) => setTimeout(r, attempt * 15000)) }
+    }
     if (!p.ok) {
-      const hint = /rejected|fetch first|non-fast-forward/i.test(p.out) ? 'GitHub has newer changes than this computer. Ask Claude to sync before publishing.'
+      const hint = /fetch first|non-fast-forward/i.test(p.out) ? 'GitHub has newer changes than this computer. Ask Claude to sync before publishing.'
+        : /Internal Server Error|remote rejected.*failure|50[0-4]|Service Unavailable|Bad Gateway/i.test(p.out) ? 'GitHub is having a problem right now (not your fault). Your changes are saved on this computer. Wait 15–30 minutes and press Publish again; check githubstatus.com if it keeps failing.'
         : /Authentication|credential|could not read Username|403|401/i.test(p.out) ? 'GitHub needs you to sign in again. Run "git push" once in the static-site folder (a sign-in window opens), then publish again.'
         : /Could not resolve host|unable to access|timed out/i.test(p.out) ? 'No internet connection to GitHub. Check the internet and publish again (your changes are saved).' : ''
       throw Object.assign(new Error(`Upload failed. ${hint}`), { detail: p.out.slice(-600) })
