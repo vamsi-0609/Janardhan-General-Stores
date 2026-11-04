@@ -1172,3 +1172,23 @@ a.v-chip { text-decoration: none; }
 @media (max-width: 767px) { .pdp { gap: 14px; } .buy-box { padding: 14px; } }
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
 .map-card { overflow: hidden; position: relative; }
+
+/* Cards: even rows (2-line names, 1-line Telugu) */
+li.pc .card .en { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+li.pc .card .te { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+li.pc .card .size { margin-top: 6px; }
+/* Sticky Add bar (phones, product pages) */
+.sticky-buy { display: none; }
+@media (max-width: 1023px) {
+  .sticky-buy { position: fixed; z-index: 45; left: 0; right: 0; bottom: 0; display: flex; align-items: center; gap: 12px; padding: 10px 14px max(10px, env(safe-area-inset-bottom));
+    background: #fff; border-top: 1px solid var(--line); box-shadow: 0 -8px 24px -12px rgb(0 0 0 / 30%); transform: translateY(110%); transition: transform .22s ease; }
+  .sticky-buy.show { transform: none; }
+  .sticky-buy .sb-t { flex: 1; min-width: 0; display: grid; line-height: 1.25; }
+  .sticky-buy .sb-t strong { font-size: .92rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .sticky-buy .sb-t span { font-size: .82rem; color: var(--muted); font-weight: 600; }
+  .sticky-buy .add-btn, .sticky-buy .qty { width: 150px; flex: none; min-height: 46px; }
+  html.sticky-buy-on .list-bar { bottom: calc(80px + env(safe-area-inset-bottom)); }
+  html.sticky-buy-on body { padding-bottom: 150px; }
+}
+@media (prefers-reduced-motion: reduce) { .sticky-buy { transition: none; } }
+@media (max-width: 1023px) { html.sticky-buy-on .list-toast { bottom: calc(160px + env(safe-area-inset-bottom)); } }

@@ -786,6 +786,8 @@ for (const t of products) {
         '<p class="desc">' + esc(p.desc || t.desc) + '</p>' +
         akaHtml([...new Set([...(p.aliases || []), ...(t.aliases || [])])]) + festFor(t) + askBlock(p.name + (p.size ? ' ' + p.size : ''), cautionHtml(t)) +
         '</div></article></div>' +
+        // phones: Add bar that stays at the bottom once the main Add button is scrolled away
+        '<div class="sticky-buy buy' + (p.off ? ' is-off' : '') + '" ' + buyAttr(line, p.id) + ' data-sticky aria-hidden="true" inert><div class="sb-t"><strong>' + esc(p.name) + '</strong><span>' + esc(size) + (p.price ? ' · ' + esc(p.price) : '') + '</span></div>' + addBtn('Add ' + p.name + ' ' + size + ' to my list', p.off) + '</div>' +
         rail('sizes-h', 'Other sizes of ' + esc(p.name), 'ఇతర సైజులు', otherSizes.map((x) => sizeCard(line, x))) +
         rail('brands-h', 'Other ' + esc(typeShort(t)), 'ఇతర బ్రాండ్లు', otherBrands.slice(0, 16).map((l) => lineCard(l)), many ? '<a class="link-arrow" href="' + productUrl(t) + '">All ' + ps.length + ' ' + icon('arrow') + '</a>' : '') +
         (sameBrandElsewhere.length ? rail('brand-h', 'More from ' + esc(p.brandName), '', sameBrandElsewhere.map((l) => lineCard(l))) : '') +

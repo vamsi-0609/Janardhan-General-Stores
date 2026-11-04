@@ -168,6 +168,19 @@
     chipGroup(brandBox, 'data-brand-chip', (v) => (brand = v))
   }
 
+  // 5b. Product page on phones: show the sticky Add bar once the main Add box has scrolled out of view.
+  const stickyBuy = document.querySelector('[data-sticky]')
+  const mainBuy = document.querySelector('.buy-box[data-big]')
+  if (stickyBuy && mainBuy && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([e]) => {
+      const show = !e.isIntersecting && e.boundingClientRect.top < 0
+      stickyBuy.classList.toggle('show', show)
+      stickyBuy.setAttribute('aria-hidden', String(!show))
+      stickyBuy.inert = !show
+      document.documentElement.classList.toggle('sticky-buy-on', show)
+    }).observe(mainBuy)
+  }
+
   // 6. App (PWA): offline support + "Install the app" button.
   if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
     addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}))
