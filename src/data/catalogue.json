@@ -1417,10 +1417,19 @@
             "seekakaya",
             "sheekaya",
             "shikakai",
-            "hair wash powder"
+            "hair wash powder",
+            "seekaya",
+            "sikaya",
+            "shikaya"
           ],
           "desc": "Traditional herbal hair-wash powder.",
-          "q": "shikakai"
+          "q": "shikakai",
+          "brands": [
+            "Meera"
+          ],
+          "photoBrands": [
+            "Meera"
+          ]
         },
         {
           "slug": "toothpaste",
@@ -1509,7 +1518,9 @@
           "aliases": [
             "vadiyalu",
             "vadagalu",
-            "fryums"
+            "fryums",
+            "odiyalu",
+            "appadalu"
           ],
           "desc": "Sun-dried fryums to fry and serve with meals.",
           "q": "sun dried vadam"
@@ -1532,7 +1543,12 @@
             "Maggi",
             "Yippee"
           ],
-          "sizes": "Small single packs to large family packs"
+          "sizes": "Small single packs to large family packs",
+          "photoBrands": [
+            null,
+            "Yippee",
+            "Maggi"
+          ]
         },
         {
           "slug": "baking-soda",

@@ -671,11 +671,12 @@
     "source": ""
   },
   "vadiyalu": {
-    "file": "File:Vadiyalu.jpg",
-    "author": "Radhika41",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Vadiyalu.jpg"
+    "own": true,
+    "file": "vadiyalu.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "instant-noodles": {
     "own": true,
