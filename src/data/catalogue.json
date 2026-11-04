@@ -384,11 +384,13 @@
           "brands": [
             "Freedom",
             "Priya",
-            "Gold Drop"
+            "Gold Drop",
+            "Natraj"
           ],
           "sizes": "1 litre packets · 15 litre cans",
           "photoBrands": [
-            "Priya"
+            "Priya",
+            "Natraj"
           ]
         },
         {
@@ -409,9 +411,11 @@
             "Priya",
             "Gold Drop"
           ],
-          "sizes": "1 litre packets · 15 litre cans",
+          "sizes": "1 litre packets",
           "photoBrands": [
-            "Freedom"
+            "Freedom",
+            "Priya",
+            "Gold Drop"
           ]
         },
         {
@@ -463,10 +467,12 @@
           "brands": [
             "Freedom",
             "Priya",
-            "Gold Drop"
+            "Gold Drop",
+            "priya gold"
           ],
           "sizes": "1 litre packets · 15 litre cans",
           "photoBrands": [
+            "priya gold",
             "Priya"
           ]
         },
