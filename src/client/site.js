@@ -125,29 +125,47 @@
     }))
   })
 
-  // 5. In-category filter.
+  // 5. Filters on category and type pages: typed text + Type chips + Brand chips, all together.
   const filter = document.querySelector('[data-filter]')
-  if (filter) {
-    const form = filter.closest('form')
-    const cards = [...document.querySelectorAll('[data-filter-item]')]
+  const typeBox = document.querySelector('[data-type-chips]')
+  const brandBox = document.querySelector('[data-brand-chips]')
+  if (filter || typeBox || brandBox) {
+    const cards = [...document.querySelectorAll('.product-grid [data-filter-item]')]
     const count = document.querySelector('[data-filter-count]')
     const empty = document.querySelector('[data-filter-empty]')
     const norm = (s) => s.toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g, '').replace(/([a-z])\1+/g, '$1').replace(/([bcdgjkpt])h/g, '$1')
-    form.hidden = false
-    form.addEventListener('submit', (e) => e.preventDefault())
+    if (filter) {
+      const form = filter.closest('form')
+      form.hidden = false
+      form.addEventListener('submit', (e) => e.preventDefault())
+    }
     const total = cards.length
-    filter.addEventListener('input', () => {
-      const terms = norm(filter.value).split(/\s+/).filter(Boolean)
+    let type = '', brand = ''
+    const apply = () => {
+      const terms = filter ? norm(filter.value).split(/\s+/).filter(Boolean) : []
       let shown = 0
       cards.forEach((li) => {
         const hay = norm(li.dataset.filterItem)
-        const ok = terms.every((t) => hay.includes(t))
+        const ok = terms.every((t) => hay.includes(t)) && (!type || li.dataset.type === type) && (!brand || li.dataset.brand === brand)
         li.hidden = !ok
         if (ok) shown++
       })
-      count.textContent = terms.length ? `${shown} of ${total} items` : `${total} items`
-      empty.hidden = shown !== 0
-    })
+      if (count) count.textContent = terms.length || type || brand ? `${shown} of ${total} items` : `${total} items`
+      if (empty) empty.hidden = shown !== 0
+    }
+    filter?.addEventListener('input', apply)
+    const chipGroup = (box, attr, set) => {
+      if (!box) return
+      box.hidden = false
+      const chips = [...box.querySelectorAll(`[${attr}]`)]
+      chips.forEach((b) => b.addEventListener('click', () => {
+        set(b.getAttribute(attr))
+        chips.forEach((x) => x.setAttribute('aria-pressed', String(x === b)))
+        apply()
+      }))
+    }
+    chipGroup(typeBox, 'data-type-chip', (v) => (type = v))
+    chipGroup(brandBox, 'data-brand-chip', (v) => (brand = v))
   }
 
   // 6. App (PWA): offline support + "Install the app" button.

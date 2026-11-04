@@ -11,13 +11,18 @@
 import { readdir, readFile, writeFile, mkdir, unlink } from 'node:fs/promises'
 import { join, extname, basename } from 'node:path'
 import { products } from '../src/data/catalogue.mjs'
+import { readFileSync } from 'node:fs'
 import { shop } from '../src/data/shop.mjs'
 import { srcDir as inDir, outDir, thumbDir, creditsFile, IMAGE_EXT, processPhoto, ownCredit, readCrops, validCrop } from './lib/photos.mjs'
 
 await mkdir(inDir, { recursive: true })
 await mkdir(thumbDir, { recursive: true })
 
-const slugs = new Set(products.map((p) => p.slug))
+const raw = JSON.parse(readFileSync(new URL('../src/data/catalogue.json', import.meta.url), 'utf8'))
+const types = raw.categories.flatMap((c) => c.products)
+const slugs = new Set([...products.map((p) => p.slug), ...types.map((p) => p.slug)])
+// Product photos added in the editor (named "p--<product>--<code>")
+const itemPhotos = new Set(JSON.parse(readFileSync(new URL('../src/data/products.json', import.meta.url), 'utf8')).products.flatMap((p) => p.photos || []).filter((n) => n.includes('--')))
 const credits = JSON.parse(await readFile(creditsFile, 'utf8'))
 const crops = await readCrops() // crops chosen in the editor
 let n = 0
@@ -25,6 +30,7 @@ const extrasWanted = new Set() // "<slug>-<n>" names that have a source photo
 for (const f of await readdir(inDir)) {
   if (!IMAGE_EXT.test(f)) continue
   const name = basename(f, extname(f)).toLowerCase()
+  if (itemPhotos.has(name)) { await processPhoto(join(inDir, f), name, validCrop(crops[name])); console.log(`✓ ${name}  (product photo)`); n++; continue }
   // Extra photos: <slug>-2.jpg, <slug>-3.jpg … (shown in the product page gallery after the main photo).
   const extra = name.match(/^(.+)-(\d{1,2})$/)
   const slug = slugs.has(name) ? name : extra && slugs.has(extra[1]) ? extra[1] : null

@@ -43,15 +43,7 @@
             "rice bag"
           ],
           "desc": "Everyday medium-grain rice for daily meals — in packets or loose by the kg.",
-          "q": "Sona Masuri rice grains",
-          "brands": [
-            "NS",
-            "Aahar",
-            "CSR",
-            "Lakshmi",
-            "Arshiya Black"
-          ],
-          "sizes": "Packets · loose by the kg"
+          "q": "Sona Masuri rice grains"
         },
         {
           "slug": "basmati-rice",
@@ -64,12 +56,7 @@
             "rice packet"
           ],
           "desc": "Long-grain aromatic rice for biryani, pulao and fried rice — in packets or loose by the kg.",
-          "q": "basmati rice uncooked",
-          "brands": [
-            "Unity",
-            "India Gate"
-          ],
-          "sizes": "Packets · loose by the kg"
+          "q": "basmati rice uncooked"
         },
         {
           "slug": "boiled-rice",
@@ -82,8 +69,7 @@
             "rice packet"
           ],
           "desc": "Parboiled rice with firm grains that stay separate after cooking — in packets or loose by the kg.",
-          "q": "parboiled rice",
-          "sizes": "Packets · loose by the kg"
+          "q": "parboiled rice"
         }
       ]
     },
@@ -279,13 +265,7 @@
             "chapati flour"
           ],
           "desc": "Whole wheat flour for chapati, roti and puri.",
-          "q": "whole wheat flour atta",
-          "brands": [
-            "Aashirvaad"
-          ],
-          "photoBrands": [
-            "Aashirvaad"
-          ]
+          "q": "whole wheat flour atta"
         },
         {
           "slug": "maida",
@@ -380,18 +360,7 @@
             "15 litre can"
           ],
           "desc": "Groundnut oil for everyday Andhra cooking — in 1 litre packets and 15 litre cans.",
-          "q": "peanut oil bottle",
-          "brands": [
-            "Freedom",
-            "Priya",
-            "Gold Drop",
-            "Natraj"
-          ],
-          "sizes": "1 litre packets · 15 litre cans",
-          "photoBrands": [
-            "Priya",
-            "Natraj"
-          ]
+          "q": "peanut oil bottle"
         },
         {
           "slug": "sunflower-oil",
@@ -405,18 +374,7 @@
             "15 litre can"
           ],
           "desc": "Refined sunflower oil for cooking and frying — in 1 litre packets and 15 litre cans.",
-          "q": "sunflower oil",
-          "brands": [
-            "Freedom",
-            "Priya",
-            "Gold Drop"
-          ],
-          "sizes": "1 litre packets",
-          "photoBrands": [
-            "Freedom",
-            "Priya",
-            "Gold Drop"
-          ]
+          "q": "sunflower oil"
         },
         {
           "slug": "rice-bran-oil",
@@ -463,18 +421,7 @@
             "15 litre can"
           ],
           "desc": "An economical refined oil for cooking and frying — in 1 litre packets and 15 litre cans.",
-          "q": "palm oil",
-          "brands": [
-            "Freedom",
-            "Priya",
-            "Gold Drop",
-            "priya gold"
-          ],
-          "sizes": "1 litre packets · 15 litre cans",
-          "photoBrands": [
-            "priya gold",
-            "Priya"
-          ]
+          "q": "palm oil"
         },
         {
           "slug": "mustard-oil",
@@ -944,18 +891,7 @@
             "3 Roses"
           ],
           "desc": "Black tea for everyday chai.",
-          "q": "black tea leaves CTC",
-          "brands": [
-            "Red Label",
-            "Taj Mahal",
-            "3 Roses"
-          ],
-          "sizes": "Rs 10 . 100 GR. 250GR",
-          "photoBrands": [
-            "3 Roses",
-            "Red Label",
-            "Taj Mahal"
-          ]
+          "q": "black tea leaves CTC"
         },
         {
           "slug": "instant-coffee",
@@ -968,18 +904,7 @@
             "nescafe"
           ],
           "desc": "Soluble coffee powder for a quick cup.",
-          "q": "instant coffee granules",
-          "brands": [
-            "Bru",
-            "Nescafe",
-            "Continental"
-          ],
-          "sizes": "Rs 2 Sachets - Half KG packets",
-          "photoBrands": [
-            "Nescafe",
-            "Continental",
-            "Bru"
-          ]
+          "q": "instant coffee granules"
         },
         {
           "slug": "soft-drinks",
@@ -1004,17 +929,7 @@
             "drinking water"
           ],
           "desc": "Bottled drinking water.",
-          "q": "drinking water bottle",
-          "brands": [
-            "kinley",
-            "bisleri",
-            "bindu"
-          ],
-          "photoBrands": [
-            "kinley",
-            "bindu",
-            "bisleri"
-          ]
+          "q": "drinking water bottle"
         }
       ]
     },
@@ -1084,13 +999,7 @@
             "sevai"
           ],
           "desc": "Thin wheat noodles for payasam and upma.",
-          "q": "vermicelli",
-          "brands": [
-            "Bambino"
-          ],
-          "photoBrands": [
-            "Bambino"
-          ]
+          "q": "vermicelli"
         },
         {
           "slug": "macaroni",
@@ -1149,16 +1058,7 @@
             "battala powder"
           ],
           "desc": "Washing powder for clothes, from small ₹10 packets up to 1 kg and 3 kg packs.",
-          "q": "laundry detergent powder",
-          "brands": [
-            "Tide",
-            "Rin",
-            "Ariel"
-          ],
-          "sizes": "₹10 packets · 1 kg · 3 kg",
-          "photoBrands": [
-            "Tide"
-          ]
+          "q": "laundry detergent powder"
         },
         {
           "slug": "washing-bar",
@@ -1201,13 +1101,7 @@
             "bokula liquid"
           ],
           "desc": "Liquid cleaner for washing utensils.",
-          "q": "dishwashing liquid bottle",
-          "brands": [
-            "Vim"
-          ],
-          "photoBrands": [
-            "Vim"
-          ]
+          "q": "dishwashing liquid bottle"
         },
         {
           "slug": "floor-cleaner",
@@ -1220,13 +1114,7 @@
             "mopping liquid"
           ],
           "desc": "Fragrant floor-cleaning liquid for mopping.",
-          "q": "floor mop bucket cleaning",
-          "brands": [
-            "Lizol"
-          ],
-          "photoBrands": [
-            "Lizol"
-          ]
+          "q": "floor mop bucket cleaning"
         },
         {
           "slug": "phenyl",
@@ -1310,10 +1198,7 @@
             "jet coil"
           ],
           "desc": "Slow-burning coil to keep mosquitoes away.",
-          "q": "mosquito coil",
-          "brands": [
-            "Jet"
-          ]
+          "q": "mosquito coil"
         },
         {
           "slug": "insect-spray",
@@ -1327,13 +1212,7 @@
             "domala spray"
           ],
           "desc": "Sprays for mosquitoes, flies and cockroaches.",
-          "q": "insecticide spray",
-          "brands": [
-            "HIT"
-          ],
-          "photoBrands": [
-            "HIT"
-          ]
+          "q": "insecticide spray"
         },
         {
           "slug": "acid-bottle",
@@ -1371,19 +1250,7 @@
           ],
           "desc": "Soap bars for bathing.",
           "q": "bar of soap",
-          "brands": [
-            "Cinthol",
-            "Mysore Sandal",
-            "Santoor",
-            "dettol"
-          ],
-          "price": "Rs 10 - Rs 45",
-          "photoBrands": [
-            "Cinthol",
-            "Mysore Sandal",
-            "Santoor",
-            "dettol"
-          ]
+          "price": "Rs 10 - Rs 45"
         },
         {
           "slug": "shampoo",
@@ -1396,24 +1263,7 @@
             "hair wash"
           ],
           "desc": "Shampoo in small single-use sachets.",
-          "q": "shampoo sachets",
-          "brands": [
-            "Chik",
-            "Clinic Plus",
-            "Head & Shoulders",
-            "Meera",
-            "Karthika",
-            "Dove"
-          ],
-          "sizes": "Sachets",
-          "photoBrands": [
-            "Clinic Plus",
-            "Dove",
-            "Chik",
-            "Karthika",
-            "Meera",
-            "Head & Shoulders"
-          ]
+          "q": "shampoo sachets"
         },
         {
           "slug": "shikakai",
@@ -1429,13 +1279,7 @@
             "shikaya"
           ],
           "desc": "Traditional herbal hair-wash powder.",
-          "q": "shikakai",
-          "brands": [
-            "Meera"
-          ],
-          "photoBrands": [
-            "Meera"
-          ]
+          "q": "shikakai"
         },
         {
           "slug": "toothpaste",
@@ -1446,17 +1290,7 @@
             "tooth paste"
           ],
           "desc": "Toothpaste for daily oral care.",
-          "q": "toothpaste on toothbrush",
-          "brands": [
-            "colgate",
-            "close up",
-            "dabur red"
-          ],
-          "photoBrands": [
-            "colgate",
-            "dabur red",
-            "close up"
-          ]
+          "q": "toothpaste on toothbrush"
         },
         {
           "slug": "toothbrush",
@@ -1491,8 +1325,7 @@
             "dypers",
             "pampers"
           ],
-          "desc": "Used for kids.",
-          "sizes": "S . M . L . XL"
+          "desc": "Used for kids."
         }
       ]
     },
@@ -1544,17 +1377,7 @@
             "noodles packet"
           ],
           "desc": "Quick-cooking noodles, from small single packs to large family packs.",
-          "q": "instant noodles cooked",
-          "brands": [
-            "Maggi",
-            "Yippee"
-          ],
-          "sizes": "Small single packs to large family packs",
-          "photoBrands": [
-            null,
-            "Yippee",
-            "Maggi"
-          ]
+          "q": "instant noodles cooked"
         },
         {
           "slug": "baking-soda",
@@ -2016,8 +1839,7 @@
             "incense sticks"
           ],
           "desc": "Plain incense sticks sold as loose packets for everyday puja.",
-          "q": "incense sticks bundle",
-          "sizes": "150 g to 500 g packets"
+          "q": "incense sticks bundle"
         }
       ]
     },
@@ -2392,10 +2214,6 @@
           ],
           "desc": "A piece of sandalwood to rub into paste.",
           "q": "sandalwood",
-          "brands": [
-            "Natural chandan"
-          ],
-          "sizes": "1 piece",
           "price": "200 and above"
         },
         {

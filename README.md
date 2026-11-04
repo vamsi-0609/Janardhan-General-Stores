@@ -21,7 +21,10 @@ The build uses only Node's standard library. It needs no network access and no e
 | Path | What |
 | --- | --- |
 | `src/data/shop.mjs` | Name, address (EN/TE), phone, WhatsApp, email, hours, Maps link — edit contact details here |
-| `src/data/catalogue.mjs` | Sections, categories and products (EN name, Telugu name, aliases, description) |
+| `src/data/catalogue.json` | Sections, categories and **types** of products (e.g. Detergent Powder): name, Telugu name, other names, description, photo |
+| `src/data/brands.json` | **Brands** (Tide, Rin, Colgate …) |
+| `src/data/products.json` | **Products**: one product = one item in one size, e.g. “Rin Detergent Powder · ½ kg”. Type, brand, name, size, price, photos, other names, in stock. Loose items have `loose`, `min` (starts from, grams) and `step` (each + adds, grams). |
+| `src/data/catalogue.mjs` | Reads the three files above for the build |
 | `src/data/image-credits.json` | Internal record of where each product photo came from (not shown on the site) |
 | `src/styles.css`, `src/client/*.js` | Styling, small progressive enhancements, client-side search |
 | `scripts/build.mjs` | Static site generator → `dist/` |
@@ -35,6 +38,10 @@ Double-click **`Open Editor.cmd`** (or run `npm run editor`). It opens http://lo
 ### Festival recommendations (home page)
 
 The top of the home page shows the next festival automatically, using today's date in India: items to buy for a few days before it, then a greeting on the festival day. Festivals, dates, greetings and items are in `src/data/festivals.mjs`. **Add next year's dates there once a year** (the build warns when fewer than 120 days of dates are left). Preview any day with `/?fest-date=YYYY-MM-DD`.
+
+### My list (WhatsApp list)
+
+Every product card has **Add**, then **− n +**. Loose items open a weight panel (from the product's “starts from”, in fixed steps). The list (`/list/`) asks for the customer's name and pickup time (pickup only, no delivery), can ask for an estimated total, and opens WhatsApp with the whole list typed in. The list is stored only in the customer's browser. Search understands sizes: “rin 1 kg”, “tide ₹10”, “అర కిలో కంది పప్పు”.
 
 ### Shop QR poster and app (PWA)
 

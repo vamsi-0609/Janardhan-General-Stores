@@ -1,0 +1,3664 @@
+{
+  "products": [
+    {
+      "id": "ns-masoori-rice-loose",
+      "type": "sona-masoori-rice",
+      "brand": "ns",
+      "name": "NS Masoori Rice",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "sona-masoori-rice"
+      ]
+    },
+    {
+      "id": "aahar-masoori-rice-loose",
+      "type": "sona-masoori-rice",
+      "brand": "aahar",
+      "name": "Aahar Masoori Rice",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "sona-masoori-rice"
+      ]
+    },
+    {
+      "id": "csr-masoori-rice-loose",
+      "type": "sona-masoori-rice",
+      "brand": "csr",
+      "name": "CSR Masoori Rice",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "sona-masoori-rice"
+      ]
+    },
+    {
+      "id": "lakshmi-masoori-rice-loose",
+      "type": "sona-masoori-rice",
+      "brand": "lakshmi",
+      "name": "Lakshmi Masoori Rice",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "sona-masoori-rice"
+      ]
+    },
+    {
+      "id": "arshiya-black-masoori-rice-loose",
+      "type": "sona-masoori-rice",
+      "brand": "arshiya-black",
+      "name": "Arshiya Black Masoori Rice",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "sona-masoori-rice"
+      ]
+    },
+    {
+      "id": "unity-basmati-rice-loose",
+      "type": "basmati-rice",
+      "brand": "unity",
+      "name": "Unity Basmati Rice",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "basmati-rice"
+      ]
+    },
+    {
+      "id": "india-gate-basmati-rice-loose",
+      "type": "basmati-rice",
+      "brand": "india-gate",
+      "name": "India Gate Basmati Rice",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "basmati-rice"
+      ]
+    },
+    {
+      "id": "uppudu-biyyam-loose",
+      "type": "boiled-rice",
+      "name": "Uppudu Biyyam (Boiled Rice)",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "boiled-rice"
+      ]
+    },
+    {
+      "id": "toor-dal-loose",
+      "type": "toor-dal",
+      "name": "Toor Dal (Kandi Pappu)",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "toor-dal"
+      ]
+    },
+    {
+      "id": "moong-dal-loose",
+      "type": "moong-dal",
+      "name": "Moong Dal (Pesara Pappu)",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "moong-dal"
+      ]
+    },
+    {
+      "id": "green-gram-loose",
+      "type": "green-gram",
+      "name": "Green Gram (Pesalu)",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "green-gram"
+      ]
+    },
+    {
+      "id": "urad-dal-loose",
+      "type": "urad-dal",
+      "name": "Urad Dal (Minapa Pappu)",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "urad-dal"
+      ]
+    },
+    {
+      "id": "chana-dal-loose",
+      "type": "chana-dal",
+      "name": "Chana Dal (Senaga Pappu)",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "chana-dal"
+      ]
+    },
+    {
+      "id": "manchi-pappulu-loose",
+      "type": "kabuli-chana",
+      "name": "Manchi pappulu (Chickpeas)",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "kabuli-chana"
+      ]
+    },
+    {
+      "id": "red-chickpeas-loose",
+      "type": "black-chana",
+      "name": "Red Chickpeas",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "black-chana"
+      ]
+    },
+    {
+      "id": "white-chickpeas-loose",
+      "type": "roasted-gram",
+      "name": "White chickpeas (Senagalu)",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "roasted-gram"
+      ]
+    },
+    {
+      "id": "horse-gram-loose",
+      "type": "horse-gram",
+      "name": "Horse Gram (Ulavalu)",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "horse-gram"
+      ]
+    },
+    {
+      "id": "groundnuts-loose",
+      "type": "groundnuts",
+      "name": "Groundnuts (Palli)",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "groundnuts"
+      ]
+    },
+    {
+      "id": "whole-pegion-peas-loose",
+      "type": "whole-pegion-peas",
+      "name": "Whole pegion peas",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "whole-pegion-peas"
+      ]
+    },
+    {
+      "id": "paddy-grains-loose",
+      "type": "paddy-grains",
+      "name": "Paddy Grains",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "paddy-grains"
+      ]
+    },
+    {
+      "id": "whole-black-gram-loose",
+      "type": "whole-black-gram",
+      "name": "Whole black gram",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "whole-black-gram"
+      ]
+    },
+    {
+      "id": "red-millet-loose",
+      "type": "red-millet",
+      "name": "Red Millet",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "red-millet"
+      ]
+    },
+    {
+      "id": "pearl-millet-loose",
+      "type": "pearl-millet",
+      "name": "Pearl Millet",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "pearl-millet"
+      ]
+    },
+    {
+      "id": "aashirvaad-wheat-flour-1-kg-packet",
+      "type": "wheat-atta",
+      "brand": "aashirvaad",
+      "name": "Aashirvaad Wheat Flour",
+      "size": "1 kg packet",
+      "photos": [
+        "wheat-atta"
+      ]
+    },
+    {
+      "id": "aashirvaad-wheat-flour-5-kg-packet",
+      "type": "wheat-atta",
+      "brand": "aashirvaad",
+      "name": "Aashirvaad Wheat Flour",
+      "size": "5 kg packet",
+      "photos": [
+        "wheat-atta"
+      ]
+    },
+    {
+      "id": "aashirvaad-wheat-flour-10-kg-packet",
+      "type": "wheat-atta",
+      "brand": "aashirvaad",
+      "name": "Aashirvaad Wheat Flour",
+      "size": "10 kg packet",
+      "photos": [
+        "wheat-atta"
+      ]
+    },
+    {
+      "id": "maida-loose",
+      "type": "maida",
+      "name": "Maida (Refined Flour)",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "maida"
+      ]
+    },
+    {
+      "id": "besan-loose",
+      "type": "besan",
+      "name": "Besan (Gram Flour)",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "besan"
+      ]
+    },
+    {
+      "id": "rice-flour-loose",
+      "type": "rice-flour",
+      "name": "Rice Flour",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "rice-flour"
+      ]
+    },
+    {
+      "id": "ragi-flour-loose",
+      "type": "ragi-flour",
+      "name": "Ragi Flour",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "ragi-flour"
+      ]
+    },
+    {
+      "id": "jowar-flour-loose",
+      "type": "jowar-flour",
+      "name": "Jowar Flour",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "jowar-flour"
+      ]
+    },
+    {
+      "id": "corn-flour-loose",
+      "type": "corn-flour",
+      "name": "Corn Flour",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "corn-flour"
+      ]
+    },
+    {
+      "id": "freedom-groundnut-oil-1-l-packet",
+      "type": "groundnut-oil",
+      "brand": "freedom",
+      "name": "Freedom Groundnut Oil",
+      "size": "1 L packet"
+    },
+    {
+      "id": "freedom-groundnut-oil-15-l-can",
+      "type": "groundnut-oil",
+      "brand": "freedom",
+      "name": "Freedom Groundnut Oil",
+      "size": "15 L can"
+    },
+    {
+      "id": "priya-groundnut-oil-1-l-packet",
+      "type": "groundnut-oil",
+      "brand": "priya",
+      "name": "Priya Groundnut Oil",
+      "size": "1 L packet",
+      "photos": [
+        "groundnut-oil"
+      ]
+    },
+    {
+      "id": "priya-groundnut-oil-15-l-can",
+      "type": "groundnut-oil",
+      "brand": "priya",
+      "name": "Priya Groundnut Oil",
+      "size": "15 L can",
+      "photos": [
+        "groundnut-oil"
+      ]
+    },
+    {
+      "id": "gold-drop-groundnut-oil-1-l-packet",
+      "type": "groundnut-oil",
+      "brand": "gold-drop",
+      "name": "Gold Drop Groundnut Oil",
+      "size": "1 L packet"
+    },
+    {
+      "id": "gold-drop-groundnut-oil-15-l-can",
+      "type": "groundnut-oil",
+      "brand": "gold-drop",
+      "name": "Gold Drop Groundnut Oil",
+      "size": "15 L can"
+    },
+    {
+      "id": "natraj-groundnut-oil-1-l-packet",
+      "type": "groundnut-oil",
+      "brand": "natraj",
+      "name": "Natraj Groundnut Oil",
+      "size": "1 L packet",
+      "photos": [
+        "groundnut-oil-2"
+      ]
+    },
+    {
+      "id": "natraj-groundnut-oil-15-l-can",
+      "type": "groundnut-oil",
+      "brand": "natraj",
+      "name": "Natraj Groundnut Oil",
+      "size": "15 L can",
+      "photos": [
+        "groundnut-oil-2"
+      ]
+    },
+    {
+      "id": "freedom-sunflower-oil-1-l-packet",
+      "type": "sunflower-oil",
+      "brand": "freedom",
+      "name": "Freedom Sunflower Oil",
+      "size": "1 L packet",
+      "photos": [
+        "sunflower-oil"
+      ]
+    },
+    {
+      "id": "priya-sunflower-oil-1-l-packet",
+      "type": "sunflower-oil",
+      "brand": "priya",
+      "name": "Priya Sunflower Oil",
+      "size": "1 L packet",
+      "photos": [
+        "sunflower-oil-2"
+      ]
+    },
+    {
+      "id": "gold-drop-sunflower-oil-1-l-packet",
+      "type": "sunflower-oil",
+      "brand": "gold-drop",
+      "name": "Gold Drop Sunflower Oil",
+      "size": "1 L packet",
+      "photos": [
+        "sunflower-oil-3"
+      ]
+    },
+    {
+      "id": "rice-bran-oil-100-ml",
+      "type": "rice-bran-oil",
+      "name": "Rice Bran Oil",
+      "size": "100 ml",
+      "photos": [
+        "rice-bran-oil"
+      ]
+    },
+    {
+      "id": "rice-bran-oil-200-ml",
+      "type": "rice-bran-oil",
+      "name": "Rice Bran Oil",
+      "size": "200 ml",
+      "photos": [
+        "rice-bran-oil"
+      ]
+    },
+    {
+      "id": "rice-bran-oil-500-ml",
+      "type": "rice-bran-oil",
+      "name": "Rice Bran Oil",
+      "size": "500 ml",
+      "photos": [
+        "rice-bran-oil"
+      ]
+    },
+    {
+      "id": "rice-bran-oil-1-l",
+      "type": "rice-bran-oil",
+      "name": "Rice Bran Oil",
+      "size": "1 L",
+      "photos": [
+        "rice-bran-oil"
+      ]
+    },
+    {
+      "id": "sesame-oil-100-ml",
+      "type": "sesame-oil",
+      "name": "Sesame Oil (Gingelly)",
+      "size": "100 ml",
+      "photos": [
+        "sesame-oil"
+      ]
+    },
+    {
+      "id": "sesame-oil-200-ml",
+      "type": "sesame-oil",
+      "name": "Sesame Oil (Gingelly)",
+      "size": "200 ml",
+      "photos": [
+        "sesame-oil"
+      ]
+    },
+    {
+      "id": "sesame-oil-500-ml",
+      "type": "sesame-oil",
+      "name": "Sesame Oil (Gingelly)",
+      "size": "500 ml",
+      "photos": [
+        "sesame-oil"
+      ]
+    },
+    {
+      "id": "sesame-oil-1-l",
+      "type": "sesame-oil",
+      "name": "Sesame Oil (Gingelly)",
+      "size": "1 L",
+      "photos": [
+        "sesame-oil"
+      ]
+    },
+    {
+      "id": "coconut-oil-100-ml",
+      "type": "coconut-oil",
+      "name": "Coconut Oil",
+      "size": "100 ml",
+      "photos": [
+        "coconut-oil"
+      ]
+    },
+    {
+      "id": "coconut-oil-200-ml",
+      "type": "coconut-oil",
+      "name": "Coconut Oil",
+      "size": "200 ml",
+      "photos": [
+        "coconut-oil"
+      ]
+    },
+    {
+      "id": "coconut-oil-500-ml",
+      "type": "coconut-oil",
+      "name": "Coconut Oil",
+      "size": "500 ml",
+      "photos": [
+        "coconut-oil"
+      ]
+    },
+    {
+      "id": "coconut-oil-1-l",
+      "type": "coconut-oil",
+      "name": "Coconut Oil",
+      "size": "1 L",
+      "photos": [
+        "coconut-oil"
+      ]
+    },
+    {
+      "id": "freedom-palm-oil-1-l-packet",
+      "type": "palmolein-oil",
+      "brand": "freedom",
+      "name": "Freedom Palm Oil",
+      "size": "1 L packet"
+    },
+    {
+      "id": "freedom-palm-oil-15-l-can",
+      "type": "palmolein-oil",
+      "brand": "freedom",
+      "name": "Freedom Palm Oil",
+      "size": "15 L can"
+    },
+    {
+      "id": "priya-palm-oil-1-l-packet",
+      "type": "palmolein-oil",
+      "brand": "priya",
+      "name": "Priya Palm Oil",
+      "size": "1 L packet",
+      "photos": [
+        "palmolein-oil-2"
+      ]
+    },
+    {
+      "id": "priya-palm-oil-15-l-can",
+      "type": "palmolein-oil",
+      "brand": "priya",
+      "name": "Priya Palm Oil",
+      "size": "15 L can",
+      "photos": [
+        "palmolein-oil-2"
+      ]
+    },
+    {
+      "id": "gold-drop-palm-oil-1-l-packet",
+      "type": "palmolein-oil",
+      "brand": "gold-drop",
+      "name": "Gold Drop Palm Oil",
+      "size": "1 L packet"
+    },
+    {
+      "id": "gold-drop-palm-oil-15-l-can",
+      "type": "palmolein-oil",
+      "brand": "gold-drop",
+      "name": "Gold Drop Palm Oil",
+      "size": "15 L can"
+    },
+    {
+      "id": "priya-gold-palm-oil-1-l-packet",
+      "type": "palmolein-oil",
+      "brand": "priya-gold",
+      "name": "Priya Gold Palm Oil",
+      "size": "1 L packet",
+      "photos": [
+        "palmolein-oil"
+      ]
+    },
+    {
+      "id": "priya-gold-palm-oil-15-l-can",
+      "type": "palmolein-oil",
+      "brand": "priya-gold",
+      "name": "Priya Gold Palm Oil",
+      "size": "15 L can",
+      "photos": [
+        "palmolein-oil"
+      ]
+    },
+    {
+      "id": "mustard-oil-100-ml",
+      "type": "mustard-oil",
+      "name": "Mustard Oil",
+      "size": "100 ml",
+      "photos": [
+        "mustard-oil"
+      ]
+    },
+    {
+      "id": "mustard-oil-200-ml",
+      "type": "mustard-oil",
+      "name": "Mustard Oil",
+      "size": "200 ml",
+      "photos": [
+        "mustard-oil"
+      ]
+    },
+    {
+      "id": "mustard-oil-500-ml",
+      "type": "mustard-oil",
+      "name": "Mustard Oil",
+      "size": "500 ml",
+      "photos": [
+        "mustard-oil"
+      ]
+    },
+    {
+      "id": "mustard-oil-1-l",
+      "type": "mustard-oil",
+      "name": "Mustard Oil",
+      "size": "1 L",
+      "photos": [
+        "mustard-oil"
+      ]
+    },
+    {
+      "id": "ghee-50-ml",
+      "type": "ghee",
+      "name": "Ghee",
+      "size": "50 ml",
+      "photos": [
+        "ghee"
+      ]
+    },
+    {
+      "id": "ghee-100-ml",
+      "type": "ghee",
+      "name": "Ghee",
+      "size": "100 ml",
+      "photos": [
+        "ghee"
+      ]
+    },
+    {
+      "id": "ghee-200-ml",
+      "type": "ghee",
+      "name": "Ghee",
+      "size": "200 ml",
+      "photos": [
+        "ghee"
+      ]
+    },
+    {
+      "id": "ghee-500-ml",
+      "type": "ghee",
+      "name": "Ghee",
+      "size": "500 ml",
+      "photos": [
+        "ghee"
+      ]
+    },
+    {
+      "id": "ghee-1-l",
+      "type": "ghee",
+      "name": "Ghee",
+      "size": "1 L",
+      "photos": [
+        "ghee"
+      ]
+    },
+    {
+      "id": "red-chilli-powder-rs-10-packet",
+      "type": "red-chilli-powder",
+      "name": "Red Chilli Powder",
+      "size": "₹10 packet",
+      "photos": [
+        "red-chilli-powder"
+      ]
+    },
+    {
+      "id": "red-chilli-powder-rs-20-packet",
+      "type": "red-chilli-powder",
+      "name": "Red Chilli Powder",
+      "size": "₹20 packet",
+      "photos": [
+        "red-chilli-powder"
+      ]
+    },
+    {
+      "id": "red-chilli-powder-50-g",
+      "type": "red-chilli-powder",
+      "name": "Red Chilli Powder",
+      "size": "50 g",
+      "photos": [
+        "red-chilli-powder"
+      ]
+    },
+    {
+      "id": "red-chilli-powder-100-g",
+      "type": "red-chilli-powder",
+      "name": "Red Chilli Powder",
+      "size": "100 g",
+      "photos": [
+        "red-chilli-powder"
+      ]
+    },
+    {
+      "id": "dry-red-chillies-loose",
+      "type": "dry-red-chillies",
+      "name": "Dry Red Chillies",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "dry-red-chillies"
+      ]
+    },
+    {
+      "id": "turmeric-powder-rs-10-packet",
+      "type": "turmeric-powder",
+      "name": "Turmeric Powder",
+      "size": "₹10 packet",
+      "photos": [
+        "turmeric-powder"
+      ]
+    },
+    {
+      "id": "turmeric-powder-rs-20-packet",
+      "type": "turmeric-powder",
+      "name": "Turmeric Powder",
+      "size": "₹20 packet",
+      "photos": [
+        "turmeric-powder"
+      ]
+    },
+    {
+      "id": "turmeric-powder-50-g",
+      "type": "turmeric-powder",
+      "name": "Turmeric Powder",
+      "size": "50 g",
+      "photos": [
+        "turmeric-powder"
+      ]
+    },
+    {
+      "id": "turmeric-powder-100-g",
+      "type": "turmeric-powder",
+      "name": "Turmeric Powder",
+      "size": "100 g",
+      "photos": [
+        "turmeric-powder"
+      ]
+    },
+    {
+      "id": "coriander-powder-rs-10-packet",
+      "type": "coriander-powder",
+      "name": "Coriander Powder",
+      "size": "₹10 packet",
+      "photos": [
+        "coriander-powder"
+      ]
+    },
+    {
+      "id": "coriander-powder-rs-20-packet",
+      "type": "coriander-powder",
+      "name": "Coriander Powder",
+      "size": "₹20 packet",
+      "photos": [
+        "coriander-powder"
+      ]
+    },
+    {
+      "id": "coriander-powder-50-g",
+      "type": "coriander-powder",
+      "name": "Coriander Powder",
+      "size": "50 g",
+      "photos": [
+        "coriander-powder"
+      ]
+    },
+    {
+      "id": "coriander-powder-100-g",
+      "type": "coriander-powder",
+      "name": "Coriander Powder",
+      "size": "100 g",
+      "photos": [
+        "coriander-powder"
+      ]
+    },
+    {
+      "id": "coriander-seeds-loose",
+      "type": "coriander-seeds",
+      "name": "Coriander Seeds",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "coriander-seeds"
+      ],
+      "min": 50,
+      "step": 25
+    },
+    {
+      "id": "cumin-seeds-loose",
+      "type": "cumin-seeds",
+      "name": "Cumin Seeds (Jeera)",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "cumin-seeds"
+      ],
+      "min": 50,
+      "step": 25
+    },
+    {
+      "id": "mustard-seeds-loose",
+      "type": "mustard-seeds",
+      "name": "Mustard Seeds",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "mustard-seeds"
+      ],
+      "min": 50,
+      "step": 25
+    },
+    {
+      "id": "fenugreek-seeds-loose",
+      "type": "fenugreek-seeds",
+      "name": "Fenugreek Seeds",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "fenugreek-seeds"
+      ],
+      "min": 50,
+      "step": 25
+    },
+    {
+      "id": "white-sesame-seeds-loose",
+      "type": "white-sesame",
+      "name": "White Sesame Seeds (Nuvvulu)",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "white-sesame"
+      ],
+      "min": 50,
+      "step": 25
+    },
+    {
+      "id": "black-sesame-seeds-loose",
+      "type": "black-sesame",
+      "name": "Black Sesame Seeds (Nalla Nuvvulu)",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "black-sesame"
+      ],
+      "min": 50,
+      "step": 25
+    },
+    {
+      "id": "black-pepper-loose",
+      "type": "black-pepper",
+      "name": "Black Pepper",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "black-pepper"
+      ],
+      "min": 25,
+      "step": 25
+    },
+    {
+      "id": "cardamom-loose",
+      "type": "cardamom",
+      "name": "Cardamom",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "cardamom"
+      ],
+      "min": 25,
+      "step": 25
+    },
+    {
+      "id": "cloves-loose",
+      "type": "cloves",
+      "name": "Cloves",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "cloves"
+      ],
+      "min": 25,
+      "step": 25
+    },
+    {
+      "id": "cinnamon-loose",
+      "type": "cinnamon",
+      "name": "Cinnamon",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "cinnamon"
+      ],
+      "min": 25,
+      "step": 25
+    },
+    {
+      "id": "garam-masala-rs-10-packet",
+      "type": "garam-masala",
+      "name": "Garam Masala",
+      "size": "₹10 packet",
+      "photos": [
+        "garam-masala"
+      ]
+    },
+    {
+      "id": "garam-masala-rs-20-packet",
+      "type": "garam-masala",
+      "name": "Garam Masala",
+      "size": "₹20 packet",
+      "photos": [
+        "garam-masala"
+      ]
+    },
+    {
+      "id": "garam-masala-50-g",
+      "type": "garam-masala",
+      "name": "Garam Masala",
+      "size": "50 g",
+      "photos": [
+        "garam-masala"
+      ]
+    },
+    {
+      "id": "garam-masala-100-g",
+      "type": "garam-masala",
+      "name": "Garam Masala",
+      "size": "100 g",
+      "photos": [
+        "garam-masala"
+      ]
+    },
+    {
+      "id": "sambar-powder-rs-10-packet",
+      "type": "sambar-powder",
+      "name": "Sambar Powder",
+      "size": "₹10 packet",
+      "photos": [
+        "sambar-powder"
+      ]
+    },
+    {
+      "id": "sambar-powder-rs-20-packet",
+      "type": "sambar-powder",
+      "name": "Sambar Powder",
+      "size": "₹20 packet",
+      "photos": [
+        "sambar-powder"
+      ]
+    },
+    {
+      "id": "sambar-powder-50-g",
+      "type": "sambar-powder",
+      "name": "Sambar Powder",
+      "size": "50 g",
+      "photos": [
+        "sambar-powder"
+      ]
+    },
+    {
+      "id": "sambar-powder-100-g",
+      "type": "sambar-powder",
+      "name": "Sambar Powder",
+      "size": "100 g",
+      "photos": [
+        "sambar-powder"
+      ]
+    },
+    {
+      "id": "asafoetida",
+      "type": "asafoetida",
+      "name": "Asafoetida (Hing)",
+      "size": "",
+      "unit": "box",
+      "photos": [
+        "asafoetida"
+      ]
+    },
+    {
+      "id": "tamarind-loose",
+      "type": "tamarind",
+      "name": "Tamarind",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "tamarind"
+      ]
+    },
+    {
+      "id": "star-anise-loose",
+      "type": "star-anise",
+      "name": "Star Anise",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "star-anise"
+      ],
+      "min": 25,
+      "step": 25
+    },
+    {
+      "id": "bay-leaves-loose",
+      "type": "bay-leaves",
+      "name": "Bay Leaves",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "bay-leaves"
+      ],
+      "min": 25,
+      "step": 25
+    },
+    {
+      "id": "rasam-powder-rs-10-packet",
+      "type": "rasam-powder",
+      "name": "Rasam Powder",
+      "size": "₹10 packet",
+      "photos": [
+        "rasam-powder"
+      ]
+    },
+    {
+      "id": "rasam-powder-rs-20-packet",
+      "type": "rasam-powder",
+      "name": "Rasam Powder",
+      "size": "₹20 packet",
+      "photos": [
+        "rasam-powder"
+      ]
+    },
+    {
+      "id": "rasam-powder-50-g",
+      "type": "rasam-powder",
+      "name": "Rasam Powder",
+      "size": "50 g",
+      "photos": [
+        "rasam-powder"
+      ]
+    },
+    {
+      "id": "rasam-powder-100-g",
+      "type": "rasam-powder",
+      "name": "Rasam Powder",
+      "size": "100 g",
+      "photos": [
+        "rasam-powder"
+      ]
+    },
+    {
+      "id": "sugar-loose",
+      "type": "sugar",
+      "name": "Sugar",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "sugar"
+      ]
+    },
+    {
+      "id": "iodised-salt-1-2-kg-packet",
+      "type": "salt",
+      "name": "Iodised Salt",
+      "size": "½ kg packet",
+      "photos": [
+        "salt"
+      ]
+    },
+    {
+      "id": "iodised-salt-1-kg-packet",
+      "type": "salt",
+      "name": "Iodised Salt",
+      "size": "1 kg packet",
+      "photos": [
+        "salt"
+      ]
+    },
+    {
+      "id": "crystal-salt-loose",
+      "type": "crystal-salt",
+      "name": "Crystal Salt",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "crystal-salt"
+      ]
+    },
+    {
+      "id": "jaggery-loose",
+      "type": "jaggery",
+      "name": "Jaggery",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "jaggery"
+      ]
+    },
+    {
+      "id": "jaggery-powder-loose",
+      "type": "jaggery-powder",
+      "name": "Jaggery Powder",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "jaggery-powder"
+      ]
+    },
+    {
+      "id": "sugar-candy-loose",
+      "type": "sugar-candy",
+      "name": "Sugar Candy",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "sugar-candy"
+      ]
+    },
+    {
+      "id": "palm-jaggery-loose",
+      "type": "palm-jaggery",
+      "name": "Palm Jaggery",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "palm-jaggery"
+      ]
+    },
+    {
+      "id": "cashew-nuts-loose",
+      "type": "cashew-nuts",
+      "name": "Cashew Nuts",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "cashew-nuts"
+      ],
+      "min": 25,
+      "step": 25
+    },
+    {
+      "id": "almonds-loose",
+      "type": "almonds",
+      "name": "Almonds",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "almonds"
+      ],
+      "min": 25,
+      "step": 25
+    },
+    {
+      "id": "raisins-loose",
+      "type": "raisins",
+      "name": "Raisins",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "raisins"
+      ],
+      "min": 25,
+      "step": 25
+    },
+    {
+      "id": "dry-dates-loose",
+      "type": "dates",
+      "name": "Dry Dates (Endu Kharjuram)",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "dates"
+      ],
+      "min": 25,
+      "step": 25
+    },
+    {
+      "id": "pistachios-loose",
+      "type": "pistachios",
+      "name": "Pistachios",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "pistachios"
+      ],
+      "min": 25,
+      "step": 25
+    },
+    {
+      "id": "red-label-tea-powder-rs-10-packet",
+      "type": "tea-powder",
+      "brand": "red-label",
+      "name": "Red Label Tea Powder",
+      "size": "₹10 packet",
+      "photos": [
+        "tea-powder-2"
+      ]
+    },
+    {
+      "id": "red-label-tea-powder-100-g",
+      "type": "tea-powder",
+      "brand": "red-label",
+      "name": "Red Label Tea Powder",
+      "size": "100 g",
+      "photos": [
+        "tea-powder-2"
+      ]
+    },
+    {
+      "id": "red-label-tea-powder-250-g",
+      "type": "tea-powder",
+      "brand": "red-label",
+      "name": "Red Label Tea Powder",
+      "size": "250 g",
+      "photos": [
+        "tea-powder-2"
+      ]
+    },
+    {
+      "id": "taj-mahal-tea-powder-rs-10-packet",
+      "type": "tea-powder",
+      "brand": "taj-mahal",
+      "name": "Taj Mahal Tea Powder",
+      "size": "₹10 packet",
+      "photos": [
+        "tea-powder-3"
+      ]
+    },
+    {
+      "id": "taj-mahal-tea-powder-100-g",
+      "type": "tea-powder",
+      "brand": "taj-mahal",
+      "name": "Taj Mahal Tea Powder",
+      "size": "100 g",
+      "photos": [
+        "tea-powder-3"
+      ]
+    },
+    {
+      "id": "taj-mahal-tea-powder-250-g",
+      "type": "tea-powder",
+      "brand": "taj-mahal",
+      "name": "Taj Mahal Tea Powder",
+      "size": "250 g",
+      "photos": [
+        "tea-powder-3"
+      ]
+    },
+    {
+      "id": "3-roses-tea-powder-rs-10-packet",
+      "type": "tea-powder",
+      "brand": "3-roses",
+      "name": "3 Roses Tea Powder",
+      "size": "₹10 packet",
+      "photos": [
+        "tea-powder"
+      ]
+    },
+    {
+      "id": "3-roses-tea-powder-100-g",
+      "type": "tea-powder",
+      "brand": "3-roses",
+      "name": "3 Roses Tea Powder",
+      "size": "100 g",
+      "photos": [
+        "tea-powder"
+      ]
+    },
+    {
+      "id": "3-roses-tea-powder-250-g",
+      "type": "tea-powder",
+      "brand": "3-roses",
+      "name": "3 Roses Tea Powder",
+      "size": "250 g",
+      "photos": [
+        "tea-powder"
+      ]
+    },
+    {
+      "id": "bru-instant-coffee-powder-rs-2-sachet",
+      "type": "instant-coffee",
+      "brand": "bru",
+      "name": "Bru Instant Coffee Powder",
+      "size": "₹2 sachet",
+      "photos": [
+        "instant-coffee-3"
+      ]
+    },
+    {
+      "id": "bru-instant-coffee-powder-1-2-kg-packet",
+      "type": "instant-coffee",
+      "brand": "bru",
+      "name": "Bru Instant Coffee Powder",
+      "size": "½ kg packet",
+      "photos": [
+        "instant-coffee-3"
+      ]
+    },
+    {
+      "id": "nescafe-instant-coffee-powder-rs-2-sachet",
+      "type": "instant-coffee",
+      "brand": "nescafe",
+      "name": "Nescafe Instant Coffee Powder",
+      "size": "₹2 sachet",
+      "photos": [
+        "instant-coffee"
+      ]
+    },
+    {
+      "id": "nescafe-instant-coffee-powder-1-2-kg-packet",
+      "type": "instant-coffee",
+      "brand": "nescafe",
+      "name": "Nescafe Instant Coffee Powder",
+      "size": "½ kg packet",
+      "photos": [
+        "instant-coffee"
+      ]
+    },
+    {
+      "id": "continental-instant-coffee-powder-rs-2-sachet",
+      "type": "instant-coffee",
+      "brand": "continental",
+      "name": "Continental Instant Coffee Powder",
+      "size": "₹2 sachet",
+      "photos": [
+        "instant-coffee-2"
+      ]
+    },
+    {
+      "id": "continental-instant-coffee-powder-1-2-kg-packet",
+      "type": "instant-coffee",
+      "brand": "continental",
+      "name": "Continental Instant Coffee Powder",
+      "size": "½ kg packet",
+      "photos": [
+        "instant-coffee-2"
+      ]
+    },
+    {
+      "id": "soft-drinks-250-ml",
+      "type": "soft-drinks",
+      "name": "Soft Drinks",
+      "size": "250 ml",
+      "photos": [
+        "soft-drinks"
+      ]
+    },
+    {
+      "id": "soft-drinks-750-ml",
+      "type": "soft-drinks",
+      "name": "Soft Drinks",
+      "size": "750 ml",
+      "photos": [
+        "soft-drinks"
+      ]
+    },
+    {
+      "id": "soft-drinks-1-25-l",
+      "type": "soft-drinks",
+      "name": "Soft Drinks",
+      "size": "1.25 L",
+      "photos": [
+        "soft-drinks"
+      ]
+    },
+    {
+      "id": "soft-drinks-2-l",
+      "type": "soft-drinks",
+      "name": "Soft Drinks",
+      "size": "2 L",
+      "photos": [
+        "soft-drinks"
+      ]
+    },
+    {
+      "id": "kinley-packaged-drinking-water-500-ml",
+      "type": "packaged-water",
+      "brand": "kinley",
+      "name": "Kinley Packaged Drinking Water",
+      "size": "500 ml",
+      "photos": [
+        "packaged-water"
+      ]
+    },
+    {
+      "id": "kinley-packaged-drinking-water-1-l",
+      "type": "packaged-water",
+      "brand": "kinley",
+      "name": "Kinley Packaged Drinking Water",
+      "size": "1 L",
+      "photos": [
+        "packaged-water"
+      ]
+    },
+    {
+      "id": "kinley-packaged-drinking-water-2-l",
+      "type": "packaged-water",
+      "brand": "kinley",
+      "name": "Kinley Packaged Drinking Water",
+      "size": "2 L",
+      "photos": [
+        "packaged-water"
+      ]
+    },
+    {
+      "id": "bisleri-packaged-drinking-water-500-ml",
+      "type": "packaged-water",
+      "brand": "bisleri",
+      "name": "Bisleri Packaged Drinking Water",
+      "size": "500 ml",
+      "photos": [
+        "packaged-water-3"
+      ]
+    },
+    {
+      "id": "bisleri-packaged-drinking-water-1-l",
+      "type": "packaged-water",
+      "brand": "bisleri",
+      "name": "Bisleri Packaged Drinking Water",
+      "size": "1 L",
+      "photos": [
+        "packaged-water-3"
+      ]
+    },
+    {
+      "id": "bisleri-packaged-drinking-water-2-l",
+      "type": "packaged-water",
+      "brand": "bisleri",
+      "name": "Bisleri Packaged Drinking Water",
+      "size": "2 L",
+      "photos": [
+        "packaged-water-3"
+      ]
+    },
+    {
+      "id": "bindu-packaged-drinking-water-500-ml",
+      "type": "packaged-water",
+      "brand": "bindu",
+      "name": "Bindu Packaged Drinking Water",
+      "size": "500 ml",
+      "photos": [
+        "packaged-water-2"
+      ]
+    },
+    {
+      "id": "bindu-packaged-drinking-water-1-l",
+      "type": "packaged-water",
+      "brand": "bindu",
+      "name": "Bindu Packaged Drinking Water",
+      "size": "1 L",
+      "photos": [
+        "packaged-water-2"
+      ]
+    },
+    {
+      "id": "bindu-packaged-drinking-water-2-l",
+      "type": "packaged-water",
+      "brand": "bindu",
+      "name": "Bindu Packaged Drinking Water",
+      "size": "2 L",
+      "photos": [
+        "packaged-water-2"
+      ]
+    },
+    {
+      "id": "bombay-rava-loose",
+      "type": "bombay-rava",
+      "name": "Bombay Rava (Sooji)",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "bombay-rava"
+      ]
+    },
+    {
+      "id": "idli-rava-loose",
+      "type": "idli-rava",
+      "name": "Idli Rava",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "idli-rava"
+      ]
+    },
+    {
+      "id": "wheat-rava-loose",
+      "type": "wheat-rava",
+      "name": "Wheat Rava (Godhuma Rava)",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "wheat-rava"
+      ]
+    },
+    {
+      "id": "poha-loose",
+      "type": "poha",
+      "name": "Poha (Atukulu)",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "poha"
+      ]
+    },
+    {
+      "id": "bambino-vermicelli-small-packet",
+      "type": "vermicelli",
+      "brand": "bambino",
+      "name": "Bambino Vermicelli",
+      "size": "Small packet",
+      "photos": [
+        "vermicelli"
+      ]
+    },
+    {
+      "id": "bambino-vermicelli-big-packet",
+      "type": "vermicelli",
+      "brand": "bambino",
+      "name": "Bambino Vermicelli",
+      "size": "Big packet",
+      "photos": [
+        "vermicelli"
+      ]
+    },
+    {
+      "id": "macaroni-small-packet",
+      "type": "macaroni",
+      "name": "Macaroni",
+      "size": "Small packet",
+      "photos": [
+        "macaroni"
+      ]
+    },
+    {
+      "id": "macaroni-big-packet",
+      "type": "macaroni",
+      "name": "Macaroni",
+      "size": "Big packet",
+      "photos": [
+        "macaroni"
+      ]
+    },
+    {
+      "id": "sago-loose",
+      "type": "sago",
+      "name": "Sago (Saggubiyyam)",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "sago"
+      ]
+    },
+    {
+      "id": "puffed-rice-loose",
+      "type": "puffed-rice",
+      "name": "Puffed Rice (Borugulu)",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "puffed-rice"
+      ]
+    },
+    {
+      "id": "tide-detergent-powder-rs-10-packet",
+      "type": "detergent-powder",
+      "brand": "tide",
+      "name": "Tide Detergent Powder",
+      "size": "₹10 packet",
+      "photos": [
+        "detergent-powder"
+      ]
+    },
+    {
+      "id": "tide-detergent-powder-1-kg",
+      "type": "detergent-powder",
+      "brand": "tide",
+      "name": "Tide Detergent Powder",
+      "size": "1 kg",
+      "photos": [
+        "detergent-powder"
+      ]
+    },
+    {
+      "id": "tide-detergent-powder-3-kg",
+      "type": "detergent-powder",
+      "brand": "tide",
+      "name": "Tide Detergent Powder",
+      "size": "3 kg",
+      "photos": [
+        "detergent-powder"
+      ]
+    },
+    {
+      "id": "rin-detergent-powder-rs-10-packet",
+      "type": "detergent-powder",
+      "brand": "rin",
+      "name": "Rin Detergent Powder",
+      "size": "₹10 packet"
+    },
+    {
+      "id": "rin-detergent-powder-1-2-kg",
+      "type": "detergent-powder",
+      "brand": "rin",
+      "name": "Rin Detergent Powder",
+      "size": "½ kg"
+    },
+    {
+      "id": "rin-detergent-powder-1-kg",
+      "type": "detergent-powder",
+      "brand": "rin",
+      "name": "Rin Detergent Powder",
+      "size": "1 kg"
+    },
+    {
+      "id": "rin-detergent-powder-3-kg",
+      "type": "detergent-powder",
+      "brand": "rin",
+      "name": "Rin Detergent Powder",
+      "size": "3 kg"
+    },
+    {
+      "id": "ariel-detergent-powder-rs-10-packet",
+      "type": "detergent-powder",
+      "brand": "ariel",
+      "name": "Ariel Detergent Powder",
+      "size": "₹10 packet"
+    },
+    {
+      "id": "ariel-detergent-powder-1-kg",
+      "type": "detergent-powder",
+      "brand": "ariel",
+      "name": "Ariel Detergent Powder",
+      "size": "1 kg"
+    },
+    {
+      "id": "ariel-detergent-powder-3-kg",
+      "type": "detergent-powder",
+      "brand": "ariel",
+      "name": "Ariel Detergent Powder",
+      "size": "3 kg"
+    },
+    {
+      "id": "washing-bar-soap",
+      "type": "washing-bar",
+      "name": "Washing Bar Soap (Battala Sabbu)",
+      "size": "",
+      "unit": "bar",
+      "photos": [
+        "washing-bar"
+      ]
+    },
+    {
+      "id": "utensil-soap",
+      "type": "dishwash-bar",
+      "name": "Utensil Soap (Bokula Sabbu)",
+      "size": "",
+      "unit": "bar",
+      "photos": [
+        "dishwash-bar"
+      ]
+    },
+    {
+      "id": "vim-dishwash-liquid-small-bottle",
+      "type": "dishwash-liquid",
+      "brand": "vim",
+      "name": "Vim Dishwash Liquid",
+      "size": "Small bottle",
+      "photos": [
+        "dishwash-liquid"
+      ]
+    },
+    {
+      "id": "vim-dishwash-liquid-medium-bottle",
+      "type": "dishwash-liquid",
+      "brand": "vim",
+      "name": "Vim Dishwash Liquid",
+      "size": "Medium bottle",
+      "photos": [
+        "dishwash-liquid"
+      ]
+    },
+    {
+      "id": "vim-dishwash-liquid-big-bottle",
+      "type": "dishwash-liquid",
+      "brand": "vim",
+      "name": "Vim Dishwash Liquid",
+      "size": "Big bottle",
+      "photos": [
+        "dishwash-liquid"
+      ]
+    },
+    {
+      "id": "lizol-floor-cleaner-small-bottle",
+      "type": "floor-cleaner",
+      "brand": "lizol",
+      "name": "Lizol Floor Cleaner",
+      "size": "Small bottle",
+      "photos": [
+        "floor-cleaner"
+      ]
+    },
+    {
+      "id": "lizol-floor-cleaner-medium-bottle",
+      "type": "floor-cleaner",
+      "brand": "lizol",
+      "name": "Lizol Floor Cleaner",
+      "size": "Medium bottle",
+      "photos": [
+        "floor-cleaner"
+      ]
+    },
+    {
+      "id": "lizol-floor-cleaner-big-bottle",
+      "type": "floor-cleaner",
+      "brand": "lizol",
+      "name": "Lizol Floor Cleaner",
+      "size": "Big bottle",
+      "photos": [
+        "floor-cleaner"
+      ]
+    },
+    {
+      "id": "phenyl-small-bottle",
+      "type": "phenyl",
+      "name": "Phenyl (Penoil)",
+      "size": "Small bottle",
+      "photos": [
+        "phenyl"
+      ]
+    },
+    {
+      "id": "phenyl-medium-bottle",
+      "type": "phenyl",
+      "name": "Phenyl (Penoil)",
+      "size": "Medium bottle",
+      "photos": [
+        "phenyl"
+      ]
+    },
+    {
+      "id": "phenyl-big-bottle",
+      "type": "phenyl",
+      "name": "Phenyl (Penoil)",
+      "size": "Big bottle",
+      "photos": [
+        "phenyl"
+      ]
+    },
+    {
+      "id": "toilet-cleaner-small-bottle",
+      "type": "toilet-cleaner",
+      "name": "Toilet Cleaner",
+      "size": "Small bottle",
+      "photos": [
+        "toilet-cleaner"
+      ]
+    },
+    {
+      "id": "toilet-cleaner-medium-bottle",
+      "type": "toilet-cleaner",
+      "name": "Toilet Cleaner",
+      "size": "Medium bottle",
+      "photos": [
+        "toilet-cleaner"
+      ]
+    },
+    {
+      "id": "toilet-cleaner-big-bottle",
+      "type": "toilet-cleaner",
+      "name": "Toilet Cleaner",
+      "size": "Big bottle",
+      "photos": [
+        "toilet-cleaner"
+      ]
+    },
+    {
+      "id": "bathroom-cleaner-small-bottle",
+      "type": "bathroom-cleaner",
+      "name": "Bathroom Cleaner",
+      "size": "Small bottle",
+      "photos": [
+        "bathroom-cleaner"
+      ]
+    },
+    {
+      "id": "bathroom-cleaner-medium-bottle",
+      "type": "bathroom-cleaner",
+      "name": "Bathroom Cleaner",
+      "size": "Medium bottle",
+      "photos": [
+        "bathroom-cleaner"
+      ]
+    },
+    {
+      "id": "bathroom-cleaner-big-bottle",
+      "type": "bathroom-cleaner",
+      "name": "Bathroom Cleaner",
+      "size": "Big bottle",
+      "photos": [
+        "bathroom-cleaner"
+      ]
+    },
+    {
+      "id": "bleaching-powder",
+      "type": "bleaching-powder",
+      "name": "Bleaching Powder",
+      "size": "",
+      "unit": "packet",
+      "photos": [
+        "bleaching-powder"
+      ]
+    },
+    {
+      "id": "broom",
+      "type": "broom",
+      "name": "Broom",
+      "size": "",
+      "unit": "piece",
+      "photos": [
+        "broom"
+      ]
+    },
+    {
+      "id": "scrub-pad-steel-wool",
+      "type": "scrub-pad",
+      "name": "Scrub Pad & Steel Wool",
+      "size": "",
+      "unit": "piece",
+      "photos": [
+        "scrub-pad"
+      ]
+    },
+    {
+      "id": "jet-mosquito-repellent-coil",
+      "type": "mosquito-coil",
+      "brand": "jet",
+      "name": "Jet Mosquito Repellent Coil",
+      "size": "",
+      "unit": "box",
+      "photos": [
+        "mosquito-coil"
+      ]
+    },
+    {
+      "id": "hit-insect-spray-small-can",
+      "type": "insect-spray",
+      "brand": "hit",
+      "name": "HIT Insect Spray",
+      "size": "Small can",
+      "photos": [
+        "insect-spray"
+      ]
+    },
+    {
+      "id": "hit-insect-spray-big-can",
+      "type": "insect-spray",
+      "brand": "hit",
+      "name": "HIT Insect Spray",
+      "size": "Big can",
+      "photos": [
+        "insect-spray"
+      ]
+    },
+    {
+      "id": "acid-bottle-small-bottle",
+      "type": "acid-bottle",
+      "name": "Acid Bottle",
+      "size": "Small bottle",
+      "photos": [
+        "acid-bottle"
+      ]
+    },
+    {
+      "id": "acid-bottle-medium-bottle",
+      "type": "acid-bottle",
+      "name": "Acid Bottle",
+      "size": "Medium bottle",
+      "photos": [
+        "acid-bottle"
+      ]
+    },
+    {
+      "id": "acid-bottle-big-bottle",
+      "type": "acid-bottle",
+      "name": "Acid Bottle",
+      "size": "Big bottle",
+      "photos": [
+        "acid-bottle"
+      ]
+    },
+    {
+      "id": "cinthol-bath-soap",
+      "type": "bath-soap",
+      "brand": "cinthol",
+      "name": "Cinthol Bath Soap",
+      "size": "",
+      "unit": "bar",
+      "photos": [
+        "bath-soap"
+      ]
+    },
+    {
+      "id": "mysore-sandal-bath-soap",
+      "type": "bath-soap",
+      "brand": "mysore-sandal",
+      "name": "Mysore Sandal Bath Soap",
+      "size": "",
+      "unit": "bar",
+      "photos": [
+        "bath-soap-2"
+      ]
+    },
+    {
+      "id": "santoor-bath-soap",
+      "type": "bath-soap",
+      "brand": "santoor",
+      "name": "Santoor Bath Soap",
+      "size": "",
+      "unit": "bar",
+      "photos": [
+        "bath-soap-3"
+      ]
+    },
+    {
+      "id": "dettol-bath-soap",
+      "type": "bath-soap",
+      "brand": "dettol",
+      "name": "Dettol Bath Soap",
+      "size": "",
+      "unit": "bar",
+      "photos": [
+        "bath-soap-4"
+      ]
+    },
+    {
+      "id": "chik-shampoo-sachets",
+      "type": "shampoo",
+      "brand": "chik",
+      "name": "Chik Shampoo Sachets",
+      "size": "",
+      "unit": "sachet",
+      "quick": [
+        1,
+        5,
+        10
+      ],
+      "photos": [
+        "shampoo-3"
+      ]
+    },
+    {
+      "id": "clinic-plus-shampoo-sachets",
+      "type": "shampoo",
+      "brand": "clinic-plus",
+      "name": "Clinic Plus Shampoo Sachets",
+      "size": "",
+      "unit": "sachet",
+      "quick": [
+        1,
+        5,
+        10
+      ],
+      "photos": [
+        "shampoo"
+      ]
+    },
+    {
+      "id": "head-shoulders-shampoo-sachets",
+      "type": "shampoo",
+      "brand": "head-shoulders",
+      "name": "Head & Shoulders Shampoo Sachets",
+      "size": "",
+      "unit": "sachet",
+      "quick": [
+        1,
+        5,
+        10
+      ],
+      "photos": [
+        "shampoo-6"
+      ]
+    },
+    {
+      "id": "meera-shampoo-sachets",
+      "type": "shampoo",
+      "brand": "meera",
+      "name": "Meera Shampoo Sachets",
+      "size": "",
+      "unit": "sachet",
+      "quick": [
+        1,
+        5,
+        10
+      ],
+      "photos": [
+        "shampoo-5"
+      ]
+    },
+    {
+      "id": "karthika-shampoo-sachets",
+      "type": "shampoo",
+      "brand": "karthika",
+      "name": "Karthika Shampoo Sachets",
+      "size": "",
+      "unit": "sachet",
+      "quick": [
+        1,
+        5,
+        10
+      ],
+      "photos": [
+        "shampoo-4"
+      ]
+    },
+    {
+      "id": "dove-shampoo-sachets",
+      "type": "shampoo",
+      "brand": "dove",
+      "name": "Dove Shampoo Sachets",
+      "size": "",
+      "unit": "sachet",
+      "quick": [
+        1,
+        5,
+        10
+      ],
+      "photos": [
+        "shampoo-2"
+      ]
+    },
+    {
+      "id": "meera-seekakaya-powder-small-packet",
+      "type": "shikakai",
+      "brand": "meera",
+      "name": "Meera Seekakaya Powder",
+      "size": "Small packet",
+      "photos": [
+        "shikakai"
+      ]
+    },
+    {
+      "id": "meera-seekakaya-powder-big-packet",
+      "type": "shikakai",
+      "brand": "meera",
+      "name": "Meera Seekakaya Powder",
+      "size": "Big packet",
+      "photos": [
+        "shikakai"
+      ]
+    },
+    {
+      "id": "colgate-toothpaste-small-tube",
+      "type": "toothpaste",
+      "brand": "colgate",
+      "name": "Colgate Toothpaste",
+      "size": "Small tube",
+      "photos": [
+        "toothpaste"
+      ]
+    },
+    {
+      "id": "colgate-toothpaste-medium-tube",
+      "type": "toothpaste",
+      "brand": "colgate",
+      "name": "Colgate Toothpaste",
+      "size": "Medium tube",
+      "photos": [
+        "toothpaste"
+      ]
+    },
+    {
+      "id": "colgate-toothpaste-big-tube",
+      "type": "toothpaste",
+      "brand": "colgate",
+      "name": "Colgate Toothpaste",
+      "size": "Big tube",
+      "photos": [
+        "toothpaste"
+      ]
+    },
+    {
+      "id": "close-up-toothpaste-small-tube",
+      "type": "toothpaste",
+      "brand": "close-up",
+      "name": "Close Up Toothpaste",
+      "size": "Small tube",
+      "photos": [
+        "toothpaste-3"
+      ]
+    },
+    {
+      "id": "close-up-toothpaste-medium-tube",
+      "type": "toothpaste",
+      "brand": "close-up",
+      "name": "Close Up Toothpaste",
+      "size": "Medium tube",
+      "photos": [
+        "toothpaste-3"
+      ]
+    },
+    {
+      "id": "close-up-toothpaste-big-tube",
+      "type": "toothpaste",
+      "brand": "close-up",
+      "name": "Close Up Toothpaste",
+      "size": "Big tube",
+      "photos": [
+        "toothpaste-3"
+      ]
+    },
+    {
+      "id": "dabur-red-toothpaste-small-tube",
+      "type": "toothpaste",
+      "brand": "dabur-red",
+      "name": "Dabur Red Toothpaste",
+      "size": "Small tube",
+      "photos": [
+        "toothpaste-2"
+      ]
+    },
+    {
+      "id": "dabur-red-toothpaste-medium-tube",
+      "type": "toothpaste",
+      "brand": "dabur-red",
+      "name": "Dabur Red Toothpaste",
+      "size": "Medium tube",
+      "photos": [
+        "toothpaste-2"
+      ]
+    },
+    {
+      "id": "dabur-red-toothpaste-big-tube",
+      "type": "toothpaste",
+      "brand": "dabur-red",
+      "name": "Dabur Red Toothpaste",
+      "size": "Big tube",
+      "photos": [
+        "toothpaste-2"
+      ]
+    },
+    {
+      "id": "toothbrush",
+      "type": "toothbrush",
+      "name": "Toothbrush",
+      "size": "",
+      "unit": "piece",
+      "photos": [
+        "toothbrush"
+      ]
+    },
+    {
+      "id": "sanitary-pads",
+      "type": "sanitary-pads",
+      "name": "Sanitary Pads",
+      "size": "",
+      "unit": "packet",
+      "photos": [
+        "sanitary-pads"
+      ]
+    },
+    {
+      "id": "kids-dypers-s",
+      "type": "kids-dypers",
+      "name": "Kids Dypers",
+      "size": "S",
+      "photos": [
+        "kids-dypers"
+      ]
+    },
+    {
+      "id": "kids-dypers-m",
+      "type": "kids-dypers",
+      "name": "Kids Dypers",
+      "size": "M",
+      "photos": [
+        "kids-dypers"
+      ]
+    },
+    {
+      "id": "kids-dypers-l",
+      "type": "kids-dypers",
+      "name": "Kids Dypers",
+      "size": "L",
+      "photos": [
+        "kids-dypers"
+      ]
+    },
+    {
+      "id": "kids-dypers-xl",
+      "type": "kids-dypers",
+      "name": "Kids Dypers",
+      "size": "XL",
+      "photos": [
+        "kids-dypers"
+      ]
+    },
+    {
+      "id": "papad",
+      "type": "papad",
+      "name": "Papad (Appalalu / Appadalu)",
+      "size": "",
+      "unit": "packet",
+      "photos": [
+        "papad"
+      ]
+    },
+    {
+      "id": "vadiyalu",
+      "type": "vadiyalu",
+      "name": "Vadiyalu",
+      "size": "",
+      "unit": "packet",
+      "photos": [
+        "vadiyalu"
+      ]
+    },
+    {
+      "id": "maggi-instant-noodles-single-pack",
+      "type": "instant-noodles",
+      "brand": "maggi",
+      "name": "Maggi Instant Noodles",
+      "size": "Single pack",
+      "photos": [
+        "instant-noodles-3"
+      ]
+    },
+    {
+      "id": "maggi-instant-noodles-family-pack",
+      "type": "instant-noodles",
+      "brand": "maggi",
+      "name": "Maggi Instant Noodles",
+      "size": "Family pack",
+      "photos": [
+        "instant-noodles-3"
+      ]
+    },
+    {
+      "id": "yippee-instant-noodles-single-pack",
+      "type": "instant-noodles",
+      "brand": "yippee",
+      "name": "Yippee Instant Noodles",
+      "size": "Single pack",
+      "photos": [
+        "instant-noodles-2"
+      ]
+    },
+    {
+      "id": "yippee-instant-noodles-family-pack",
+      "type": "instant-noodles",
+      "brand": "yippee",
+      "name": "Yippee Instant Noodles",
+      "size": "Family pack",
+      "photos": [
+        "instant-noodles-2"
+      ]
+    },
+    {
+      "id": "baking-soda",
+      "type": "baking-soda",
+      "name": "Baking Soda",
+      "size": "",
+      "unit": "packet",
+      "photos": [
+        "baking-soda"
+      ]
+    },
+    {
+      "id": "matchboxes",
+      "type": "matchboxes",
+      "name": "Matchboxes",
+      "size": "",
+      "unit": "box",
+      "photos": [
+        "matchboxes"
+      ]
+    },
+    {
+      "id": "candles",
+      "type": "candles",
+      "name": "Candles",
+      "size": "",
+      "unit": "packet",
+      "photos": [
+        "candles"
+      ]
+    },
+    {
+      "id": "batteries",
+      "type": "batteries",
+      "name": "Batteries",
+      "size": "",
+      "unit": "piece",
+      "photos": [
+        "batteries"
+      ]
+    },
+    {
+      "id": "paper-tea-cups",
+      "type": "paper-tea-cups",
+      "name": "Paper Tea Cups",
+      "size": "",
+      "unit": "packet",
+      "photos": [
+        "paper-tea-cups"
+      ]
+    },
+    {
+      "id": "paper-plates-small",
+      "type": "paper-plates",
+      "name": "Paper Plates",
+      "size": "Small",
+      "photos": [
+        "paper-plates"
+      ]
+    },
+    {
+      "id": "paper-plates-medium",
+      "type": "paper-plates",
+      "name": "Paper Plates",
+      "size": "Medium",
+      "photos": [
+        "paper-plates"
+      ]
+    },
+    {
+      "id": "paper-plates-big-buffet",
+      "type": "paper-plates",
+      "name": "Paper Plates",
+      "size": "Big (buffet)",
+      "photos": [
+        "paper-plates"
+      ]
+    },
+    {
+      "id": "paper-glasses",
+      "type": "paper-glasses",
+      "name": "Paper Glasses",
+      "size": "",
+      "unit": "packet",
+      "photos": [
+        "paper-glasses"
+      ]
+    },
+    {
+      "id": "prasadam-cups",
+      "type": "prasadam-cups",
+      "name": "Prasadam Cups (Dhonnelu)",
+      "size": "",
+      "unit": "packet",
+      "photos": [
+        "prasadam-cups"
+      ]
+    },
+    {
+      "id": "red-kumkuma-rs-10-packet",
+      "type": "kumkum",
+      "name": "Red Kumkuma",
+      "size": "₹10 packet",
+      "photos": [
+        "kumkum"
+      ]
+    },
+    {
+      "id": "red-kumkuma-rs-20-packet",
+      "type": "kumkum",
+      "name": "Red Kumkuma",
+      "size": "₹20 packet",
+      "photos": [
+        "kumkum"
+      ]
+    },
+    {
+      "id": "red-kumkuma-50-g",
+      "type": "kumkum",
+      "name": "Red Kumkuma",
+      "size": "50 g",
+      "photos": [
+        "kumkum"
+      ]
+    },
+    {
+      "id": "red-kumkuma-100-g",
+      "type": "kumkum",
+      "name": "Red Kumkuma",
+      "size": "100 g",
+      "photos": [
+        "kumkum"
+      ]
+    },
+    {
+      "id": "maroon-kumkuma-rs-10-packet",
+      "type": "maroon-kumkum",
+      "name": "Maroon Kumkuma",
+      "size": "₹10 packet",
+      "photos": [
+        "maroon-kumkum"
+      ]
+    },
+    {
+      "id": "maroon-kumkuma-rs-20-packet",
+      "type": "maroon-kumkum",
+      "name": "Maroon Kumkuma",
+      "size": "₹20 packet",
+      "photos": [
+        "maroon-kumkum"
+      ]
+    },
+    {
+      "id": "maroon-kumkuma-50-g",
+      "type": "maroon-kumkum",
+      "name": "Maroon Kumkuma",
+      "size": "50 g",
+      "photos": [
+        "maroon-kumkum"
+      ]
+    },
+    {
+      "id": "maroon-kumkuma-100-g",
+      "type": "maroon-kumkum",
+      "name": "Maroon Kumkuma",
+      "size": "100 g",
+      "photos": [
+        "maroon-kumkum"
+      ]
+    },
+    {
+      "id": "pasupu-rs-10-packet",
+      "type": "puja-pasupu",
+      "name": "Pasupu (Turmeric for Puja)",
+      "size": "₹10 packet",
+      "photos": [
+        "puja-pasupu"
+      ]
+    },
+    {
+      "id": "pasupu-rs-20-packet",
+      "type": "puja-pasupu",
+      "name": "Pasupu (Turmeric for Puja)",
+      "size": "₹20 packet",
+      "photos": [
+        "puja-pasupu"
+      ]
+    },
+    {
+      "id": "pasupu-50-g",
+      "type": "puja-pasupu",
+      "name": "Pasupu (Turmeric for Puja)",
+      "size": "50 g",
+      "photos": [
+        "puja-pasupu"
+      ]
+    },
+    {
+      "id": "pasupu-100-g",
+      "type": "puja-pasupu",
+      "name": "Pasupu (Turmeric for Puja)",
+      "size": "100 g",
+      "photos": [
+        "puja-pasupu"
+      ]
+    },
+    {
+      "id": "turmeric-sticks-rs-10-packet",
+      "type": "turmeric-sticks",
+      "name": "Turmeric Sticks (Pasupu Kommulu)",
+      "size": "₹10 packet",
+      "photos": [
+        "turmeric-sticks"
+      ]
+    },
+    {
+      "id": "turmeric-sticks-rs-20-packet",
+      "type": "turmeric-sticks",
+      "name": "Turmeric Sticks (Pasupu Kommulu)",
+      "size": "₹20 packet",
+      "photos": [
+        "turmeric-sticks"
+      ]
+    },
+    {
+      "id": "turmeric-sticks-50-g",
+      "type": "turmeric-sticks",
+      "name": "Turmeric Sticks (Pasupu Kommulu)",
+      "size": "50 g",
+      "photos": [
+        "turmeric-sticks"
+      ]
+    },
+    {
+      "id": "turmeric-sticks-100-g",
+      "type": "turmeric-sticks",
+      "name": "Turmeric Sticks (Pasupu Kommulu)",
+      "size": "100 g",
+      "photos": [
+        "turmeric-sticks"
+      ]
+    },
+    {
+      "id": "sindoor-rs-10-packet",
+      "type": "sindoor",
+      "name": "Sindoor",
+      "size": "₹10 packet",
+      "photos": [
+        "sindoor"
+      ]
+    },
+    {
+      "id": "sindoor-rs-20-packet",
+      "type": "sindoor",
+      "name": "Sindoor",
+      "size": "₹20 packet",
+      "photos": [
+        "sindoor"
+      ]
+    },
+    {
+      "id": "sindoor-50-g",
+      "type": "sindoor",
+      "name": "Sindoor",
+      "size": "50 g",
+      "photos": [
+        "sindoor"
+      ]
+    },
+    {
+      "id": "sindoor-100-g",
+      "type": "sindoor",
+      "name": "Sindoor",
+      "size": "100 g",
+      "photos": [
+        "sindoor"
+      ]
+    },
+    {
+      "id": "pasupu-kumkum-set",
+      "type": "pasupu-kumkum-set",
+      "name": "Pasupu-Kumkum Set",
+      "size": "",
+      "unit": "set",
+      "photos": [
+        "pasupu-kumkum-set"
+      ]
+    },
+    {
+      "id": "pacha-karpuram-rs-10-packet",
+      "type": "pacha-karpuram",
+      "name": "Pacha Karpuram",
+      "size": "₹10 packet",
+      "photos": [
+        "pacha-karpuram"
+      ]
+    },
+    {
+      "id": "pacha-karpuram-rs-20-packet",
+      "type": "pacha-karpuram",
+      "name": "Pacha Karpuram",
+      "size": "₹20 packet",
+      "photos": [
+        "pacha-karpuram"
+      ]
+    },
+    {
+      "id": "pacha-karpuram-50-g",
+      "type": "pacha-karpuram",
+      "name": "Pacha Karpuram",
+      "size": "50 g",
+      "photos": [
+        "pacha-karpuram"
+      ]
+    },
+    {
+      "id": "pacha-karpuram-100-g",
+      "type": "pacha-karpuram",
+      "name": "Pacha Karpuram",
+      "size": "100 g",
+      "photos": [
+        "pacha-karpuram"
+      ]
+    },
+    {
+      "id": "jajikaya",
+      "type": "jajikaya",
+      "name": "Jajikaya (Nutmeg)",
+      "size": "",
+      "unit": "piece",
+      "photos": [
+        "jajikaya"
+      ]
+    },
+    {
+      "id": "japathri-rs-10-packet",
+      "type": "japathri",
+      "name": "Japathri (Mace)",
+      "size": "₹10 packet",
+      "photos": [
+        "japathri"
+      ]
+    },
+    {
+      "id": "japathri-rs-20-packet",
+      "type": "japathri",
+      "name": "Japathri (Mace)",
+      "size": "₹20 packet",
+      "photos": [
+        "japathri"
+      ]
+    },
+    {
+      "id": "japathri-50-g",
+      "type": "japathri",
+      "name": "Japathri (Mace)",
+      "size": "50 g",
+      "photos": [
+        "japathri"
+      ]
+    },
+    {
+      "id": "japathri-100-g",
+      "type": "japathri",
+      "name": "Japathri (Mace)",
+      "size": "100 g",
+      "photos": [
+        "japathri"
+      ]
+    },
+    {
+      "id": "lavangalu-cloves-for-kalasam-rs-10-packet",
+      "type": "puja-lavangalu",
+      "name": "Lavangalu (Cloves) for Kalasam",
+      "size": "₹10 packet",
+      "photos": [
+        "puja-lavangalu"
+      ]
+    },
+    {
+      "id": "lavangalu-cloves-for-kalasam-rs-20-packet",
+      "type": "puja-lavangalu",
+      "name": "Lavangalu (Cloves) for Kalasam",
+      "size": "₹20 packet",
+      "photos": [
+        "puja-lavangalu"
+      ]
+    },
+    {
+      "id": "lavangalu-cloves-for-kalasam-50-g",
+      "type": "puja-lavangalu",
+      "name": "Lavangalu (Cloves) for Kalasam",
+      "size": "50 g",
+      "photos": [
+        "puja-lavangalu"
+      ]
+    },
+    {
+      "id": "lavangalu-cloves-for-kalasam-100-g",
+      "type": "puja-lavangalu",
+      "name": "Lavangalu (Cloves) for Kalasam",
+      "size": "100 g",
+      "photos": [
+        "puja-lavangalu"
+      ]
+    },
+    {
+      "id": "yalakulu-cardamom-for-kalasam-rs-10-packet",
+      "type": "puja-yalakulu",
+      "name": "Yalakulu (Cardamom) for Kalasam",
+      "size": "₹10 packet",
+      "photos": [
+        "puja-yalakulu"
+      ]
+    },
+    {
+      "id": "yalakulu-cardamom-for-kalasam-rs-20-packet",
+      "type": "puja-yalakulu",
+      "name": "Yalakulu (Cardamom) for Kalasam",
+      "size": "₹20 packet",
+      "photos": [
+        "puja-yalakulu"
+      ]
+    },
+    {
+      "id": "yalakulu-cardamom-for-kalasam-50-g",
+      "type": "puja-yalakulu",
+      "name": "Yalakulu (Cardamom) for Kalasam",
+      "size": "50 g",
+      "photos": [
+        "puja-yalakulu"
+      ]
+    },
+    {
+      "id": "yalakulu-cardamom-for-kalasam-100-g",
+      "type": "puja-yalakulu",
+      "name": "Yalakulu (Cardamom) for Kalasam",
+      "size": "100 g",
+      "photos": [
+        "puja-yalakulu"
+      ]
+    },
+    {
+      "id": "kalasam-samanlu",
+      "type": "kalasam-samanlu-set",
+      "name": "Kalasam Samanlu (Sugandhalu Set)",
+      "size": "",
+      "unit": "set",
+      "photos": [
+        "kalasam-samanlu-set"
+      ]
+    },
+    {
+      "id": "coconut-small",
+      "type": "pooja-coconut",
+      "name": "Coconut (Tenkaya / Kobbari Kaya)",
+      "size": "Small",
+      "photos": [
+        "pooja-coconut"
+      ]
+    },
+    {
+      "id": "coconut-medium",
+      "type": "pooja-coconut",
+      "name": "Coconut (Tenkaya / Kobbari Kaya)",
+      "size": "Medium",
+      "photos": [
+        "pooja-coconut"
+      ]
+    },
+    {
+      "id": "coconut-big",
+      "type": "pooja-coconut",
+      "name": "Coconut (Tenkaya / Kobbari Kaya)",
+      "size": "Big",
+      "photos": [
+        "pooja-coconut"
+      ]
+    },
+    {
+      "id": "kalasam-kayalu",
+      "type": "kalasam-kayalu",
+      "name": "Kalasam Kayalu (Peechu Tenkaya)",
+      "size": "",
+      "unit": "piece",
+      "photos": [
+        "kalasam-kayalu"
+      ]
+    },
+    {
+      "id": "camphor-tablets-rs-10-packet",
+      "type": "camphor-tablets",
+      "name": "Camphor Tablets (Karpuram Billalu)",
+      "size": "₹10 packet",
+      "photos": [
+        "camphor-tablets"
+      ]
+    },
+    {
+      "id": "camphor-tablets-rs-20-packet",
+      "type": "camphor-tablets",
+      "name": "Camphor Tablets (Karpuram Billalu)",
+      "size": "₹20 packet",
+      "photos": [
+        "camphor-tablets"
+      ]
+    },
+    {
+      "id": "camphor-tablets-50-g",
+      "type": "camphor-tablets",
+      "name": "Camphor Tablets (Karpuram Billalu)",
+      "size": "50 g",
+      "photos": [
+        "camphor-tablets"
+      ]
+    },
+    {
+      "id": "camphor-tablets-100-g",
+      "type": "camphor-tablets",
+      "name": "Camphor Tablets (Karpuram Billalu)",
+      "size": "100 g",
+      "photos": [
+        "camphor-tablets"
+      ]
+    },
+    {
+      "id": "gadda-karpuram-rs-10-packet",
+      "type": "camphor-cubes",
+      "name": "Gadda Karpuram",
+      "size": "₹10 packet",
+      "photos": [
+        "camphor-cubes"
+      ]
+    },
+    {
+      "id": "gadda-karpuram-rs-20-packet",
+      "type": "camphor-cubes",
+      "name": "Gadda Karpuram",
+      "size": "₹20 packet",
+      "photos": [
+        "camphor-cubes"
+      ]
+    },
+    {
+      "id": "gadda-karpuram-50-g",
+      "type": "camphor-cubes",
+      "name": "Gadda Karpuram",
+      "size": "50 g",
+      "photos": [
+        "camphor-cubes"
+      ]
+    },
+    {
+      "id": "gadda-karpuram-100-g",
+      "type": "camphor-cubes",
+      "name": "Gadda Karpuram",
+      "size": "100 g",
+      "photos": [
+        "camphor-cubes"
+      ]
+    },
+    {
+      "id": "sandalwood-incense-sticks-small-packet",
+      "type": "sandal-agarbatti",
+      "name": "Sandalwood Incense Sticks",
+      "size": "Small packet",
+      "photos": [
+        "sandal-agarbatti"
+      ]
+    },
+    {
+      "id": "sandalwood-incense-sticks-big-packet",
+      "type": "sandal-agarbatti",
+      "name": "Sandalwood Incense Sticks",
+      "size": "Big packet",
+      "photos": [
+        "sandal-agarbatti"
+      ]
+    },
+    {
+      "id": "rose-incense-sticks-small-packet",
+      "type": "rose-agarbatti",
+      "name": "Rose Incense Sticks",
+      "size": "Small packet",
+      "photos": [
+        "rose-agarbatti"
+      ]
+    },
+    {
+      "id": "rose-incense-sticks-big-packet",
+      "type": "rose-agarbatti",
+      "name": "Rose Incense Sticks",
+      "size": "Big packet",
+      "photos": [
+        "rose-agarbatti"
+      ]
+    },
+    {
+      "id": "jasmine-incense-sticks-small-packet",
+      "type": "jasmine-agarbatti",
+      "name": "Jasmine Incense Sticks",
+      "size": "Small packet",
+      "photos": [
+        "jasmine-agarbatti"
+      ]
+    },
+    {
+      "id": "jasmine-incense-sticks-big-packet",
+      "type": "jasmine-agarbatti",
+      "name": "Jasmine Incense Sticks",
+      "size": "Big packet",
+      "photos": [
+        "jasmine-agarbatti"
+      ]
+    },
+    {
+      "id": "sambrani-incense-sticks-small-packet",
+      "type": "sambrani-agarbatti",
+      "name": "Sambrani Incense Sticks",
+      "size": "Small packet",
+      "photos": [
+        "sambrani-agarbatti"
+      ]
+    },
+    {
+      "id": "sambrani-incense-sticks-big-packet",
+      "type": "sambrani-agarbatti",
+      "name": "Sambrani Incense Sticks",
+      "size": "Big packet",
+      "photos": [
+        "sambrani-agarbatti"
+      ]
+    },
+    {
+      "id": "assorted-fragrance-incense-small-packet",
+      "type": "assorted-agarbatti",
+      "name": "Assorted Fragrance Incense",
+      "size": "Small packet",
+      "photos": [
+        "assorted-agarbatti"
+      ]
+    },
+    {
+      "id": "assorted-fragrance-incense-big-packet",
+      "type": "assorted-agarbatti",
+      "name": "Assorted Fragrance Incense",
+      "size": "Big packet",
+      "photos": [
+        "assorted-agarbatti"
+      ]
+    },
+    {
+      "id": "loose-incense-sticks-150-g-packet",
+      "type": "loose-agarbatti",
+      "name": "Loose Incense Sticks (Packets)",
+      "size": "150 g packet",
+      "photos": [
+        "loose-agarbatti"
+      ]
+    },
+    {
+      "id": "loose-incense-sticks-250-g-packet",
+      "type": "loose-agarbatti",
+      "name": "Loose Incense Sticks (Packets)",
+      "size": "250 g packet",
+      "photos": [
+        "loose-agarbatti"
+      ]
+    },
+    {
+      "id": "loose-incense-sticks-500-g-packet",
+      "type": "loose-agarbatti",
+      "name": "Loose Incense Sticks (Packets)",
+      "size": "500 g packet",
+      "photos": [
+        "loose-agarbatti"
+      ]
+    },
+    {
+      "id": "dhoop-sticks-small-packet",
+      "type": "dhoop-sticks",
+      "name": "Dhoop Sticks",
+      "size": "Small packet",
+      "photos": [
+        "dhoop-sticks"
+      ]
+    },
+    {
+      "id": "dhoop-sticks-big-packet",
+      "type": "dhoop-sticks",
+      "name": "Dhoop Sticks",
+      "size": "Big packet",
+      "photos": [
+        "dhoop-sticks"
+      ]
+    },
+    {
+      "id": "dhoop-cones-small-packet",
+      "type": "dhoop-cones",
+      "name": "Dhoop Cones",
+      "size": "Small packet",
+      "photos": [
+        "dhoop-cones"
+      ]
+    },
+    {
+      "id": "dhoop-cones-big-packet",
+      "type": "dhoop-cones",
+      "name": "Dhoop Cones",
+      "size": "Big packet",
+      "photos": [
+        "dhoop-cones"
+      ]
+    },
+    {
+      "id": "sambrani-cups",
+      "type": "sambrani-cups",
+      "name": "Sambrani Cups",
+      "size": "",
+      "unit": "box",
+      "photos": [
+        "sambrani-cups"
+      ]
+    },
+    {
+      "id": "sambrani-small-packet",
+      "type": "sambrani",
+      "name": "Sambrani (Loban)",
+      "size": "Small packet",
+      "photos": [
+        "sambrani"
+      ]
+    },
+    {
+      "id": "sambrani-big-packet",
+      "type": "sambrani",
+      "name": "Sambrani (Loban)",
+      "size": "Big packet",
+      "photos": [
+        "sambrani"
+      ]
+    },
+    {
+      "id": "guggilam-small-packet",
+      "type": "guggilam",
+      "name": "Guggilam (Resin)",
+      "size": "Small packet",
+      "photos": [
+        "guggilam"
+      ]
+    },
+    {
+      "id": "guggilam-big-packet",
+      "type": "guggilam",
+      "name": "Guggilam (Resin)",
+      "size": "Big packet",
+      "photos": [
+        "guggilam"
+      ]
+    },
+    {
+      "id": "round-cotton-wicks",
+      "type": "round-wicks",
+      "name": "Round Cotton Wicks (Poo Vattulu)",
+      "size": "",
+      "unit": "packet",
+      "photos": [
+        "round-wicks"
+      ]
+    },
+    {
+      "id": "long-cotton-wicks",
+      "type": "long-wicks",
+      "name": "Long Cotton Wicks",
+      "size": "",
+      "unit": "packet",
+      "photos": [
+        "long-wicks"
+      ]
+    },
+    {
+      "id": "365-vattulu",
+      "type": "365-vattulu",
+      "name": "365 Vattulu (Karthika Pournami Wicks)",
+      "size": "",
+      "unit": "packet",
+      "photos": [
+        "365-vattulu"
+      ]
+    },
+    {
+      "id": "ghee-wicks",
+      "type": "ghee-wicks",
+      "name": "Ghee Wicks",
+      "size": "",
+      "unit": "packet",
+      "photos": [
+        "ghee-wicks"
+      ]
+    },
+    {
+      "id": "lotus-stem-wicks",
+      "type": "lotus-stem-wicks",
+      "name": "Lotus Stem Wicks",
+      "size": "",
+      "unit": "packet",
+      "photos": [
+        "lotus-stem-wicks"
+      ]
+    },
+    {
+      "id": "deepam-oil-100-ml",
+      "type": "deepam-oil",
+      "name": "Deepam Oil",
+      "size": "100 ml",
+      "photos": [
+        "deepam-oil"
+      ]
+    },
+    {
+      "id": "deepam-oil-200-ml",
+      "type": "deepam-oil",
+      "name": "Deepam Oil",
+      "size": "200 ml",
+      "photos": [
+        "deepam-oil"
+      ]
+    },
+    {
+      "id": "deepam-oil-500-ml",
+      "type": "deepam-oil",
+      "name": "Deepam Oil",
+      "size": "500 ml",
+      "photos": [
+        "deepam-oil"
+      ]
+    },
+    {
+      "id": "deepam-oil-1-l",
+      "type": "deepam-oil",
+      "name": "Deepam Oil",
+      "size": "1 L",
+      "photos": [
+        "deepam-oil"
+      ]
+    },
+    {
+      "id": "castor-oil-100-ml",
+      "type": "castor-oil",
+      "name": "Castor Oil (Amudam)",
+      "size": "100 ml",
+      "photos": [
+        "castor-oil"
+      ]
+    },
+    {
+      "id": "castor-oil-200-ml",
+      "type": "castor-oil",
+      "name": "Castor Oil (Amudam)",
+      "size": "200 ml",
+      "photos": [
+        "castor-oil"
+      ]
+    },
+    {
+      "id": "castor-oil-500-ml",
+      "type": "castor-oil",
+      "name": "Castor Oil (Amudam)",
+      "size": "500 ml",
+      "photos": [
+        "castor-oil"
+      ]
+    },
+    {
+      "id": "castor-oil-1-l",
+      "type": "castor-oil",
+      "name": "Castor Oil (Amudam)",
+      "size": "1 L",
+      "photos": [
+        "castor-oil"
+      ]
+    },
+    {
+      "id": "small-matti-pramidalu",
+      "type": "clay-diyas",
+      "name": "Small Matti Pramidalu",
+      "size": "",
+      "unit": "piece",
+      "quick": [
+        5,
+        10,
+        25,
+        50,
+        100
+      ],
+      "photos": [
+        "clay-diyas"
+      ]
+    },
+    {
+      "id": "large-matti-pramidalu",
+      "type": "akhanda-deepam",
+      "name": "Large Matti Pramidalu",
+      "size": "",
+      "unit": "piece",
+      "quick": [
+        5,
+        10,
+        25,
+        50,
+        100
+      ],
+      "photos": [
+        "akhanda-deepam"
+      ]
+    },
+    {
+      "id": "neyyi-deepam",
+      "type": "neyyi-deepam",
+      "name": "Neyyi Deepam (Ghee Deepam)",
+      "size": "",
+      "unit": "piece",
+      "quick": [
+        5,
+        10,
+        25,
+        50,
+        100
+      ],
+      "photos": [
+        "neyyi-deepam"
+      ]
+    },
+    {
+      "id": "daily-pooja-kit",
+      "type": "daily-pooja-kit",
+      "name": "Daily Pooja Kit",
+      "size": "",
+      "unit": "set",
+      "photos": [
+        "daily-pooja-kit"
+      ]
+    },
+    {
+      "id": "satyanarayana-vratham-kit",
+      "type": "satyanarayana-kit",
+      "name": "Satyanarayana Vratham Kit",
+      "size": "",
+      "unit": "set",
+      "photos": [
+        "satyanarayana-kit"
+      ]
+    },
+    {
+      "id": "varalakshmi-vratham-kit",
+      "type": "varalakshmi-kit",
+      "name": "Varalakshmi Vratham Kit",
+      "size": "",
+      "unit": "set",
+      "photos": [
+        "varalakshmi-kit"
+      ]
+    },
+    {
+      "id": "gruhapravesam-kit",
+      "type": "gruhapravesam-kit",
+      "name": "Gruhapravesam Kit",
+      "size": "",
+      "unit": "set",
+      "photos": [
+        "gruhapravesam-kit"
+      ]
+    },
+    {
+      "id": "vinayaka-chavithi-kit",
+      "type": "vinayaka-chavithi-kit",
+      "name": "Vinayaka Chavithi Kit",
+      "size": "",
+      "unit": "set",
+      "photos": [
+        "vinayaka-chavithi-kit"
+      ]
+    },
+    {
+      "id": "homam-samagri-kit",
+      "type": "homam-kit",
+      "name": "Homam Samagri Kit",
+      "size": "",
+      "unit": "set",
+      "photos": [
+        "homam-kit"
+      ]
+    },
+    {
+      "id": "purnahuthi-set",
+      "type": "purnahuthi-set",
+      "name": "Purnahuthi Set",
+      "size": "",
+      "unit": "set",
+      "photos": [
+        "purnahuthi-set"
+      ]
+    },
+    {
+      "id": "bhumi-puja-set",
+      "type": "bhumi-puja-set",
+      "name": "Bhumi Puja Set",
+      "size": "",
+      "unit": "set",
+      "photos": [
+        "bhumi-puja-set"
+      ]
+    },
+    {
+      "id": "deepavali-lakshmi-pooja-kit",
+      "type": "deepavali-kit",
+      "name": "Deepavali Lakshmi Pooja Kit",
+      "size": "",
+      "unit": "set",
+      "photos": [
+        "deepavali-kit"
+      ]
+    },
+    {
+      "id": "sandalwood-powder-rs-10-packet",
+      "type": "sandalwood-powder",
+      "name": "Sandalwood Powder (Gandham)",
+      "size": "₹10 packet",
+      "photos": [
+        "sandalwood-powder"
+      ]
+    },
+    {
+      "id": "sandalwood-powder-rs-20-packet",
+      "type": "sandalwood-powder",
+      "name": "Sandalwood Powder (Gandham)",
+      "size": "₹20 packet",
+      "photos": [
+        "sandalwood-powder"
+      ]
+    },
+    {
+      "id": "sandalwood-powder-50-g",
+      "type": "sandalwood-powder",
+      "name": "Sandalwood Powder (Gandham)",
+      "size": "50 g",
+      "photos": [
+        "sandalwood-powder"
+      ]
+    },
+    {
+      "id": "sandalwood-powder-100-g",
+      "type": "sandalwood-powder",
+      "name": "Sandalwood Powder (Gandham)",
+      "size": "100 g",
+      "photos": [
+        "sandalwood-powder"
+      ]
+    },
+    {
+      "id": "natural-chandan-sandalwood-stick",
+      "type": "sandalwood-stick",
+      "brand": "natural-chandan",
+      "name": "Natural chandan Sandalwood Stick",
+      "size": "",
+      "unit": "piece",
+      "photos": [
+        "sandalwood-stick"
+      ]
+    },
+    {
+      "id": "ashtagandham-rs-10-packet",
+      "type": "ashtagandham",
+      "name": "Ashtagandham",
+      "size": "₹10 packet",
+      "photos": [
+        "ashtagandham"
+      ]
+    },
+    {
+      "id": "ashtagandham-rs-20-packet",
+      "type": "ashtagandham",
+      "name": "Ashtagandham",
+      "size": "₹20 packet",
+      "photos": [
+        "ashtagandham"
+      ]
+    },
+    {
+      "id": "ashtagandham-50-g",
+      "type": "ashtagandham",
+      "name": "Ashtagandham",
+      "size": "50 g",
+      "photos": [
+        "ashtagandham"
+      ]
+    },
+    {
+      "id": "ashtagandham-100-g",
+      "type": "ashtagandham",
+      "name": "Ashtagandham",
+      "size": "100 g",
+      "photos": [
+        "ashtagandham"
+      ]
+    },
+    {
+      "id": "muggu-powder-loose",
+      "type": "muggu-powder",
+      "name": "Muggu Powder",
+      "size": "Loose",
+      "loose": true,
+      "photos": [
+        "muggu-powder"
+      ]
+    },
+    {
+      "id": "rangoli-colours-rs-10-packet",
+      "type": "rangoli-colours",
+      "name": "Rangoli Colours",
+      "size": "₹10 packet",
+      "photos": [
+        "rangoli-colours"
+      ]
+    },
+    {
+      "id": "rangoli-colours-rs-20-packet",
+      "type": "rangoli-colours",
+      "name": "Rangoli Colours",
+      "size": "₹20 packet",
+      "photos": [
+        "rangoli-colours"
+      ]
+    },
+    {
+      "id": "rangoli-colours-50-g",
+      "type": "rangoli-colours",
+      "name": "Rangoli Colours",
+      "size": "50 g",
+      "photos": [
+        "rangoli-colours"
+      ]
+    },
+    {
+      "id": "rangoli-colours-100-g",
+      "type": "rangoli-colours",
+      "name": "Rangoli Colours",
+      "size": "100 g",
+      "photos": [
+        "rangoli-colours"
+      ]
+    },
+    {
+      "id": "homam-pullalu",
+      "type": "samidhalu",
+      "name": "Homam Pullalu (Samidhalu)",
+      "size": "",
+      "unit": "bundle",
+      "photos": [
+        "samidhalu"
+      ]
+    },
+    {
+      "id": "darbha-grass",
+      "type": "darbha",
+      "name": "Darbha Grass",
+      "size": "",
+      "unit": "bundle",
+      "photos": [
+        "darbha"
+      ]
+    },
+    {
+      "id": "go-muthram-small-bottle",
+      "type": "go-muthram",
+      "name": "Go Muthram (Cow Urine)",
+      "size": "Small bottle",
+      "photos": [
+        "go-muthram"
+      ]
+    },
+    {
+      "id": "go-muthram-medium-bottle",
+      "type": "go-muthram",
+      "name": "Go Muthram (Cow Urine)",
+      "size": "Medium bottle",
+      "photos": [
+        "go-muthram"
+      ]
+    },
+    {
+      "id": "go-muthram-big-bottle",
+      "type": "go-muthram",
+      "name": "Go Muthram (Cow Urine)",
+      "size": "Big bottle",
+      "photos": [
+        "go-muthram"
+      ]
+    },
+    {
+      "id": "ganga-jalam-small-bottle",
+      "type": "ganga-jalam",
+      "name": "Ganga Jalam",
+      "size": "Small bottle",
+      "photos": [
+        "ganga-jalam"
+      ]
+    },
+    {
+      "id": "ganga-jalam-medium-bottle",
+      "type": "ganga-jalam",
+      "name": "Ganga Jalam",
+      "size": "Medium bottle",
+      "photos": [
+        "ganga-jalam"
+      ]
+    },
+    {
+      "id": "ganga-jalam-big-bottle",
+      "type": "ganga-jalam",
+      "name": "Ganga Jalam",
+      "size": "Big bottle",
+      "photos": [
+        "ganga-jalam"
+      ]
+    },
+    {
+      "id": "navadhanyalu",
+      "type": "navadhanyalu",
+      "name": "Navadhanyalu (Nine Grains)",
+      "size": "",
+      "unit": "set",
+      "photos": [
+        "navadhanyalu"
+      ]
+    },
+    {
+      "id": "betel-nuts-rs-10-packet",
+      "type": "vakkalu",
+      "name": "Betel Nuts (Vakkalu)",
+      "size": "₹10 packet",
+      "photos": [
+        "vakkalu"
+      ]
+    },
+    {
+      "id": "betel-nuts-rs-20-packet",
+      "type": "vakkalu",
+      "name": "Betel Nuts (Vakkalu)",
+      "size": "₹20 packet",
+      "photos": [
+        "vakkalu"
+      ]
+    },
+    {
+      "id": "betel-nuts-50-g",
+      "type": "vakkalu",
+      "name": "Betel Nuts (Vakkalu)",
+      "size": "50 g",
+      "photos": [
+        "vakkalu"
+      ]
+    },
+    {
+      "id": "betel-nuts-100-g",
+      "type": "vakkalu",
+      "name": "Betel Nuts (Vakkalu)",
+      "size": "100 g",
+      "photos": [
+        "vakkalu"
+      ]
+    },
+    {
+      "id": "tamalapaku-set-of-leaves",
+      "type": "tamalapaku",
+      "name": "Tamalapaku (Betel Leaves)",
+      "size": "Set of leaves",
+      "price": "₹10 per set",
+      "photos": [
+        "tamalapaku"
+      ]
+    },
+    {
+      "id": "prasadam-cups-2",
+      "type": "puja-prasadam-cups",
+      "name": "Prasadam Cups (Dhonnelu)",
+      "size": "",
+      "unit": "packet",
+      "photos": [
+        "prasadam-cups"
+      ]
+    },
+    {
+      "id": "vibhuti-rs-10-packet",
+      "type": "vibhuti",
+      "name": "Vibhuti",
+      "size": "₹10 packet",
+      "photos": [
+        "vibhuti"
+      ]
+    },
+    {
+      "id": "vibhuti-rs-20-packet",
+      "type": "vibhuti",
+      "name": "Vibhuti",
+      "size": "₹20 packet",
+      "photos": [
+        "vibhuti"
+      ]
+    },
+    {
+      "id": "vibhuti-50-g",
+      "type": "vibhuti",
+      "name": "Vibhuti",
+      "size": "50 g",
+      "photos": [
+        "vibhuti"
+      ]
+    },
+    {
+      "id": "vibhuti-100-g",
+      "type": "vibhuti",
+      "name": "Vibhuti",
+      "size": "100 g",
+      "photos": [
+        "vibhuti"
+      ]
+    },
+    {
+      "id": "vibhuti-pandu",
+      "type": "vibhuti-pandu",
+      "name": "Vibhuti Pandu",
+      "size": "",
+      "unit": "piece",
+      "photos": [
+        "vibhuti-pandu"
+      ]
+    },
+    {
+      "id": "rose-water-small-bottle",
+      "type": "panneer",
+      "name": "Rose Water (Panneer)",
+      "size": "Small bottle",
+      "photos": [
+        "panneer"
+      ]
+    },
+    {
+      "id": "rose-water-medium-bottle",
+      "type": "panneer",
+      "name": "Rose Water (Panneer)",
+      "size": "Medium bottle",
+      "photos": [
+        "panneer"
+      ]
+    },
+    {
+      "id": "rose-water-big-bottle",
+      "type": "panneer",
+      "name": "Rose Water (Panneer)",
+      "size": "Big bottle",
+      "photos": [
+        "panneer"
+      ]
+    },
+    {
+      "id": "honey-small-bottle",
+      "type": "honey",
+      "name": "Honey",
+      "size": "Small bottle",
+      "photos": [
+        "honey"
+      ]
+    },
+    {
+      "id": "honey-big-bottle",
+      "type": "honey",
+      "name": "Honey",
+      "size": "Big bottle",
+      "photos": [
+        "honey"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,188 @@
+{
+  "brands": [
+    {
+      "id": "3-roses",
+      "name": "3 Roses"
+    },
+    {
+      "id": "aahar",
+      "name": "Aahar"
+    },
+    {
+      "id": "aashirvaad",
+      "name": "Aashirvaad"
+    },
+    {
+      "id": "ariel",
+      "name": "Ariel"
+    },
+    {
+      "id": "arshiya-black",
+      "name": "Arshiya Black"
+    },
+    {
+      "id": "bambino",
+      "name": "Bambino"
+    },
+    {
+      "id": "bindu",
+      "name": "Bindu"
+    },
+    {
+      "id": "bisleri",
+      "name": "Bisleri"
+    },
+    {
+      "id": "bru",
+      "name": "Bru"
+    },
+    {
+      "id": "chik",
+      "name": "Chik"
+    },
+    {
+      "id": "cinthol",
+      "name": "Cinthol"
+    },
+    {
+      "id": "clinic-plus",
+      "name": "Clinic Plus"
+    },
+    {
+      "id": "close-up",
+      "name": "Close Up"
+    },
+    {
+      "id": "colgate",
+      "name": "Colgate"
+    },
+    {
+      "id": "continental",
+      "name": "Continental"
+    },
+    {
+      "id": "csr",
+      "name": "CSR"
+    },
+    {
+      "id": "dabur-red",
+      "name": "Dabur Red"
+    },
+    {
+      "id": "dettol",
+      "name": "Dettol"
+    },
+    {
+      "id": "dove",
+      "name": "Dove"
+    },
+    {
+      "id": "freedom",
+      "name": "Freedom"
+    },
+    {
+      "id": "gold-drop",
+      "name": "Gold Drop"
+    },
+    {
+      "id": "head-shoulders",
+      "name": "Head & Shoulders"
+    },
+    {
+      "id": "hit",
+      "name": "HIT"
+    },
+    {
+      "id": "india-gate",
+      "name": "India Gate"
+    },
+    {
+      "id": "jet",
+      "name": "Jet"
+    },
+    {
+      "id": "karthika",
+      "name": "Karthika"
+    },
+    {
+      "id": "kinley",
+      "name": "Kinley"
+    },
+    {
+      "id": "lakshmi",
+      "name": "Lakshmi"
+    },
+    {
+      "id": "lizol",
+      "name": "Lizol"
+    },
+    {
+      "id": "maggi",
+      "name": "Maggi"
+    },
+    {
+      "id": "meera",
+      "name": "Meera"
+    },
+    {
+      "id": "mysore-sandal",
+      "name": "Mysore Sandal"
+    },
+    {
+      "id": "natraj",
+      "name": "Natraj"
+    },
+    {
+      "id": "natural-chandan",
+      "name": "Natural chandan"
+    },
+    {
+      "id": "nescafe",
+      "name": "Nescafe"
+    },
+    {
+      "id": "ns",
+      "name": "NS"
+    },
+    {
+      "id": "priya",
+      "name": "Priya"
+    },
+    {
+      "id": "priya-gold",
+      "name": "Priya Gold"
+    },
+    {
+      "id": "red-label",
+      "name": "Red Label"
+    },
+    {
+      "id": "rin",
+      "name": "Rin"
+    },
+    {
+      "id": "santoor",
+      "name": "Santoor"
+    },
+    {
+      "id": "taj-mahal",
+      "name": "Taj Mahal"
+    },
+    {
+      "id": "tide",
+      "name": "Tide"
+    },
+    {
+      "id": "unity",
+      "name": "Unity"
+    },
+    {
+      "id": "vim",
+      "name": "Vim"
+    },
+    {
+      "id": "yippee",
+      "name": "Yippee"
+    }
+  ]
+}

@@ -143,9 +143,9 @@
   $('#backdrop').addEventListener('click', () => closeDrawer())
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !$('#drawer').hidden) closeDrawer() })
 
-  // ───────── PRODUCTS ─────────
-  function renderProducts() {
-    const search = h('input', { type: 'search', placeholder: 'Search by name, Telugu name, brand or also-known-as…', value: filters.q, 'aria-label': 'Search products' })
+  // ───────── TYPES (e.g. Detergent Powder, Toor Dal) ─────────
+  function renderTypes() {
+    const search = h('input', { type: 'search', placeholder: 'Search types by name, Telugu name or other names…', value: filters.q, 'aria-label': 'Search types' })
     search.addEventListener('input', () => { filters.q = search.value; drawList() })
     const sel = h('select', { 'aria-label': 'Category' }, h('option', { value: '' }, 'All categories'),
       S.sections.map((s) => h('optgroup', { label: s.name }, S.categories.filter((c) => c.section === s.slug).map((c) => h('option', { value: c.slug, selected: c.slug === filters.cat }, `${c.name} (${c.products.length})`)))))
@@ -156,30 +156,30 @@
       const q2 = norm(filters.q)
       const rows = products().filter((p) => (!filters.cat || p.category === filters.cat) &&
         (!q2 || [p.name, p.te, p.slug, ...(p.aliases || []), ...(p.brands || [])].some((x) => norm(x).includes(q2))))
-      count.textContent = `${rows.length} of ${products().length} products`
+      count.textContent = `${rows.length} of ${products().length} types`
       ul.replaceChildren(...(rows.length ? rows.map((p) => {
         const ph = S.photos[p.slug] || []
         const cat = S.categories.find((c) => c.slug === p.category)
-        return h('li', {}, h('button', { class: 'pitem', type: 'button', onclick: () => editProduct(p.slug) },
+        return h('li', {}, h('button', { class: 'pitem', type: 'button', onclick: () => editType(p.slug) },
           ph[0] ? h('img', { src: ph[0].thumb, alt: '', loading: 'lazy' }) : h('img', { alt: '' }),
           h('span', { class: 't' }, h('strong', {}, p.name), h('span', { class: 'te', lang: 'te' }, p.te),
             h('span', { class: 'meta' }, `${sectionName(p.section)} › ${cat?.name}`),
             h('span', { class: 'meta' },
               h('span', { class: 'badge' + (ph.length ? '' : ' warn') }, ph.length ? `${ph.length} photo${ph.length > 1 ? 's' : ''}` : 'no photo'),
               ph[0]?.stock ? h('span', { class: 'badge' }, 'stock photo') : '',
-              p.brands?.length ? h('span', { class: 'badge' }, `${p.brands.length} brand${p.brands.length > 1 ? 's' : ''}`) : ''))))
-      }) : [h('li', { class: 'empty' }, 'No products match. Try another word, or add a new product.')]))
+              h('span', { class: 'badge' + (skusOfType(p.slug).length ? ' qty' : ' warn') }, `${skusOfType(p.slug).length} product${skusOfType(p.slug).length === 1 ? '' : 's'}`)))))
+      }) : [h('li', { class: 'empty' }, 'No types match. Try another word, or add a new type.')]))
     }
     drawList()
     $('#main').replaceChildren(
-      h('div', { class: 'page-head' }, h('div', {}, h('h1', {}, 'Products'), h('p', {}, 'Click a product to edit it. Changes show in the preview right after you save.')),
-        h('button', { class: 'btn primary', type: 'button', onclick: () => editProduct(null) }, '＋ Add product')),
+      h('div', { class: 'page-head' }, h('div', {}, h('h1', {}, 'Types of products'), h('p', {}, 'A type groups the products customers look for, e.g. “Detergent Powder” holds Tide, Rin and Ariel in every size. It has the photo, Telugu name, description and other names for search.')),
+        h('button', { class: 'btn primary', type: 'button', onclick: () => editType(null) }, '＋ Add type')),
       h('div', { class: 'toolbar' }, search, sel, count),
       ul,
     )
   }
 
-  function editProduct(slug) {
+  function editType(slug) {
     const isNew = !slug
     const p = isNew ? { slug: '', name: '', te: '', aliases: [], desc: '', brands: [], category: filters.cat || S.categories[0].slug } : productBySlug(slug)
     const f = {
@@ -233,7 +233,7 @@
         ph.hasSource
           ? h('button', { class: 'btn small adjust', type: 'button', onclick: () => openCropper(p.slug, ph, async () => { await load(); drawPhotos() }) }, ph.crop ? '✂ Adjust (custom)' : '✂ Adjust / crop')
           : h('p', { class: 'hint adjust-note' }, 'Stock photo: add your own photo to adjust it'),
-        brandPick(ph, i)))
+        ''))
       photoBox.replaceChildren(
         h('div', { class: 'photos' }, cards, drop),
         queue.length ? h('div', {}, h('p', { class: 'hint' }, `${queue.length} photo(s) will be added when you save:`), h('div', { class: 'queue' }, queue.map((q) => h('img', { src: q.url, alt: '' })))) : '',
@@ -282,10 +282,11 @@
       h('fieldset', {}, h('legend', {}, 'Photos'), photoBox),
       h('fieldset', {}, h('legend', {}, 'Names people search for'),
         field('Also known as', f.aliases.el, 'Telugu-English spellings, local names, common misspellings. Used by the search box.')),
-      h('fieldset', {}, h('legend', {}, 'Brands, sizes & price (optional)'),
-        field('Brands at the shop', f.brands.el, 'Shown as buttons on the product page; also searchable.'),
-        field('Pack sizes', f.sizes),
-        h('div', { class: 'grid2' }, field('Price', f.price, 'Only if you want a price shown.'), field('Price in Telugu', f.priceTe))),
+      !isNew ? h('fieldset', {}, h('legend', {}, `Products of this type (${skusOfType(p.slug).length})`),
+        h('ul', { class: 'sib-list' }, skusOfType(p.slug).map((x) => h('li', {}, h('button', { type: 'button', class: 'link', onclick: () => { closeDrawer(true); editSku(x.id) } }, `${x.name}${x.size ? ' · ' + x.size : ''}${x.brand ? ' — ' + brandName(x.brand) : ''}${x.off ? ' (out of stock)' : ''}`)))),
+        h('button', { class: 'btn small', type: 'button', onclick: () => { closeDrawer(true); editSku(null, { type: p.slug }) } }, '＋ Add a product of this type')) : h('p', { class: 'hint' }, 'After saving the type, add its products (brands and sizes) in the Products tab.'),
+      h('fieldset', {}, h('legend', {}, 'Price note (optional)'),
+        h('div', { class: 'grid2' }, field('Price note', f.price, 'Only for a general note like “₹30 – ₹45, depending on size”. Set exact prices on each product.'), field('Price note in Telugu', f.priceTe))),
       h('fieldset', {}, h('legend', {}, 'Note for customers (optional)'),
         h('div', { class: 'grid2' }, field('Note', f.caution), field('Note in Telugu', f.cautionTe))),
       h('fieldset', {}, h('legend', {}, 'Suggest this item for festivals'),
@@ -296,7 +297,7 @@
     async function save() {
       const product = {
         slug: f.slug.value.trim(), name: f.name.value, te: f.te.value, desc: f.desc.value,
-        aliases: f.aliases.get(), brands: f.brands.get(), sizes: f.sizes.value, price: f.price.value, priceTe: f.priceTe.value,
+        aliases: f.aliases.get(), price: f.price.value, priceTe: f.priceTe.value,
         caution: f.caution.value, cautionTe: f.cautionTe.value, q: p.q, photo: p.photo,
       }
       const festivals = festChecks.map((l) => l.querySelector('input')).filter((c) => c.checked).map((c) => c.value)
@@ -308,26 +309,263 @@
       }
       dirty = false
       await load()
-      toast(isNew ? 'Product added ✓' : 'Saved ✓')
+      toast(isNew ? 'Type added ✓' : 'Saved ✓')
       render()
-      editProduct(product.slug)
+      editType(product.slug)
     }
     async function del() {
       if (!confirm(`Delete "${p.name}" and its photos? This cannot be undone from the editor.`)) return
       if (await act(() => api('DELETE', `/api/product/${p.slug}`), 'Product deleted')) { await load(); closeDrawer(true); render() }
     }
-    openDrawer(isNew ? 'Add a product' : `Edit: ${p.name}`, body, [
-      h('button', { class: 'btn primary', type: 'submit', form: 'pform' }, isNew ? 'Add product' : 'Save changes'),
+    openDrawer(isNew ? 'Add a type' : `Edit type: ${p.name}`, body, [
+      h('button', { class: 'btn primary', type: 'submit', form: 'pform' }, isNew ? 'Add type' : 'Save changes'),
       !isNew ? h('a', { class: 'btn', href: productUrl(p), target: '_blank', rel: 'noopener' }, 'View in browser ↗') : '',
       h('span', { class: 'spacer' }),
-      !isNew ? h('button', { class: 'btn danger', type: 'button', onclick: del }, 'Delete product') : '',
+      !isNew ? h('button', { class: 'btn danger', type: 'button', onclick: del }, 'Delete type') : '',
     ], () => !dirty || confirm('You have unsaved changes. Close without saving?'))
+  }
+
+  // ───────── PRODUCTS (one product = one size on the shelf) ─────────
+  let pf = { q: '', cat: '', type: '', brand: '', stock: '' } // product filters
+  const typeBySlug = (slug) => products().find((t) => t.slug === slug)
+  const brandName = (id) => (S.brands.find((b) => b.id === id) || {}).name || ''
+  const skusOfType = (slug) => S.skus.filter((p) => p.type === slug)
+  const skuThumb = (p) => (p.photos?.[0] ? `/photo/thumb/${p.photos[0]}.webp` : '')
+  const sizeLabel = (p) => (p.loose ? `Loose · from ${p.min || 250} g` : p.size || (p.unit ? `per ${p.unit}` : ''))
+  const skuPreviewUrl = (p) => { const t = typeBySlug(p.type); if (!t) return PREVIEW(); return skusOfType(p.type).filter((x) => !x.off).length > 1 ? `${productUrl(t)}${p.id}/` : productUrl(t) }
+  const UNITS = [['piece', 'pieces'], ['packet', 'packets'], ['bar', 'bars'], ['bottle', 'bottles'], ['box', 'boxes'], ['bag', 'bags'], ['can', 'cans'], ['tube', 'tubes'], ['sachet', 'sachets'], ['set', 'sets'], ['kit', 'kits'], ['bundle', 'bundles'], ['leaf', 'leaves'], ['pair', 'pairs'], ['dozen', 'dozens'], ['roll', 'rolls'], ['item', 'items']]
+  function typeSelect(value, cat) {
+    return h('select', {}, h('option', { value: '' }, '— choose type —'), S.sections.map((s) => h('optgroup', { label: s.name },
+      S.categories.filter((c) => c.section === s.slug && (!cat || c.slug === cat)).flatMap((c) => c.products.map((t) => h('option', { value: t.slug, selected: t.slug === value }, `${t.name.replace(/\s*\(.*\)\s*$/, '')} · ${c.name}`))))))
+  }
+  function brandSelect(value) {
+    return h('select', {}, h('option', { value: '' }, '— no brand —'), S.brands.map((b) => h('option', { value: b.id, selected: b.id === value }, b.name)))
+  }
+
+  function renderSkus() {
+    const search = h('input', { type: 'search', placeholder: 'Search name, size, brand, other names…', value: pf.q, 'aria-label': 'Search products' })
+    const cat = h('select', { 'aria-label': 'Category' }, h('option', { value: '' }, 'All categories'),
+      S.sections.map((s) => h('optgroup', { label: s.name }, S.categories.filter((c) => c.section === s.slug).map((c) => h('option', { value: c.slug, selected: c.slug === pf.cat }, c.name)))))
+    const typeBox = h('span')
+    const brand = h('select', { 'aria-label': 'Brand' }, h('option', { value: '' }, 'All brands'), h('option', { value: '-', selected: pf.brand === '-' }, '(no brand)'), S.brands.map((b) => h('option', { value: b.id, selected: b.id === pf.brand }, b.name)))
+    const stock = h('select', { 'aria-label': 'Stock' }, [['', 'In stock + out of stock'], ['in', 'In stock'], ['out', 'Out of stock'], ['nophoto', 'Without photo'], ['noprice', 'Without price']].map(([v, l]) => h('option', { value: v, selected: v === pf.stock }, l)))
+    const count = h('span', { class: 'count' })
+    const tbody = h('tbody')
+    const drawTypes = () => {
+      const sel = typeSelect(pf.type, pf.cat)
+      sel.setAttribute('aria-label', 'Type')
+      sel.options[0].textContent = 'All types'
+      sel.addEventListener('change', () => { pf.type = sel.value; draw() })
+      typeBox.replaceChildren(sel)
+    }
+    search.addEventListener('input', () => { pf.q = search.value; draw() })
+    cat.addEventListener('change', () => { pf.cat = cat.value; pf.type = ''; drawTypes(); draw() })
+    brand.addEventListener('change', () => { pf.brand = brand.value; draw() })
+    stock.addEventListener('change', () => { pf.stock = stock.value; draw() })
+    function draw() {
+      const q = norm(pf.q)
+      const catOf = (p) => typeBySlug(p.type)?.category
+      const rows = S.skus.filter((p) => (!pf.cat || catOf(p) === pf.cat) && (!pf.type || p.type === pf.type) &&
+        (!pf.brand || (pf.brand === '-' ? !p.brand : p.brand === pf.brand)) &&
+        (!pf.stock || (pf.stock === 'in' ? !p.off : pf.stock === 'out' ? p.off : pf.stock === 'nophoto' ? !p.photos?.length : !p.price)) &&
+        (!q || [p.name, p.te, p.size, brandName(p.brand), typeBySlug(p.type)?.name, ...(p.aliases || [])].some((x) => norm(x).includes(q))))
+      const groups = new Map()
+      for (const p of rows) { const k = p.type + '|' + (p.brand || '') + '|' + p.name; if (!groups.has(k)) groups.set(k, []); groups.get(k).push(p) }
+      const lines = [...groups.values()]
+      count.textContent = `${lines.length} products · ${rows.length} sizes`
+      tbody.replaceChildren(...(lines.length ? lines.slice(0, 300).map((line) => {
+        const p = line[0], t = typeBySlug(p.type)
+        const pic = skuThumb(line.find((x) => x.photos?.length) || p)
+        const inStock = line.filter((x) => !x.off).length
+        return h('tr', { class: inStock ? '' : 'is-off' },
+          h('td', { class: 'c-ph' }, pic ? h('img', { src: pic, alt: '', loading: 'lazy' }) : h('span', { class: 'noph' }, 'no photo')),
+          h('td', { class: 'c-name' }, h('button', { class: 'link-strong', type: 'button', onclick: () => editSku(p.id) }, p.name), p.te ? h('span', { class: 'te', lang: 'te' }, p.te) : ''),
+          h('td', { class: 'c-sizes' }, h('div', { class: 'chips-in' }, line.map((x) => h('button', { type: 'button', class: 'sizechip' + (x.off ? ' off' : ''), title: x.off ? 'Out of stock' : 'Edit this size', onclick: () => editSku(x.id) }, (sizeLabel(x) || 'no size') + (x.price ? ' · ' + x.price : ''))),
+            h('button', { type: 'button', class: 'sizechip add', title: 'Add another size of this product', onclick: () => editSku(null, { type: p.type, brand: p.brand, name: p.name, te: p.te, aliases: p.aliases, desc: p.desc }) }, '＋ size'))),
+          h('td', {}, brandName(p.brand) || h('span', { class: 'muted' }, '—')),
+          h('td', {}, t ? t.name.replace(/s*(.*)s*$/, '') : h('span', { class: 'badge warn' }, 'type missing')),
+          h('td', { class: 'c-stock' }, h('span', { class: 'badge' + (inStock === line.length ? ' qty' : inStock ? '' : ' warn') }, `${inStock}/${line.length} in stock`)),
+          h('td', { class: 'c-act' }, h('button', { class: 'btn small', type: 'button', onclick: () => editSku(p.id) }, 'Edit')))
+      }) : [h('tr', {}, h('td', { colspan: 7, class: 'empty' }, 'No products match. Change the filters, or add a product.'))]))
+      if (lines.length > 300) tbody.append(h('tr', {}, h('td', { colspan: 7, class: 'empty' }, 'Showing the first 300. Use the search or filters to find the others.')))
+    }
+    drawTypes()
+    draw()
+    $('#main').replaceChildren(
+      h('div', { class: 'page-head' }, h('div', {}, h('h1', {}, 'Products'), h('p', {}, 'Every product is one item on the shelf in one size, e.g. “Rin Detergent Powder · ½ kg”. It has its own photos, price and other names.')),
+        h('button', { class: 'btn primary', type: 'button', onclick: () => editSku(null, pf.type ? { type: pf.type } : {}) }, '＋ Add product')),
+      h('div', { class: 'toolbar filters' }, search, cat, typeBox, brand, stock, count),
+      h('div', { class: 'table-wrap' }, h('table', { class: 'ptable' },
+        h('thead', {}, h('tr', {}, ['Photo', 'Product', 'Sizes (click to edit)', 'Brand', 'Type', 'Stock', ''].map((x) => h('th', {}, x)))), tbody)),
+    )
+  }
+
+  function editSku(id, preset = {}) {
+    const isNew = !id
+    const p = isNew ? { type: '', brand: '', name: '', te: '', size: '', price: '', desc: '', aliases: [], ...preset } : JSON.parse(JSON.stringify(S.skus.find((x) => x.id === id)))
+    let dirty = false
+    const t0 = typeBySlug(p.type)
+    const f = {
+      cat: h('select', {}, h('option', { value: '' }, 'All categories'), S.sections.map((s) => h('optgroup', { label: s.name }, S.categories.filter((c) => c.section === s.slug).map((c) => h('option', { value: c.slug, selected: c.slug === t0?.category }, c.name))))),
+      typeBox: h('span'),
+      type: null,
+      brand: h('select'),
+      name: h('input', { type: 'text', value: p.name, placeholder: 'e.g. Rin Detergent Powder' }),
+      te: h('input', { type: 'text', value: p.te || '', lang: 'te', placeholder: 'optional, e.g. రిన్ సర్ఫ్' }),
+      size: h('input', { type: 'text', value: p.loose ? '' : p.size || '', placeholder: 'e.g. ½ kg packet, ₹10 sachet, 1 L, Big' }),
+      loose: h('input', { type: 'checkbox', checked: !!p.loose }),
+      min: h('select', {}, [25, 50, 100, 250, 500, 1000].map((g) => h('option', { value: g, selected: g === (p.min || 250) }, g < 1000 ? `${g} g` : '1 kg'))),
+      step: h('select', {}, [25, 50, 100, 250, 500, 1000].map((g) => h('option', { value: g, selected: g === (p.step || ((p.min || 250) < 250 ? 25 : 250)) }, g < 1000 ? `${g} g` : '1 kg'))),
+      unit: h('select', {}, UNITS.map(([u, pl]) => h('option', { value: u, selected: u === (p.unit || 'piece') }, pl))),
+      price: h('input', { type: 'text', value: p.price || '', placeholder: 'e.g. ₹55 (optional)' }),
+      show: h('input', { type: 'checkbox', checked: !p.off }),
+      aliases: chipInput(p.aliases || [], 'Type another name and press Enter'),
+      desc: h('textarea', { rows: 3, value: p.desc || '', placeholder: 'optional — leave empty to use the type’s description' }),
+    }
+    const drawType = () => {
+      f.type = typeSelect(p.type, f.cat.value)
+      f.type.addEventListener('change', () => { p.type = f.type.value; dirty = true; drawBrands(); suggest() })
+      f.typeBox.replaceChildren(f.type)
+    }
+    const drawBrands = () => {
+      const cur = f.brand.value || p.brand || ''
+      const own = [...new Set(S.skus.filter((x) => x.type === (f.type?.value || p.type) && x.brand).map((x) => x.brand))]
+      const t = typeBySlug(f.type?.value || p.type)
+      f.brand.replaceChildren(h('option', { value: '' }, '— no brand —'),
+        own.length ? h('optgroup', { label: `Brands of ${t ? t.name.replace(/s*(.*)s*$/, '') : 'this type'}` }, own.map((id) => h('option', { value: id, selected: id === cur }, brandName(id)))) : '',
+        h('optgroup', { label: own.length ? 'Other brands (adds it to this type)' : 'All brands' }, S.brands.filter((b) => !own.includes(b.id)).map((b) => h('option', { value: b.id, selected: b.id === cur }, b.name))))
+    }
+    f.cat.addEventListener('change', () => { drawType() })
+    drawType()
+    drawBrands()
+    const unitRow = field('Counted in (when there is no size)', f.unit, 'Used in the WhatsApp list, e.g. “3 bars”.')
+    const looseHelp = h('small', {})
+    const drawLooseHelp = () => { const m = Number(f.min.value), st = Number(f.step.value); const fm = (g) => (g < 1000 ? `${g} g` : `${+(g / 1000).toFixed(2)} kg`); looseHelp.textContent = `Customers can choose: ${[0, 1, 2, 3].map((k) => fm(m + k * st)).join(', ')} …` }
+    f.min.addEventListener('change', drawLooseHelp); f.step.addEventListener('change', drawLooseHelp); drawLooseHelp()
+    const minRow = h('div', {}, h('div', { class: 'grid2' }, field('Starts from', f.min, 'The smallest amount a customer can take.'), field('Each + adds', f.step, '25 g for small or costly items, 250 g for dals, rice, chillies.')), looseHelp)
+    const syncUnit = () => { unitRow.hidden = !!f.size.value.trim() || f.loose.checked; f.size.disabled = f.loose.checked; minRow.hidden = !f.loose.checked }
+    f.size.addEventListener('input', syncUnit)
+    f.loose.addEventListener('change', syncUnit)
+    syncUnit()
+    const suggestion = h('button', { type: 'button', class: 'link', hidden: true })
+    function suggest() {
+      const t = typeBySlug(f.type?.value)
+      const b = brandName(f.brand.value)
+      const s = t ? `${b ? b + ' ' : ''}${t.name.replace(/\s*\(.*\)\s*$/, '')}` : ''
+      suggestion.hidden = !s || f.name.value.trim() === s
+      suggestion.textContent = `Use “${s}”`
+      suggestion.onclick = () => { f.name.value = s; dirty = true; suggestion.hidden = true }
+    }
+    f.brand.addEventListener('change', suggest)
+    f.name.addEventListener('input', suggest)
+    suggest()
+
+    // other sizes of this product (same type + brand + name)
+    const siblings = isNew ? [] : S.skus.filter((x) => x.id !== p.id && x.type === p.type && (x.brand || '') === (p.brand || '') && x.name === p.name)
+    // photos
+    const photos = p.photos || []
+    const file = h('input', { type: 'file', accept: 'image/jpeg,image/png,image/webp', multiple: true, hidden: true })
+    file.addEventListener('change', async () => {
+      if (isNew) return toast('Save the product first, then add photos.', true)
+      for (const fl of file.files) if (!(await act(() => api('POST', `/api/sku/${p.id}/photo?op=add&filename=${encodeURIComponent(fl.name)}`, undefined, fl)))) break
+      await load(); toast('Photos saved ✓'); reopen()
+    })
+    const op = async (o, body) => { if (o === 'delete' && !confirm('Remove this photo from the product?')) return; if (await act(() => api('POST', `/api/sku/${p.id}/photo?op=${o}`, body))) { await load(); reopen() } }
+    const copyFrom = siblings.filter((x) => x.photos?.length)
+    const copySel = copyFrom.length ? h('select', { 'aria-label': 'Use photos of another size', onchange: async (e) => { if (e.target.value && await act(() => api('POST', `/api/sku/${p.id}/photo?op=copy-from`, { from: e.target.value }), 'Photos added ✓')) { await load(); reopen() } } },
+      h('option', { value: '' }, 'Use photos of another size…'), copyFrom.map((x) => h('option', { value: x.id }, `${sizeLabel(x)} (${x.photos.length} photo${x.photos.length > 1 ? 's' : ''})`))) : ''
+    const photoBox = isNew ? h('p', { class: 'hint' }, 'Save the product first, then add its photos (you can add several).') : h('div', {},
+      h('div', { class: 'photos' }, photos.map((name, i) => {
+        const meta = S.photoMeta?.[name] || {}
+        return h('div', { class: 'photo' + (i === 0 ? ' main' : '') },
+          h('img', { src: `/photo/thumb/${name}.webp?v=${meta.v || 0}`, alt: `Photo ${i + 1}` }),
+          i === 0 ? h('span', { class: 'tag' }, 'Main photo') : '',
+          h('div', { class: 'ops' },
+            h('button', { class: 'icon-btn', type: 'button', 'aria-label': 'Move left', disabled: i === 0, onclick: () => op('move', { name, dir: -1 }) }, '←'),
+            i ? h('button', { class: 'btn small', type: 'button', onclick: () => op('main', { name }) }, 'Make main') : h('span'),
+            h('button', { class: 'icon-btn', type: 'button', 'aria-label': 'Move right', disabled: i === photos.length - 1, onclick: () => op('move', { name, dir: 1 }) }, '→'),
+            h('button', { class: 'icon-btn', type: 'button', 'aria-label': 'Remove photo', onclick: () => op('delete', { name }) }, '🗑')),
+          meta.hasSource ? h('button', { class: 'btn small adjust', type: 'button', onclick: () => openCropper(p.id, { name, crop: meta.crop || null }, async () => { await load(); reopen() }, `/api/sku/${p.id}/crop`) }, meta.crop ? '✂ Adjust (custom)' : '✂ Adjust / crop') : '')
+      }),
+      h('label', { class: 'drop', tabindex: '0' }, h('strong', {}, '＋ Add photos'), h('span', {}, 'Choose one or more'), h('span', {}, 'JPG, PNG or WebP'), file)),
+      h('div', { class: 'vtools' }, copySel, h('span', { class: 'hint' }, 'First photo = main photo on cards. Customers can swipe through all photos on the product page.')))
+
+    const body = h('form', { id: 'sform', oninput: () => (dirty = true), onchange: () => (dirty = true), onsubmit: (e) => { e.preventDefault(); save(false) } },
+      h('fieldset', {}, h('legend', {}, 'What it is'),
+        h('div', { class: 'grid2' }, field('Category (to find the type)', f.cat), field('Type of product', f.typeBox, h('span', {}, 'e.g. Detergent Powder. ', h('button', { type: 'button', class: 'link', onclick: () => { if (!dirty || confirm('Leave without saving?')) { closeDrawer(true); editType(null) } } }, '＋ New type')), true)),
+        h('div', { class: 'grid2' }, field('Brand', f.brand, h('span', {}, 'Pick “no brand” for loose items. ', h('button', { type: 'button', class: 'link', onclick: () => { if (!dirty || confirm('Leave without saving?')) { closeDrawer(true); editBrand(null) } } }, '＋ New brand'))),
+          h('label', { class: 'field' }, h('span', { class: 'req' }, 'Product name'), f.name, h('small', {}, 'Shown on the website and in the WhatsApp list. ', suggestion))),
+        field('Telugu name (optional)', f.te)),
+      h('fieldset', {}, h('legend', {}, 'Size & price'),
+        h('div', { class: 'grid2' }, field('Size / pack', f.size, 'Exactly as on the pack or as you sell it.'), field('Price (optional)', f.price, 'Shown on the website when filled in.')),
+        h('label', { class: 'check-line' }, f.loose, h('span', {}, h('strong', {}, 'Sold loose by weight'), ' — customers choose how much (set the start and the steps below)')),
+        minRow,
+        unitRow,
+        h('label', { class: 'check-line' }, f.show, h('span', {}, h('strong', {}, 'In stock — show on the website'), ' (untick when not available)'))),
+      h('fieldset', {}, h('legend', {}, 'Photos'), photoBox),
+      h('fieldset', {}, h('legend', {}, 'Other names (for search)'), field('Also known as', f.aliases.el, 'Local names, Telugu-English spellings, pack names, e.g. “rin surf”, “rin powder”. The type’s other names are searched too.'))
+      , h('fieldset', {}, h('legend', {}, 'Description'), field('Description (optional)', f.desc)),
+      !isNew ? h('fieldset', {}, h('legend', {}, 'Other sizes of this product'),
+        h('button', { class: 'btn small', type: 'button', onclick: () => { if (!dirty || confirm('Leave without saving?')) { closeDrawer(true); editSku(null, { type: p.type, brand: p.brand, name: p.name, te: p.te, aliases: p.aliases, desc: p.desc }) } } }, '＋ Add another size (e.g. 1 kg)'),
+        h('ul', { class: 'sib-list' }, siblings.map((x) => h('li', {}, h('button', { type: 'button', class: 'link', onclick: () => { if (!dirty || confirm('Leave without saving?')) { closeDrawer(true); editSku(x.id) } } }, `${sizeLabel(x) || 'no size'}${x.price ? ' · ' + x.price : ''}${x.off ? ' (out of stock)' : ''}`))))) : '')
+
+    function reopen() { closeDrawer(true); editSku(p.id) }
+    async function save(another) {
+      const product = { type: f.type?.value || '', brand: f.brand.value, name: f.name.value.trim(), te: f.te.value, size: f.loose.checked ? (p.loose && p.size !== 'Loose' ? p.size : 'Loose') : f.size.value.trim(), loose: f.loose.checked,
+        unit: f.unit.value, min: f.loose.checked ? Number(f.min.value) : undefined, step: f.loose.checked ? Number(f.step.value) : undefined, price: f.price.value, off: !f.show.checked, aliases: f.aliases.get(), desc: f.desc.value, quick: p.quick }
+      const r = await act(() => api('POST', '/api/sku', { product, originalId: isNew ? null : p.id }), isNew ? 'Product added ✓' : 'Saved ✓')
+      if (!r) return
+      dirty = false
+      await load()
+      closeDrawer(true)
+      if (another) editSku(null, { type: product.type, brand: product.brand, name: product.name, te: product.te, aliases: product.aliases, desc: product.desc })
+      else editSku(r.id)
+    }
+    async function del() {
+      if (!confirm(`Delete “${p.name}${p.size ? ' · ' + p.size : ''}”? Its own photos are deleted too.`)) return
+      if (await act(() => api('DELETE', `/api/sku/${p.id}`), 'Product deleted')) { await load(); closeDrawer(true); render() }
+    }
+    openDrawer(isNew ? (preset.name ? `Add another size: ${preset.name}` : 'Add a product') : `${p.name}${p.size ? ' · ' + p.size : ''}`, body, [
+      h('button', { class: 'btn primary', type: 'submit', form: 'sform' }, isNew ? 'Add product' : 'Save'),
+      !isNew ? h('a', { class: 'btn', href: skuPreviewUrl(p), target: '_blank', rel: 'noopener' }, 'View ↗') : '',
+      h('span', { class: 'spacer' }),
+      !isNew ? h('button', { class: 'btn danger', type: 'button', onclick: del }, 'Delete') : '',
+    ], () => !dirty || confirm('You have unsaved changes. Close without saving?'))
+  }
+
+  // ───────── BRANDS ─────────
+  function renderBrands() {
+    const counts = Object.fromEntries(S.brands.map((b) => [b.id, S.skus.filter((p) => p.brand === b.id).length]))
+    $('#main').replaceChildren(
+      h('div', { class: 'page-head' }, h('div', {}, h('h1', {}, 'Brands'), h('p', {}, 'Add a brand once, then pick it in any product. Renaming a brand here renames it everywhere.')),
+        h('button', { class: 'btn primary', type: 'button', onclick: () => editBrand(null) }, '＋ Add brand')),
+      h('div', { class: 'brand-grid' }, S.brands.map((b) => h('div', { class: 'row-card' },
+        h('div', { class: 't' }, h('strong', {}, b.name, b.te ? h('span', { lang: 'te', class: 'te-inline' }, ' · ' + b.te) : ''), h('span', {}, `${counts[b.id]} product${counts[b.id] === 1 ? '' : 's'}`)),
+        h('div', { class: 'acts' },
+          h('button', { class: 'btn small', type: 'button', onclick: () => { pf = { q: '', cat: '', type: '', brand: b.id, stock: '' }; switchTab('products') } }, 'Products'),
+          h('button', { class: 'btn small', type: 'button', onclick: () => editBrand(b.id) }, 'Edit'))))),
+    )
+  }
+  function editBrand(id) {
+    const isNew = !id
+    const b = isNew ? { id: '', name: '', te: '' } : S.brands.find((x) => x.id === id)
+    const f = { name: h('input', { type: 'text', value: b.name, placeholder: 'e.g. Rin' }), te: h('input', { type: 'text', value: b.te || '', lang: 'te', placeholder: 'optional' }) }
+    const used = isNew ? 0 : S.skus.filter((p) => p.brand === id).length
+    const save = async () => { if (await act(() => api('POST', '/api/brand', { brand: { id: b.id, name: f.name.value, te: f.te.value }, originalId: isNew ? null : b.id }), 'Saved ✓')) { await load(); closeDrawer(true); render() } }
+    const del = async () => { if (!confirm(`Delete the brand “${b.name}”?`)) return; if (await act(() => api('DELETE', `/api/brand/${b.id}`), 'Brand deleted')) { await load(); closeDrawer(true); render() } }
+    openDrawer(isNew ? 'Add a brand' : `Edit brand: ${b.name}`, h('form', { id: 'bform', onsubmit: (e) => { e.preventDefault(); save() } },
+      h('fieldset', {}, h('legend', {}, 'Brand'), h('div', { class: 'grid2' }, field('Brand name', f.name, null, true), field('Telugu (optional)', f.te)),
+        !isNew ? h('p', { class: 'hint' }, `${used} product${used === 1 ? '' : 's'} use this brand.`) : '')), [
+      h('button', { class: 'btn primary', type: 'submit', form: 'bform' }, isNew ? 'Add brand' : 'Save'),
+      h('span', { class: 'spacer' }),
+      !isNew ? h('button', { class: 'btn danger', type: 'button', onclick: del, disabled: used > 0, title: used ? 'Change or delete its products first' : '' }, 'Delete brand') : '',
+    ])
   }
 
   // ───────── PHOTO CROP / ADJUST ─────────
   // The "stage" is a square whose side is the photo's longer edge, with the photo centred in it.
   // The crop box {x, y, s} is in fractions (0–1) of the stage side. Areas outside the photo become white.
-  function openCropper(slug, ph, done) {
+  function openCropper(slug, ph, done, endpoint) {
     let rotate = ph.crop?.rotate || 0
     let box = ph.crop ? { x: ph.crop.x, y: ph.crop.y, s: ph.crop.s } : null
     let W = 1, H = 1
@@ -403,7 +641,7 @@
     const onKey = (e) => { if (e.key === 'Escape') { e.stopPropagation(); e.preventDefault(); close() } }
     document.addEventListener('keydown', onKey, true)
     const save = async (crop) => {
-      const ok = await act(() => api('POST', `/api/photo/${slug}/crop`, { name: ph.name, crop }), crop ? 'Photo adjusted ✓' : 'Back to automatic ✓')
+      const ok = await act(() => api('POST', endpoint || `/api/photo/${slug}/crop`, { name: ph.name, crop }), crop ? 'Photo adjusted ✓' : 'Back to automatic ✓')
       if (ok) { close(); done() }
     }
     root.append(h('div', { class: 'cropper', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Adjust photo' },
@@ -444,7 +682,8 @@
             h('button', { class: 'icon-btn', type: 'button', 'aria-label': 'Move up', disabled: i === 0, onclick: () => moveCat(c.slug, -1) }, '↑'),
             h('button', { class: 'icon-btn', type: 'button', 'aria-label': 'Move down', disabled: i === cats.length - 1, onclick: () => moveCat(c.slug, 1) }, '↓'),
             c.products.length ? h('a', { class: 'btn small', href: `${PREVIEW()}/${c.section}/${c.slug}/`, target: '_blank', rel: 'noopener' }, 'View ↗') : '',
-            h('button', { class: 'btn small', type: 'button', onclick: () => { filters = { q: '', cat: c.slug }; switchTab('products') } }, 'Products'),
+            h('button', { class: 'btn small', type: 'button', onclick: () => { filters = { q: '', cat: c.slug }; switchTab('types') } }, 'Types'),
+            h('button', { class: 'btn small', type: 'button', onclick: () => { pf = { q: '', cat: c.slug, type: '', brand: '', stock: '' }; switchTab('products') } }, 'Products'),
             h('button', { class: 'btn small', type: 'button', onclick: () => editCategory(c.slug) }, 'Edit')))))]
       })),
     )
@@ -964,7 +1203,7 @@
   // ───────── tabs ─────────
   function render() {
     if (!S) return
-    ;({ products: renderProducts, categories: renderCategories, festivals: renderFestivals, help: renderHelp })[tab]()
+    ;({ products: renderSkus, types: renderTypes, brands: renderBrands, categories: renderCategories, festivals: renderFestivals, help: renderHelp })[tab]()
   }
   function switchTab(t) {
     tab = t

@@ -84,7 +84,7 @@ if (process.argv.includes('--static')) {
 
 // 2. Browser checks.
 const browser = await chromium.launch({ executablePath })
-const keyRoutes = ['/', '/kirana/', '/puja-samagri/', '/kirana/spices-masalas/', '/puja-samagri/pooja-kits/', '/kirana/pulses-dals/toor-dal/', '/puja-samagri/kumkum-turmeric/kumkum/', '/about/', '/visit/', '/contact/', '/search/?q=agarbatti', '/credits/', '/this-page-does-not-exist']
+const keyRoutes = ['/', '/kirana/', '/puja-samagri/', '/kirana/spices-masalas/', '/puja-samagri/pooja-kits/', '/kirana/pulses-dals/toor-dal/', '/kirana/household-cleaning/detergent-powder/', '/kirana/household-cleaning/detergent-powder/rin-detergent-powder-1-kg/', '/list/', '/puja-samagri/kumkum-turmeric/kumkum/', '/about/', '/visit/', '/contact/', '/search/?q=agarbatti', '/credits/', '/this-page-does-not-exist']
 const plan = []
 // QUICK=1: key pages, every section/category page, the first product of each category, and new/changed products.
 const QUICK_EXTRA = ['/kirana/paper-plates-cups/paper-plates/', '/puja-samagri/other-devotional/puja-prasadam-cups/', '/puja-samagri/wicks-deepam-oil/deepam-oil/']
@@ -187,18 +187,34 @@ const kir = await searchCount('oil', 'kirana')
 const puj = await searchCount('oil', 'puja-samagri')
 if (!(kir > 0 && puj > 0 && kir + puj === all)) fail('search', `section filter inconsistent: all=${all} kirana=${kir} puja=${puj}`)
 else console.log(`  search "oil" all=${all} kirana=${kir} puja=${puj}`)
-// Brand searches show that brand's own photo (or a brand tile), never another brand's photo
-// (photo N of a product is <slug>.webp for the main photo, <slug>-N.webp for the others)
-const soap = JSON.parse(readFileSync(join(root, 'src', 'data', 'catalogue.json'), 'utf8')).categories.flatMap((c) => c.products).find((p) => p.slug === 'bath-soap')
-const brandPhoto = (b) => { const i = (soap?.photoBrands || []).indexOf(b); return i < 0 ? 'TILE' : i === 0 ? 'bath-soap.webp' : `bath-soap-${i + 1}.webp` }
-const cintholPhoto = brandPhoto('Cinthol')
-for (const [q, want] of [['cinthol', cintholPhoto], ['సింథాల్ సబ్బు', cintholPhoto], ['santoor', brandPhoto('Santoor')], ['candy pappu', 'toor-dal.webp']]) {
+// Brand searches open THAT brand's product (with its own photo, never another brand's)
+const skuList = JSON.parse(readFileSync(join(root, 'src', 'data', 'products.json'), 'utf8')).products
+const ownPhoto = (type, id) => { const p = skuList.find((x) => x.id === id); return p?.photos?.[0] ? p.photos[0] + '.webp' : 'TILE' }
+for (const [q, href, want] of [['cinthol', '/bath-soap/cinthol-bath-soap/', ownPhoto('bath-soap', 'cinthol-bath-soap')], ['సింథాల్ సబ్బు', '/bath-soap/cinthol-bath-soap/', ownPhoto('bath-soap', 'cinthol-bath-soap')], ['santoor', '/bath-soap/santoor-bath-soap/', ownPhoto('bath-soap', 'santoor-bath-soap')], ['candy pappu', '/toor-dal/', 'toor-dal.webp']]) {
   await page.goto(`${BASE}/search/?q=${encodeURIComponent(q)}`)
-  await page.waitForFunction(() => document.querySelector('[data-results] li'), null, { timeout: 4000 }).catch(() => {})
-  const got = await page.$eval('[data-results] li', (l) => (l.querySelector('.brand-tile') ? 'TILE' : (l.querySelector('.ph img')?.getAttribute('src') || '').split('/').pop().split('?')[0].replace(/\.[0-9a-f]{8}\.webp$/, '.webp'))).catch(() => 'none')
-  if (got !== want) fail('brand photo', `"${q}" first result shows ${got} (expected ${want})`)
-  else console.log(`  brand/sound-alike search "${q}" → ${got}`)
+  await page.waitForFunction(() => document.querySelector('[data-results] li.pc'), null, { timeout: 4000 }).catch(() => {})
+  const got = await page.$eval('[data-results] li.pc', (l) => [l.querySelector('a.card').getAttribute('href'), l.querySelector('.brand-tile') ? 'TILE' : (l.querySelector('.ph img')?.getAttribute('src') || '').split('/').pop().split('?')[0].replace(/.[0-9a-f]{8}.webp$/, '.webp')]).catch(() => ['none', 'none'])
+  if (!got[0].includes(href) || got[1] !== want) fail('brand search', `"${q}" first result ${got.join(' ')} (expected ${href} ${want})`)
+  else console.log(`  brand/sound-alike search "${q}" → ${got.join(' ')}`)
 }
+// Sizes in the search pick that size ("rin 1 kg", "tide 10 rs", "rice 25 kg", "అర కిలో కంది పప్పు")
+for (const [q, href, want] of [['rin 1 kg', '/detergent-powder/rin-detergent-powder-1-kg/', 'rin-detergent-powder-1-kg'], ['tide 10 rs', '/detergent-powder/tide-detergent-powder-rs-10-packet/', 'tide-detergent-powder-rs-10-packet'], ['masoori rice 25 kg', '-masoori-rice', 'want:25000'], ['అర కిలో కంది పప్పు', '/toor-dal/', 'want:500']]) {
+  await page.goto(`${BASE}/search/?q=${encodeURIComponent(q)}`)
+  await page.waitForFunction(() => document.querySelector('[data-results] li.pc'), null, { timeout: 4000 }).catch(() => {})
+  const got = await page.$eval('[data-results] li.pc', (l) => [l.querySelector('a.card').getAttribute('href'), l.querySelector('[data-want-g]') ? 'want:' + l.querySelector('[data-want-g]').dataset.wantG : l.querySelector('select')?.value || '']).catch(() => ['none', ''])
+  if (!got[0].includes(href) || got[1] !== want) fail('size search', `"${q}" → ${got.join(' ')} (expected ${href} ${want})`)
+  else console.log(`  size search "${q}" → ${got.join(' ')}`)
+}
+// My list: Add on a product page → counter shows 1, + makes 2
+await page.goto(`${BASE}/kirana/household-cleaning/detergent-powder/tide-detergent-powder-1-kg/`)
+await page.evaluate(() => localStorage.removeItem('jgs-list-v2'))
+await page.reload()
+await page.click('.buy-box [data-add]')
+await page.click('.buy-box [data-inc]')
+const listState = await page.evaluate(() => [document.querySelector('[data-list-count]')?.textContent, document.querySelector('.buy-box [data-qty] span')?.textContent])
+if (listState[0] !== '1' || listState[1] !== '2') fail('my list', `counter/qty after Add + "+": ${listState.join(' / ')}`)
+else console.log('  my list: Add → 1 line, + → 2 OK')
+await page.evaluate(() => localStorage.removeItem('jgs-list-v2'))
 // Header search submits to /search/
 await page.goto(`${BASE}/`)
 await page.fill('#q-mobile', 'ghee')

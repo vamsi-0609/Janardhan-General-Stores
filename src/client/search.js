@@ -67,20 +67,51 @@
     return prev[b.length]
   }
 
+  // ───────── sizes in the search: "rin 1 kg", "tide 10 rs", "rice 25 kg", "అర కిలో కంది పప్పు", "oil 15 litre" ─────────
+  // Quantities become tokens: w<grams>, v<ml>, p<rupees>. They pick the matching size; the other words find the product.
+  const UNIT = { kg: 'kg', kgs: 'kg', kilo: 'kg', kilos: 'kg', kilogram: 'kg', kilograms: 'kg', 'కిలో': 'kg', 'కిలోలు': 'kg', 'కేజీ': 'kg', 'కేజీలు': 'kg',
+    g: 'g', gm: 'g', gms: 'g', gr: 'g', grm: 'g', gram: 'g', grams: 'g', 'గ్రాములు': 'g', 'గ్రాము': 'g',
+    l: 'l', lt: 'l', ltr: 'l', ltrs: 'l', litre: 'l', litres: 'l', liter: 'l', liters: 'l', 'లీటర్': 'l', 'లీటరు': 'l', 'లీటర్లు': 'l',
+    ml: 'ml', rs: 'rs', rupee: 'rs', rupees: 'rs', 'రూపాయలు': 'rs', 'రూపాయి': 'rs', 'రూ': 'rs' }
+  const NUMW = { one: 1, two: 2, three: 3, four: 4, five: 5, ten: 10, fifteen: 15, twenty: 20, fifty: 50, hundred: 100,
+    'ఒక': 1, 'ఒకటి': 1, 'రెండు': 2, 'మూడు': 3, 'నాలుగు': 4, 'ఐదు': 5, 'పది': 10, 'ఇరవై': 20, 'యాభై': 50, 'వంద': 100,
+    half: 0.5, ara: 0.5, 'అర': 0.5, quarter: 0.25, pav: 0.25, paav: 0.25, 'పావు': 0.25 }
+  const qtyToken = (n, u) => (u === 'kg' ? `w${Math.round(n * 1000)}` : u === 'g' ? `w${Math.round(n)}` : u === 'l' ? `v${Math.round(n * 1000)}` : u === 'ml' ? `v${Math.round(n)}` : `p${n}`)
+  function qtyParse(text) {
+    const toks = String(text || '').toLowerCase().replace(/½/g, ' 0.5 ').replace(/¼/g, ' 0.25 ').replace(/₹/g, ' rs ')
+      .replace(/(\d+)\s*\/\s*(\d+)/g, (m, a, b) => ` ${Number(a) / Number(b)} `)
+      .replace(/(\d+(?:\.\d+)?)/g, ' $1 ').split(/[^a-z0-9.ఀ-౿]+/).map((t) => t.replace(/^\.+|\.+$/g, '')).filter(Boolean)
+    const num = (t) => (/^\d+(\.\d+)?$/.test(t) ? Number(t) : t in NUMW ? NUMW[t] : null)
+    const tokens = []
+    const used = new Set()
+    for (let i = 0; i < toks.length; i++) {
+      const n = num(toks[i])
+      if (n == null || used.has(i)) continue
+      const next = UNIT[toks[i + 1]], prev = UNIT[toks[i - 1]]
+      if (next) { tokens.push(qtyToken(n, next)); used.add(i).add(i + 1) }
+      else if (prev === 'rs' && !used.has(i - 1)) { tokens.push(qtyToken(n, 'rs')); used.add(i).add(i - 1) }
+    }
+    return { tokens, rest: toks.filter((_, i) => !used.has(i)).join(' ') }
+  }
+  let qtyMatch = new Map() // item → { v: size id, g: grams wanted (loose items) }
+
   function prepare(item) {
     const name = loose(item.n)
     const te = base(item.t)
     const aliases = loose(item.a.join(' '))
     const brands = loose((item.b || []).join(' '))
     const cat = loose(`${item.c} ${item.s}`) + ' ' + base(item.ct)
-    const all = `${name} ${te} ${aliases} ${cat}`
+    // Sizes: their words ("packet", "bag", "big") are searchable, and their quantities pick the size.
+    const vs = (item.o && item.o.v) || []
+    const vq = vs.map((v) => ({ id: v.id, w: !!v.w, m: v.m || 250, t: qtyParse(`${v.l} ${v.p || ''}`).tokens, words: loose(v.l).split(' ').filter((x) => x.length >= 2) }))
+    const all = `${name} ${te} ${aliases} ${cat} ${loose(vs.map((v) => v.l).join(' '))}`.trim()
     // Exact (not loosened) word lists, for 1–2 letter typing.
     const bName = base(item.n).split(' ')
     const bOther = base(`${item.a.join(' ')} ${(item.b || []).join(' ')}`).split(' ')
     // Whole phrases without spaces: "kandipappu", "కందిపప్పు" (people and voice often join words).
     const joined = [item.n, item.t, ...item.a].map((x) => base(x).replace(/ /g, '')).filter((x) => x.length >= 4)
     const sk = new Set(`${item.n} ${item.a.join(' ')} ${te2lat(item.t)}`.split(/[^A-Za-z]+/).map(skel).filter((x) => x.length >= 3))
-    return { ...item, _name: name, _te: te, _aliases: aliases, _brands: brands, _all: all, _words: [...new Set(all.split(' '))].filter((w) => w.length >= 3), _bName: bName, _bOther: bOther, _joined: joined, _skel: sk }
+    return { ...item, _vq: vq, _name: name, _te: te, _aliases: aliases, _brands: brands, _all: all, _words: [...new Set(all.split(' '))].filter((w) => w.length >= 3), _bName: bName, _bOther: bOther, _joined: joined, _skel: sk }
   }
 
   // 1–2 letters: only words that START with exactly what was typed (so "gh" finds ghee, not every "g").
@@ -120,7 +151,8 @@
 
   // All typed words must match. While typing, the last word is treated as a prefix (already the case above).
   function rankRaw(index, q, section) {
-    const raw = base(q).split(' ').filter(Boolean)
+    const qq = qtyParse(q)
+    const raw = base(qq.rest).split(' ').filter(Boolean)
     if (!raw.length) return []
     // Short words are matched exactly; longer ones in the loose (spelling-tolerant) form.
     const terms = raw.map((w) => (w.length <= 2 || loose(w).length < 3 ? { t: w, short: true } : { t: loose(w), short: false })).filter((x) => x.t)
@@ -139,6 +171,20 @@
         total += s
       }
       if (total < 0) continue
+      // A size in the search ("1 kg", "₹10"): prefer products that have it, and pick that size.
+      if (item._vq && item._vq.length) {
+        const hit = qq.tokens.length && item._vq.find((v) => v.t.some((t) => qq.tokens.includes(t)))
+        const looseV = item._vq.find((v) => v.w)
+        const g = qq.tokens.filter((t) => t[0] === 'w').map((t) => Number(t.slice(1))).find((x) => x >= (looseV ? looseV.m : 250))
+        // Size words: "coconut big", "maggi family pack", "rice bag" (not words of the product's own name)
+        const nameWords = item._name.split(' ')
+        const wordHits = item._vq.map((v) => terms.filter(({ t }) => t.length >= 2 && v.words.includes(t) && !nameWords.includes(t)).length)
+        const best = Math.max(0, ...wordHits)
+        const byWord = item._vq.length > 1 && best > 0 && wordHits.filter((x) => x === best).length === 1 && item._vq[wordHits.indexOf(best)]
+        if (hit) { total += 45; qtyMatch.set(item, { v: hit.id }) }
+        else if (looseV && g) { total += 15; qtyMatch.set(item, { v: looseV.id, g }) }
+        else if (byWord) { total += 10; qtyMatch.set(item, { v: byWord.id }) }
+      }
       // Festivals and categories are only promoted when their own name matches, not via a side word.
       if (item.k === 'c' && !strong) continue
       if (strong && item.f) total += 40
@@ -151,6 +197,7 @@
   }
   // Telugu typed/spoken but written differently from our Telugu names? Try it in English letters too.
   function rank(index, q, section = 'all') {
+    qtyMatch = new Map()
     const r = rankRaw(index, q, section)
     if (!hasTe(q)) return r
     const seen = new Set(r.map((x) => x.item))
@@ -213,7 +260,8 @@
     if (x.g) return { src: x.g[0], n: x.g[1], brand }
     return { src: '', n: 1, brand }
   }
-  const linkFor = (x, pic) => (pic.n > 1 ? `${x.u}?photo=${pic.n}` : x.u)
+  const linkFor = (x, pic) => { const m = qtyMatch.get(x); const mv = m && x.o && x.o.v.find((v) => v.id === m.v); return mv && mv.u ? mv.u : m && x.o && x.o.v.length > 1 ? `${x.u}?v=${encodeURIComponent(m.v)}` : pic.n > 1 ? `${x.u}?photo=${pic.n}` : x.u }
+  const matchLabel = (x) => { const m = qtyMatch.get(x); const v = m && x.o && x.o.v.find((y) => y.id === m.v); return v ? (v.w ? (m.g ? (m.g < 1000 ? `${m.g} g` : `${m.g / 1000} kg`) + ' loose' : 'Loose') : v.l) : '' }
   const MONO = ['#355b45', '#a34b32', '#70413b', '#4f6d4a', '#8d3f2b', '#2f5d62', '#6a4c93', '#b58a38']
   const monoColor = (s) => MONO[[...s].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) >>> 0, 7) % MONO.length]
 
@@ -260,23 +308,23 @@
       let nf = 0, nc = 0
       for (const x of all) {
         if (x.f && nf++ >= 1) continue
-        if (x.k === 'c' && nc++ >= 2) continue
+        if ((x.k === 'c' || x.k === 't') && nc++ >= 2) continue
         picked.push(x)
         if (picked.length >= MAX) break
       }
-      const nProducts = all.filter((x) => !x.f && x.k !== 'c').length
+      const nProducts = all.filter((x) => !x.f && x.k !== 'c' && x.k !== 't').length
       const row = (x, kind, i) => {
         const pic = kind ? { src: x.i, n: 1, brand: '' } : pictureFor(x, q)
         const ph = pic.src ? `<img src="${esc(pic.src)}" alt="" width="44" height="44" loading="lazy" decoding="async">`
           : `<span class="sg-mono" style="--mc:${monoColor(pic.brand)}">${esc(pic.brand.slice(0, 2).toUpperCase())}</span>`
         return `<a class="sg-row${kind ? ` sg-${kind}` : ''}" id="${id}-o${i}" role="option" aria-selected="false" href="${esc(kind ? x.u : linkFor(x, pic))}"${x.f && x.col ? ` style="--fa:${esc(x.col[0])}"` : ''}>
           ${ph}
-          <span class="sg-t"><span class="sg-n">${highlight(x.n, q)}</span><span class="sg-te" lang="te">${highlight(x.t, q)}</span></span>
-          <span class="sg-k">${kind === 'fest' ? 'Festival' : kind === 'cat' ? `${esc(x.cnt)} items` : pic.brand ? `Brand: ${esc(pic.brand)}` : esc(x.c)}</span></a>`
+          <span class="sg-t"><span class="sg-n">${highlight(x.n, q)}${x.z ? ` <span class="sg-z">· ${esc(x.z)}</span>` : ''}</span><span class="sg-te" lang="te">${highlight(x.t, q)}</span></span>
+          <span class="sg-k">${!kind && matchLabel(x) ? `<b>${esc(matchLabel(x))}</b>` : ''}${kind === 'fest' ? 'Festival' : kind === 'cat' ? `${esc(x.cnt)} ${x.k === 't' ? 'brands' : 'items'}` : pic.brand ? `Brand: ${esc(pic.brand)}` : esc(x.c)}</span></a>`
       }
       let i = 0
       const parts = []
-      for (const x of picked) parts.push(row(x, x.f ? 'fest' : x.k === 'c' ? 'cat' : '', i++))
+      for (const x of picked) parts.push(row(x, x.f ? 'fest' : x.k === 'c' || x.k === 't' ? 'cat' : '', i++))
       parts.push(nProducts
         ? `<a class="sg-all" id="${id}-o${i}" role="option" aria-selected="false" href="/search/?q=${encodeURIComponent(q)}">See all ${nProducts} item${nProducts === 1 ? '' : 's'} for “${esc(q)}” →</a>`
         : parts.length ? '' : `<p class="sg-none">No match for “${esc(q)}”. Try another spelling, or <a href="/search/">browse all items</a>.</p>`)
@@ -467,26 +515,44 @@
         ${p.i ? `<span class="ft-thumbs" aria-hidden="true"><img src="${esc(p.i)}" alt="" width="80" height="80" loading="lazy" decoding="async"></span>` : ''}
       </a></li>`
     }
-    if (p.k === 'c') {
+    if (p.k === 'c' || p.k === 't') {
+      // categories, and types with several brands ("Detergent Powder · 3 brands")
       return `<li class="cat-result"><a class="cat-chip-result" href="${esc(p.u)}">${p.i ? `<img src="${esc(p.i)}" alt="" width="44" height="44" loading="lazy" decoding="async">` : ''}
-        <span><span class="crk">Category · ${esc(p.s)}</span><strong>${highlight(p.n, q)}</strong> <span lang="te">${esc(p.t)}</span></span><span class="crn">${Number(p.cnt) || ''} items →</span></a></li>`
+        <span><span class="crk">${p.k === 't' ? 'All brands' : 'Category'} · ${esc(p.s)}</span><strong>${highlight(p.n, q)}</strong> <span lang="te">${esc(p.t)}</span></span><span class="crn">${Number(p.cnt) || ''} ${p.k === 't' ? 'brands' : 'items'} →</span></a></li>`
     }
-    const pic = pictureFor(p, q)
+    const mv = qtyMatch.get(p) && p.o && p.o.v.find((v) => v.id === qtyMatch.get(p).v)
+    const pic = mv && mv.i ? { src: mv.i, n: 1, brand: '' } : pictureFor(p, q)
+    const tileName = pic.brand || (p.b && p.b[0]) || p.n.replace(/\s*\(.*\)\s*$/, '')
     const ph = pic.src
-      ? `<img src="${esc(pic.src)}" alt="${esc(pic.brand ? `${pic.brand} ${p.n}` : p.n)}" width="320" height="320" loading="lazy" decoding="async">`
-      : `<span class="brand-tile" style="--mc:${monoColor(pic.brand)}"><strong>${esc(pic.brand)}</strong><small>Photo coming soon</small></span>`
-    return `<li><a class="card" data-theme="${p.sec === 'puja-samagri' ? 'puja' : 'kirana'}" href="${esc(linkFor(p, pic))}">
+      ? `<img src="${esc(pic.src)}" alt="${esc(pic.brand ? `${pic.brand} ${p.n}` : p.n)}" width="320" height="320" loading="lazy" decoding="async" data-card-img>`
+      : `<span class="brand-tile" style="--mc:${monoColor(tileName)}"><strong>${esc(tileName)}</strong><small>Photo coming soon</small></span>`
+    // Size picker + Add / − n + (same as the catalogue cards; list.js does the rest)
+    let buy = ''
+    if (p.o && p.o.v && p.o.v.length) {
+      const vs = p.o.v
+      const m = qtyMatch.get(p)
+      const vName = (v) => (v.w ? 'Loose (by weight)' : v.l || (v.un ? `Per ${v.un}` : 'Each'))
+      const id = `sv-${++cardSeq}`
+      const pick = vs.length > 1
+        ? `<label class="visually-hidden" for="${id}">Size</label><select class="v-sel" id="${id}" data-vsel>${vs.map((v) => `<option value="${esc(v.id)}"${m && m.v === v.id ? ' selected' : ''}>${esc(vName(v))}${v.p ? ` · ${esc(v.p)}` : ''}</option>`).join('')}</select>`
+        : ''
+      buy = `<div class="buy" data-buy="${esc(JSON.stringify(p.o))}"${m && m.g ? ` data-want-g="${m.g}"` : ''}>${pick}<p class="b-price" data-price>${esc((mv || vs[0]).p || '')}</p>
+        <button class="add-btn" type="button" data-add aria-label="Add ${esc(p.n)} to my list"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 5v14M5 12h14"/></svg><span>Add</span></button></div>`
+    }
+    return `<li class="pc"><a class="card" data-theme="${p.sec === 'puja-samagri' ? 'puja' : 'kirana'}" href="${esc(linkFor(p, pic))}">
       <div class="ph">${ph}${pic.brand ? `<span class="brand-pill">${esc(pic.brand)}</span>` : ''}</div>
-      <div class="body"><span class="cat">${esc(p.c)}</span><span class="en">${highlight(p.n, q)}</span><span class="te" lang="te">${esc(p.t)}</span></div>
-    </a></li>`
+      <div class="body"><span class="cat">${esc(p.c)}</span>${p.b && p.b[0] ? `<span class="brand-k">${esc(p.b[0])}</span>` : ''}<span class="en">${highlight(p.n, q)}</span><span class="te" lang="te">${esc(p.t)}</span>${mv ? `<span class="size match">${esc(mv.w ? 'Loose' : mv.l)}</span>` : p.z ? `<span class="size">${highlight(p.z, q)}</span>` : ''}</div>
+    </a>${buy}</li>`
   }
+  let cardSeq = 0
 
   function render() {
     const q = input.value.trim()
     const list = search(index, q, section)
-    const products = list.filter((x) => !x.f && x.k !== 'c')
+    const products = list.filter((x) => !x.f && x.k !== 'c' && x.k !== 't')
     const nItems = products.length
     results.innerHTML = list.map((x) => card(x, q)).join('')
+    document.dispatchEvent(new Event('jgs:cards'))
     empty.hidden = !(q && list.length === 0)
     browse.hidden = !!q
     const tip = root.querySelector('[data-voice-tip]')

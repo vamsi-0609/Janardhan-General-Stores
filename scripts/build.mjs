@@ -10,7 +10,7 @@ import { createHash } from 'node:crypto'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { shop, telHref, mailHref, whatsappHref } from '../src/data/shop.mjs'
-import { sections, categories, products, categoriesOf, sectionOf, categoryOf } from '../src/data/catalogue.mjs'
+import { sections, categories, products, categoriesOf, sectionOf, categoryOf, skus, skusOf, allTypeSlugs } from '../src/data/catalogue.mjs'
 import { festivals } from '../src/data/festivals.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
@@ -80,6 +80,8 @@ const ICONS = {
   list: '<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
   store: '<path d="M3 9h18l-1.5-5h-15L3 9Zm0 0v11h18V9M9 20v-6h6v6"/>',
   print: '<path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="7" rx="1"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  clipboard: '<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h4"/>',
   mic: '<rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3.5M8.5 21.5h7"/>',
 }
 const WA_PATH = '<path class="icon-fill" d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3ZM12 2a10 10 0 0 0-8.6 15l-1.4 5 5.1-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/>'
@@ -105,6 +107,7 @@ async function asset(src, ext) {
 const CSS = await asset('src/styles.css', 'css')
 const SITE_JS = await asset('src/client/site.js', 'js')
 const SEARCH_JS = await asset('src/client/search.js', 'js')
+const LIST_JS = await asset('src/client/list.js', 'js')
 
 // ───────────────────────── product photo galleries ─────────────────────────
 // Main photo: img/products/<slug>.webp. Extra photos: <slug>-2.webp, <slug>-3.webp … (from shop-photos/).
@@ -120,27 +123,106 @@ function photosOf(p) {
   return [base, ...extras]
 }
 
-// Which photo shows which brand (set in the editor: "Brand in this photo"). Untagged photos are general.
-function brandPhotos(p) {
-  const src = p.photo ? products.find((x) => x.slug === p.photo) || p : p
-  const tags = src.photoBrands || []
-  const photos = photosOf(p)
-  const byBrand = {}
-  photos.forEach((ph, i) => { if (tags[i] && (p.brands || []).includes(tags[i]) && !(tags[i] in byBrand)) byBrand[tags[i]] = { ph, n: i + 1 } })
-  const gi = photos.findIndex((_, i) => !tags[i])
-  return { photos, byBrand, general: gi < 0 ? null : { ph: photos[gi], n: gi + 1 }, mainTagged: !!tags[0] }
+// ───────────────────────── products: a PRODUCT LINE (type + brand + name) has one or more SIZES ─────────────────────────
+const MONO = ['#355b45', '#a34b32', '#70413b', '#4f6d4a', '#8d3f2b', '#2f5d62', '#6a4c93', '#b58a38']
+const monoColor = (str) => MONO[[...String(str)].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) >>> 0, 7) % MONO.length]
+const hasPhoto = (name) => !!name && productFiles.has(name + '.webp')
+const typeOf = (p) => products.find((t) => t.slug === p.type)
+const typeShort = (t) => t.name.replace(/\s*\(.*\)\s*$/, '')
+const multi = (t) => skusOf(t.slug).length > 1
+/** Page of one size: the type's address when the type has only this one. */
+const skuUrl = (p) => { const t = typeOf(p); const ls = linesOf(t.slug); return ls.length === 1 && firstIn(ls[0]) === p ? productUrl(t) : productUrl(t) + p.id + '/' }
+const skuPhotos = (p) => (p.photos || []).filter(hasPhoto)
+const skuMain = (p) => skuPhotos(p)[0] || null
+const sizeText = (p) => (p.loose ? `Loose · from ${p.min || 250} g` : p.size || (p.unit ? `Per ${p.unit}` : ''))
+const slugish = (s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+const lineKey = (p) => `${p.type}:${p.brand || '-'}:${slugish(p.name)}`
+/** Product lines of a type, in order: [[size, size …], …] */
+const linesOf = (typeSlug) => { const m = new Map(); for (const p of skusOf(typeSlug)) { const k = lineKey(p); if (!m.has(k)) m.set(k, []); m.get(k).push(p) } return [...m.values()] }
+const lineOf = (p) => linesOf(p.type).find((l) => l.includes(p))
+const firstIn = (line) => line.find((x) => !x.off) || line[0]
+const lineMain = (line) => { for (const x of [firstIn(line), ...line]) { const m = skuMain(x); if (m) return m } return null }
+const tileHtml = (p, big = false) => '<span class="brand-tile' + (big ? ' big' : '') + '" style="--mc:' + monoColor(p.brandName || p.name) + '"><strong>' + esc(p.brandName || p.name.replace(/\s*\(.*\)\s*$/, '')) + '</strong><small>Photo coming soon</small></span>'
+/** What "My list" needs: the product line with all its sizes. */
+function lineCfg(line) {
+  const p0 = firstIn(line), t = typeOf(p0), main = lineMain(line)
+  return { k: lineKey(p0), n: p0.name, t: p0.te || t.te, u: skuUrl(p0), i: main ? thumb(main) : '', ...(p0.brandName ? { b: p0.brandName } : {}),
+    v: line.map((p) => {
+      const v = { id: p.id, l: p.loose ? '' : p.size || '', u: skuUrl(p) }
+      if (p.price) v.p = p.price
+      if (p.loose) { v.w = 1; if (p.min) v.m = p.min; if (p.step) v.s = p.step }
+      if (!p.size && !p.loose && p.unit) v.un = p.unit
+      if (!p.loose && p.quick && p.quick.length) v.q = p.quick
+      const m = skuMain(p); if (m) v.i = thumb(m)
+      if (p.off) v.off = 1
+      return v
+    }) }
+}
+const buyAttr = (line, fixed) => 'data-buy="' + esc(JSON.stringify(lineCfg(line))) + '"' + (fixed ? ' data-fixed="' + esc(fixed) + '"' : '')
+const addBtn = (label, off) => '<button class="add-btn" type="button" data-add aria-label="' + esc(label) + '"' + (off ? ' disabled' : '') + '>' + (off ? '<span>Out of stock</span>' : icon('plus') + '<span>Add</span>') + '</button>'
+let selSeq = 0
+/** Product card (one per product line): photo · brand · name · size menu · price · Add / − n +. */
+function lineCard(line, { eager = false, showCat = false } = {}) {
+  const p = firstIn(line), t = typeOf(p), c = categoryOf(t.category)
+  const main = skuMain(p) || lineMain(line)
+  const allOff = line.every((x) => x.off)
+  const ph = main
+    ? '<img src="' + thumb(main) + '" srcset="' + thumb(main) + ' 320w, ' + img(main) + ' 640w" sizes="(min-width:1280px) 230px, (min-width:768px) 30vw, 46vw" alt="' + esc(p.name) + '" width="320" height="320" ' + (eager ? 'fetchpriority="high"' : 'loading="lazy"') + ' decoding="async" data-card-img>'
+    : tileHtml(p)
+  const words = [p.name, p.te || '', ...line.map((x) => x.size || ''), t.name, t.te, ...(t.aliases || []), ...line.flatMap((x) => x.aliases || []), p.brandName].join(' ')
+  const id = 'vs' + (++selSeq)
+  const sizes = line.length > 1
+    ? '<label class="visually-hidden" for="' + id + '">Size of ' + esc(p.name) + '</label><select class="v-sel" id="' + id + '" data-vsel>' +
+      line.map((x) => '<option value="' + esc(x.id) + '"' + (x === p ? ' selected' : '') + '>' + esc(sizeText(x)) + (x.price ? ' · ' + esc(x.price) : '') + (x.off ? ' (out of stock)' : '') + '</option>').join('') + '</select>'
+    : ''
+  return '<li class="pc' + (allOff ? ' is-off' : '') + '" data-filter-item="' + esc(words) + '" data-type="' + t.slug + '" data-brand="' + esc(p.brand || '') + '">' +
+    '<a class="card" data-theme="' + theme(t.section) + '" href="' + skuUrl(p) + '">' +
+    '<div class="ph">' + ph + (allOff ? '<span class="oos-pill">Out of stock</span>' : '') + '</div>' +
+    '<div class="body">' + (showCat ? '<span class="cat">' + esc(c.name) + '</span>' : '') + (p.brandName ? '<span class="brand-k">' + esc(p.brandName) + '</span>' : '') +
+    '<span class="en">' + esc(p.name) + '</span>' + te(p.te || t.te, 'span', 'te') + (line.length === 1 && sizeText(p) ? '<span class="size">' + esc(sizeText(p)) + '</span>' : '') + '</div></a>' +
+    '<div class="buy" ' + buyAttr(line) + '>' + sizes + '<p class="b-price" data-price>' + esc(p.price || '') + '</p>' + addBtn('Add ' + p.name + ' to my list', p.off) + '</div></li>'
+}
+/** One size in the "Other sizes" row. */
+function sizeCard(line, p) {
+  const main = skuMain(p) || lineMain(line)
+  return '<li class="pc vc' + (p.off ? ' is-off' : '') + '"><a class="card" href="' + skuUrl(p) + '"><div class="ph">' + (main ? '<img src="' + thumb(main) + '" alt="' + esc(p.name + ' ' + sizeText(p)) + '" width="320" height="320" loading="lazy" decoding="async">' : tileHtml(p)) + (p.off ? '<span class="oos-pill">Out of stock</span>' : '') + '</div>' +
+    '<div class="body">' + (p.brandName ? '<span class="brand-k">' + esc(p.brandName) + '</span>' : '') + '<span class="vc-l">' + esc(sizeText(p)) + '</span><span class="te">' + esc(p.name) + '</span></div></a>' +
+    '<div class="buy" ' + buyAttr(line, p.id) + '><p class="b-price">' + esc(p.price || '') + '</p>' + addBtn('Add ' + p.name + ' ' + sizeText(p) + ' to my list', p.off) + '</div></li>'
+}
+/** A type on a card: its single product line, or a "choose" card when it has several. */
+function typeCard(t, opts = {}) {
+  const ls = linesOf(t.slug)
+  if (ls.length === 1) return lineCard(ls[0], opts)
+  const c = categoryOf(t.category)
+  const base = t.photo || t.slug
+  const brandsOf = [...new Set(skusOf(t.slug).map((x) => x.brandName).filter(Boolean))]
+  return '<li class="pc" data-filter-item="' + esc([t.name, t.te, ...(t.aliases || []), ...brandsOf].join(' ')) + '" data-type="' + t.slug + '">' +
+    '<a class="card" data-theme="' + theme(t.section) + '" href="' + productUrl(t) + '">' +
+    '<div class="ph"><img src="' + thumb(base) + '" alt="' + esc(t.name) + '" width="320" height="320" loading="lazy" decoding="async"></div>' +
+    '<div class="body">' + (opts.showCat ? '<span class="cat">' + esc(c.name) + '</span>' : '') + '<span class="en">' + esc(t.name) + '</span>' + te(t.te, 'span', 'te') +
+    '<span class="brands">' + ls.length + ' products' + (brandsOf.length ? ' · ' + esc(brandsOf.slice(0, 3).join(', ')) + (brandsOf.length > 3 ? ' …' : '') : '') + '</span></div></a>' +
+    '<div class="buy"><a class="add-btn as-link" href="' + productUrl(t) + '">Choose ' + icon('arrow') + '</a></div></li>'
+}
+const brandChips = (ps) => {
+  const bs = [...new Map(ps.filter((p) => p.brand).map((p) => [p.brand, p.brandName])).entries()]
+  return bs.length > 1 ? '<div class="type-chips" data-brand-chips hidden role="group" aria-label="Brand">' +
+    '<button type="button" class="tchip" data-brand-chip="" aria-pressed="true">All brands</button>' +
+    bs.map(([id, name]) => '<button type="button" class="tchip" data-brand-chip="' + esc(id) + '" aria-pressed="false">' + esc(name) + '</button>').join('') + '</div>' : ''
 }
 
 const sectionLabelShort = (slug) => (slug === 'puja-samagri' ? 'Puja Samagri' : 'Kirana')
-const searchIndex = products.map((p) => {
-  const c = categoryOf(p.category)
-  const bp = brandPhotos(p)
-  const e = { n: p.name, t: p.te, a: [...p.aliases, ...(p.brands || [])], b: p.brands || [], c: c.name, ct: c.te, s: sectionLabelShort(p.section), sec: p.section, u: productUrl(p), i: thumb(p.photo || p.slug) }
-  // bp: brand → [photo, photo number]; g: a general photo to use for brands without their own photo (0 = none).
-  if (Object.keys(bp.byBrand).length) e.bp = Object.fromEntries(Object.entries(bp.byBrand).map(([b, x]) => [b, [thumb(x.ph), x.n]]))
-  if (bp.mainTagged) e.g = bp.general ? [thumb(bp.general.ph), bp.general.n] : 0
-  return e
-})
+const searchIndex = []
+for (const t of products) {
+  const c = categoryOf(t.category)
+  const ls = linesOf(t.slug)
+  const common = { c: c.name, ct: c.te, s: sectionLabelShort(t.section), sec: t.section }
+  if (ls.length > 1) searchIndex.push({ k: 't', n: t.name, t: t.te, a: [...(t.aliases || [])], b: [...new Set(skusOf(t.slug).map((x) => x.brandName).filter(Boolean))], ...common, u: productUrl(t), i: thumb(t.photo || t.slug), cnt: ls.length })
+  for (const line of ls) {
+    const p = firstIn(line), main = lineMain(line)
+    searchIndex.push({ n: p.name, z: line.length === 1 ? sizeText(p) : `${line.length} sizes`, t: p.te || t.te, a: [...new Set([...line.flatMap((x) => x.aliases || []), ...(t.aliases || []), ...(ls.length > 1 ? [typeShort(t)] : [])])], b: p.brandName ? [p.brandName] : [], ...common, u: skuUrl(p), i: main ? thumb(main) : '', o: lineCfg(line) })
+  }
+}
+
 // Categories are searchable ("dal" → Pulses & Dals).
 for (const c of categories) {
   const cover = c.products[0]
@@ -226,11 +308,13 @@ function header(current) {
       <a class="btn btn-light" href="${telHref}">${icon('phone')}<span>Call</span></a>
       <a class="btn btn-wa" href="${whatsappHref('Hello Janardhan General Stores, I have a question.')}" target="_blank" rel="noopener">${icon('whatsapp')}<span>WhatsApp</span></a>
     </div>
+    <a class="list-btn" href="/list/"${current === 'list' ? ' aria-current="page"' : ''} aria-label="My list">${icon('clipboard')}<span class="lb-lbl">My list</span><span class="lb-n" data-list-count hidden>0</span></a>
     <details class="menu">
       <summary aria-label="Menu">${icon('menu')}</summary>
       <nav class="menu-panel" aria-label="Main menu">
         ${NAV.map(([k, href, en, t]) => `<a href="${href}"${cur(k)}><span>${en}</span>${te(t)}</a>`).join('')}
         <a href="/search/"${cur('search')}><span>Search</span>${te('వెతకండి')}</a>
+        <a href="/list/"${cur('list')}><span>My list</span>${te('నా జాబితా')}</a>
         <hr>
         <a href="${telHref}"><span>Call ${esc(shop.phoneDisplay)}</span>${icon('phone')}</a>
         <a href="${whatsappHref('Hello Janardhan General Stores, I have a question.')}" target="_blank" rel="noopener"><span>WhatsApp</span>${icon('whatsapp')}</a>
@@ -270,6 +354,7 @@ function footer() {
         <li><a href="/puja-samagri/">Puja Samagri · ${te('పూజా సామగ్రి')}</a></li>
         <li><a href="/festivals/">Festivals · ${te('పండుగలు')}</a></li>
         <li><a href="/search/">Search the catalogue</a></li>
+        <li><a href="/list/">My list · ${te('నా జాబితా')}</a></li>
       </ul>
     </div>
     <div>
@@ -332,6 +417,7 @@ ${noindex ? '<meta name="robots" content="noindex">' : `<link rel="canonical" hr
 ${jsonld.map(ld).join('\n')}
 <script src="${SITE_JS}" defer></script>
 <script src="${SEARCH_JS}" defer></script>
+<script src="${LIST_JS}" defer></script>
 ${scripts.filter((s) => s !== SEARCH_JS).map((s) => `<script src="${s}" defer></script>`).join('\n')}
 </head>
 <body data-theme="${themeName}">
@@ -349,33 +435,25 @@ ${footer()}
   if (!noindex) sitemap.push(path)
 }
 
-function gallery(p) {
-  const photos = photosOf(p)
+function gallery(name, photos, it) {
+  if (!photos.length) return '<div class="ph">' + tileHtml(it, true) + '</div>'
   if (photos.length === 1) {
-    return `<div class="ph"><img src="${img(photos[0])}" alt="${esc(p.name)}" width="640" height="640" fetchpriority="high" decoding="async"></div>`
+    return '<div class="ph"><img src="' + img(photos[0]) + '" alt="' + esc(name) + '" width="640" height="640" fetchpriority="high" decoding="async"></div>'
   }
   const n = photos.length
-  return `<div class="gallery" data-gallery>
-        <div class="g-track ph" tabindex="0" role="region" aria-roledescription="carousel" aria-label="${esc(p.name)} photos (${n}). Swipe or use the arrow keys.">
-          ${photos.map((ph, i) => `<figure class="g-slide" id="g-${i + 1}" aria-label="Photo ${i + 1} of ${n}"><img src="${img(ph)}" alt="${esc(p.name)}${i ? ` – photo ${i + 1}` : ''}" width="640" height="640" ${i ? 'loading="lazy"' : 'fetchpriority="high"'} decoding="async"></figure>`).join('')}
-        </div>
-        <span class="g-count" data-g-count aria-hidden="true">1 / ${n}</span>
-        <button class="g-nav g-prev" type="button" data-g-prev aria-label="Previous photo" hidden>${icon('arrow')}</button>
-        <button class="g-nav g-next" type="button" data-g-next aria-label="Next photo" hidden>${icon('arrow')}</button>
-        <div class="g-thumbs" role="group" aria-label="Choose a photo">
-          ${photos.map((ph, i) => `<a class="g-thumb" href="#g-${i + 1}" data-g-thumb="${i}"${i ? '' : ' aria-current="true"'} aria-label="Show photo ${i + 1} of ${n}"><img src="${thumb(ph)}" alt="" width="80" height="80" loading="lazy" decoding="async"></a>`).join('')}
-        </div>
-      </div>`
+  return '<div class="gallery" data-gallery>' +
+    '<div class="g-track ph" tabindex="0" role="region" aria-roledescription="carousel" aria-label="' + esc(name) + ' photos (' + n + '). Swipe or use the arrow keys.">' +
+    photos.map((ph, i) => '<figure class="g-slide" id="g-' + (i + 1) + '" aria-label="Photo ' + (i + 1) + ' of ' + n + '"><img src="' + img(ph) + '" alt="' + esc(name) + (i ? ' – photo ' + (i + 1) : '') + '" width="640" height="640" ' + (i ? 'loading="lazy"' : 'fetchpriority="high"') + ' decoding="async"></figure>').join('') +
+    '</div><span class="g-count" data-g-count aria-hidden="true">1 / ' + n + '</span>' +
+    '<button class="g-nav g-prev" type="button" data-g-prev aria-label="Previous photo" hidden>' + icon('arrow') + '</button>' +
+    '<button class="g-nav g-next" type="button" data-g-next aria-label="Next photo" hidden>' + icon('arrow') + '</button>' +
+    '<div class="g-thumbs" role="group" aria-label="Choose a photo">' +
+    photos.map((ph, i) => '<a class="g-thumb" href="#g-' + (i + 1) + '" data-g-thumb="' + i + '"' + (i ? '' : ' aria-current="true"') + ' aria-label="Show photo ' + (i + 1) + ' of ' + n + '"><img src="' + thumb(ph) + '" alt="" width="80" height="80" loading="lazy" decoding="async"></a>').join('') +
+    '</div></div>'
 }
 
 // ───────────────────────── components ─────────────────────────
-function productCard(p, { eager = false, showCat = false } = {}) {
-  const c = categoryOf(p.category)
-  return `<li data-filter-item="${esc([p.name, p.te, ...p.aliases, ...(p.brands || [])].join(' '))}"><a class="card" data-theme="${theme(p.section)}" href="${productUrl(p)}">
-    <div class="ph"><img src="${thumb(p.photo || p.slug)}" srcset="${thumb(p.photo || p.slug)} 320w, ${img(p.photo || p.slug)} 640w" sizes="(min-width:1280px) 230px, (min-width:768px) 30vw, 46vw" alt="${esc(p.name)}" width="320" height="320" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async"></div>
-    <div class="body">${showCat ? `<span class="cat">${esc(c.name)}</span>` : ''}<span class="en">${esc(p.name)}</span>${te(p.te, 'span', 'te')}${p.price ? `<span class="price">${esc(p.price)}</span>` : ''}${p.brands ? `<span class="brands">${esc(p.brands.join(' · '))}</span>` : ''}</div>
-  </a></li>`
-}
+const productCard = typeCard
 
 function catTile(c, eager = false) {
   const cover = c.products[0]
@@ -426,9 +504,9 @@ const fmtDay = (iso, year = false) => new Intl.DateTimeFormat('en-IN', { weekday
 const festivalUrl = (f) => `/festivals/${f.id}/`
 const festItems = (f) => f.items.map((slug) => {
   const p = products.find((x) => x.slug === slug)
-  if (!p) throw new Error(`Festival ${f.id} uses unknown product ${slug}`)
+  if (!p && !allTypeSlugs.has(slug)) throw new Error(`Festival ${f.id} uses unknown product ${slug}`)
   return p
-})
+}).filter(Boolean)
 function festDateLine(f, days, year = false) {
   const start = days[0][0], end = days[days.length - 1][0]
   if (f.season || days.length > 3) return `${fmtDay(start, year)} – ${fmtDay(end, year)}`
@@ -617,68 +695,103 @@ for (const c of categories) {
       ${icon('search').replace('class="icon"', 'class="icon search-icon"')}
       <input id="filter" type="search" data-filter placeholder="Filter in ${esc(c.name)}…" autocomplete="off" style="padding-right:18px">
     </form>
-    <p class="count" data-filter-count aria-live="polite">${c.products.length} items</p>
+    <p class="count" data-filter-count aria-live="polite">${c.products.reduce((a, p) => a + linesOf(p.slug).length, 0)} items</p>
   </div>
-  <ul class="product-grid">${c.products.map((p, i) => productCard({ ...p, section: c.section, category: c.slug }, { eager: i < 2 })).join('')}</ul>
+  ${c.products.length > 1 ? `<div class="type-chips" data-type-chips hidden role="group" aria-label="Type">
+    <button type="button" class="tchip" data-type-chip="" aria-pressed="true">All</button>${c.products.map((p) => `<button type="button" class="tchip" data-type-chip="${p.slug}" aria-pressed="false">${esc(typeShort(p))}${linesOf(p.slug).length > 1 ? ` <span class="n">${linesOf(p.slug).length}</span>` : ''}</button>`).join('')}
+  </div>` : ''}
+  ${brandChips(c.products.flatMap((p) => skusOf(p.slug)))}
+  <ul class="product-grid">${(() => { let k = 0; return c.products.map((p) => linesOf(p.slug).map((l) => lineCard(l, { eager: k++ < 2 })).join('')).join('') })()}</ul>
   <div class="empty" data-filter-empty hidden><p>No items match that filter here.</p><p><a href="/search/">Search the whole catalogue</a></p></div>
 </section>
 ${askStrip(`Hello Janardhan General Stores, I am looking for an item in ${c.name}.`)}`,
   })
 }
 
-// Product pages
-for (const p of products) {
-  const c = categoryOf(p.category)
-  const s = sectionOf(p.section)
-  const related = c.products.filter((x) => x.slug !== p.slug).slice(0, 6).map((x) => ({ ...x, section: c.section, category: c.slug }))
-  const msg = `Hello Janardhan General Stores, is ${p.name} available at the shop?`
-  await page(productUrl(p), {
-    title: `${p.name} – ${p.te} | ${c.name} | Janardhan General Stores Rajampet`,
-    description: `${p.desc} ${p.name} (${p.te}) in ${c.name} at Janardhan General Stores, Rajampet. Call or WhatsApp to check availability.`,
-    current: p.section,
-    themeName: s.theme,
-    ogImage: img(p.photo || p.slug),
-    jsonld: [crumbLd([['Home', '/'], [s.name, sectionUrl(s.slug)], [c.name, categoryUrl(c)], [p.name, productUrl(p)]])],
-    body: `<div class="container">
-  <div style="padding-top:14px">${crumbs([['Home', '/'], [s.name, sectionUrl(s.slug)], [c.name, categoryUrl(c)], [p.name, productUrl(p)]], true)}</div>
-  <article class="pdp">
-    <div class="pdp-media">
-      ${gallery(p)}
-    </div>
-    <div class="pdp-info">
-      <a class="chip" href="${categoryUrl(c)}">${esc(c.name)} · ${te(c.te)}</a>
-      <h1>${esc(p.name)}</h1>
-      ${te(p.te, 'p', 'te-name')}
-      <p class="desc">${esc(p.desc)}</p>
-      ${p.price ? `<p class="price-tag"><span class="lbl">Price at the shop</span><strong>${esc(p.price)}</strong>${te(p.priceTe, 'span', 'te')}</p>` : ''}
-      ${p.brands || p.sizes ? `<div class="stock-info">${p.brands ? `<div class="aka"><h2>Brands at the shop</h2><ul class="brand-list">${(() => { const bp = brandPhotos(p); return p.brands.map((b) => bp.byBrand[b] && bp.photos.length > 1
-        ? `<li><a class="has-photo" href="#g-${bp.byBrand[b].n}" data-g-go="${bp.byBrand[b].n - 1}"><img src="${thumb(bp.byBrand[b].ph)}" alt="" width="28" height="28" loading="lazy" decoding="async">${esc(b)}</a></li>`
-        : `<li><a href="/search/?q=${encodeURIComponent(b)}">${esc(b)}</a></li>`).join('') })()}</ul></div>` : ''}${p.sizes ? `<p class="sizes"><span>Pack sizes</span> ${esc(p.sizes)}</p>` : ''}</div>` : ''}
-      ${p.aliases.length ? `<div class="aka"><h2>Also known as</h2><ul>${p.aliases.map((a) => `<li>${esc(a)}</li>`).join('')}</ul></div>` : ''}
-      ${(() => {
-        const fs = festivals.filter((f) => f.items.includes(p.slug) || (p.photo && f.items.includes(p.photo)))
-        return fs.length ? `<div class="aka fest-for"><h2>Suggested for</h2><ul>${fs.map((f) => `<li><a href="${festivalUrl(f)}" style="--fa:${f.colors[0]}">${esc(f.name)} ${icon('arrow')}</a></li>`).join('')}</ul></div>` : ''
-      })()}
-      <div class="ask">
-        <h2>Want this item?</h2>
-        <p>Ask the shop about availability, brands and pack sizes, then pick it up in person.</p>
-        ${te('అందుబాటులో ఉందో లేదో ఫోన్ లేదా వాట్సాప్ ద్వారా అడగండి.', 'p')}
-        <div class="actions">
-          <a class="btn btn-wa" href="${whatsappHref(msg)}" target="_blank" rel="noopener">${icon('whatsapp')}Ask on WhatsApp</a>
-          <a class="btn btn-light" href="${telHref}">${icon('phone')}Call ${esc(shop.phoneDisplay)}</a>
-          <a class="btn btn-light" href="${shop.mapsUrl}" target="_blank" rel="noopener">${icon('directions')}Directions</a>
-        </div>
-        ${p.caution ? `<div class="caution" role="note"><strong>${icon('info')}Please note</strong><p>${esc(p.caution)}</p><p lang="te" class="te">${esc(p.cautionTe)}</p></div>` : ''}
-        <p class="note">${icon('info')}<span>${p.price ? 'Price as informed by the shop and may change. Photo is representative.' : p.brands ? 'Brands listed are ones the shop usually keeps; stock and prices vary, so please ask. Photo shows one of the brands we keep.' : 'This is a representative catalogue item. Stock, brands and prices are not shown online and are confirmed at the shop.'}</span></p>
-      </div>
-    </div>
-  </article>
-</div>
-${related.length ? `<section class="container section" aria-labelledby="rel-h">
-  <div class="section-head"><h2 id="rel-h">More in ${esc(c.name)} ${te(c.te)}</h2><a class="link-arrow" href="${categoryUrl(c)}">View all ${c.products.length} ${icon('arrow')}</a></div>
-  <ul class="product-grid related">${related.map((x) => productCard(x)).join('')}</ul>
-</section>` : ''}`,
-  })
+// Type pages (several products) and product pages
+const rail = (id, title, teTitle, cards, more = '') => cards.length ? '<section class="container section rail-sec" aria-labelledby="' + id + '"><div class="section-head"><h2 id="' + id + '">' + title + (teTitle ? ' ' + te(teTitle) : '') + '</h2>' + more + '</div><ul class="rail">' + cards.join('') + '</ul></section>' : ''
+const askBlock = (name, caution) => '<div class="ask"><h2>Need help?</h2><p>Ask the shop about this item, then pick it up in person.</p>' +
+  '<div class="actions"><a class="btn btn-wa" href="' + whatsappHref('Hello Janardhan General Stores, is ' + name + ' available at the shop?') + '" target="_blank" rel="noopener">' + icon('whatsapp') + 'Ask on WhatsApp</a>' +
+  '<a class="btn btn-light" href="' + telHref + '">' + icon('phone') + 'Call ' + esc(shop.phoneDisplay) + '</a>' +
+  '<a class="btn btn-light" href="' + shop.mapsUrl + '" target="_blank" rel="noopener">' + icon('directions') + 'Directions</a></div>' + (caution || '') +
+  '<p class="note">' + icon('info') + '<span>Photos are representative. Stock and prices are confirmed by the shop on WhatsApp.</span></p></div>'
+const akaHtml = (list) => (list.length ? '<div class="aka"><h2>Also known as</h2><ul>' + list.map((a) => '<li>' + esc(a) + '</li>').join('') + '</ul></div>' : '')
+const festFor = (t) => {
+  const fs = festivals.filter((f) => f.items.includes(t.slug) || (t.photo && f.items.includes(t.photo)))
+  return fs.length ? '<div class="aka fest-for"><h2>Suggested for</h2><ul>' + fs.map((f) => '<li><a href="' + festivalUrl(f) + '" style="--fa:' + f.colors[0] + '">' + esc(f.name) + ' ' + icon('arrow') + '</a></li>').join('') + '</ul></div>' : ''
+}
+const cautionHtml = (t) => (t.caution ? '<div class="caution" role="note"><strong>' + icon('info') + 'Please note</strong><p>' + esc(t.caution) + '</p><p lang="te" class="te">' + esc(t.cautionTe || '') + '</p></div>' : '')
+const moreInCategory = (t, c) => rail('more-h', 'More in ' + esc(c.name), c.te, c.products.filter((x) => x.slug !== t.slug).slice(0, 12).map((x) => typeCard({ ...x, section: c.section, category: c.slug })),
+  '<a class="link-arrow" href="' + categoryUrl(c) + '">View all ' + icon('arrow') + '</a>')
+
+for (const t of products) {
+  const c = categoryOf(t.category)
+  const s = sectionOf(t.section)
+  const ps = skusOf(t.slug)
+  const base = [['Home', '/'], [s.name, sectionUrl(s.slug)], [c.name, categoryUrl(c)]]
+  if (linesOf(t.slug).length > 1) {
+    // Type page: every product of this type (all brands, all sizes)
+    const brandNames = [...new Set(ps.map((p) => p.brandName).filter(Boolean))]
+    await page(productUrl(t), {
+      title: t.name + ' – ' + t.te + ' | ' + ps.length + ' products | Janardhan General Stores Rajampet',
+      description: t.desc + (brandNames.length ? ' Brands at the shop: ' + brandNames.join(', ') + '.' : ''),
+      current: t.section,
+      themeName: s.theme,
+      ogImage: img(t.photo || t.slug),
+      jsonld: [crumbLd([...base, [t.name, productUrl(t)]])],
+      body: '<div class="container"><div style="padding-top:14px">' + crumbs([...base, [typeShort(t), productUrl(t)]], true) + '</div>' +
+        '<header class="type-head"><div class="th-ph"><img src="' + thumb(t.photo || t.slug) + '" alt="" width="160" height="160"></div><div>' +
+        '<a class="chip" href="' + categoryUrl(c) + '">' + esc(c.name) + ' · ' + te(c.te) + '</a><h1>' + esc(t.name) + '</h1>' + te(t.te, 'p', 'te-name') +
+        '<p class="desc">' + esc(t.desc) + '</p>' + (t.price ? '<p class="price-tag"><span class="lbl">Price at the shop</span><strong>' + esc(t.price) + '</strong>' + te(t.priceTe || '', 'span', 'te') + '</p>' : '') +
+        '<p class="th-meta">' + ps.length + ' products' + (brandNames.length ? ' · ' + brandNames.length + ' brand' + (brandNames.length > 1 ? 's' : '') : '') + '</p></div></header>' +
+        '' +
+        brandChips(ps) +
+        '<ul class="product-grid">' + linesOf(t.slug).map((l, i) => lineCard(l, { eager: i < 2 })).join('') + '</ul>' +
+        '<div class="empty" data-filter-empty hidden><p>No products match.</p></div>' +
+        '<div class="type-extra">' + akaHtml(t.aliases || []) + festFor(t) + cautionHtml(t) + '</div></div>' + moreInCategory(t, c),
+    })
+  }
+  for (const p of ps) {
+    const url = skuUrl(p)
+    const photos = skuPhotos(p)
+    const line = lineOf(p)
+    const otherSizes = line.filter((x) => x !== p)
+    const otherBrands = linesOf(t.slug).filter((l) => !l.includes(p))
+    const sameBrandElsewhere = p.brand ? products.filter((x) => x.slug !== p.type).flatMap((x) => linesOf(x.slug)).filter((l) => l[0].brand === p.brand).slice(0, 12) : []
+    const many = linesOf(t.slug).length > 1
+    const trail = [...base, ...(many ? [[typeShort(t), productUrl(t)]] : []), [p.name + (p.size ? ' · ' + p.size : ''), url]]
+    const size = sizeText(p)
+    await page(url, {
+      title: p.name + (p.size ? ' ' + p.size : '') + ' – ' + (p.te || t.te) + ' | ' + c.name + ' | Janardhan General Stores Rajampet',
+      description: (p.desc || t.desc) + ' At Janardhan General Stores, Rajampet.',
+      current: t.section,
+      themeName: s.theme,
+      ogImage: photos[0] ? img(photos[0]) : img(t.photo || t.slug),
+      jsonld: [crumbLd(trail)],
+      body: '<div class="container"><div style="padding-top:14px">' + crumbs(trail, true) + '</div>' +
+        '<article class="pdp"><div class="pdp-media">' + gallery(p.name, photos, p) + '</div><div class="pdp-info">' +
+        '<a class="chip" href="' + (many ? productUrl(t) : categoryUrl(c)) + '">' + esc(many ? typeShort(t) : c.name) + ' · ' + te(many ? t.te : c.te) + '</a>' +
+        (p.brandName ? '<p class="brand-k big">' + esc(p.brandName) + '</p>' : '') +
+        '<h1>' + esc(p.name) + '</h1>' + te(p.te || t.te, 'p', 'te-name') +
+        '<div class="buy-box buy' + (p.off ? ' is-off' : '') + '" ' + buyAttr(line, p.id) + ' data-big>' +
+        (line.length > 1
+          ? '<p class="bb-h">Size <span lang="te">సైజు</span></p><div class="v-chips" role="list">' + line.map((x) => (x === p
+            ? '<span class="v-chip" role="listitem" aria-current="true"><span>' + esc(sizeText(x)) + '</span>' + (x.price ? '<small>' + esc(x.price) + '</small>' : '') + '</span>'
+            : '<a class="v-chip' + (x.off ? ' is-off' : '') + '" role="listitem" href="' + skuUrl(x) + '"><span>' + esc(sizeText(x)) + '</span>' + (x.price ? '<small>' + esc(x.price) + '</small>' : '') + '</a>')).join('') + '</div>'
+          : size ? '<p class="bb-h">Size <span lang="te">సైజు</span></p><p class="bb-size">' + esc(size) + '</p>' : '') +
+        '<p class="bb-price" data-price>' + esc(p.price || '') + '</p>' +
+        (!p.price && t.price ? '<p class="price-tag"><span class="lbl">Price at the shop</span><strong>' + esc(t.price) + '</strong></p>' : '') +
+        (p.off ? '<button class="btn btn-add-big oos" type="button" data-add disabled><span>Out of stock</span></button>' : '<button class="btn btn-primary btn-add-big" type="button" data-add>' + icon('plus') + '<span>Add to my list</span></button>') +
+        '<p class="bb-help">Add what you need, then send the list to the shop on WhatsApp. <span lang="te">జాబితా వాట్సాప్‌లో పంపండి.</span></p></div>' +
+        '<p class="desc">' + esc(p.desc || t.desc) + '</p>' +
+        akaHtml([...new Set([...(p.aliases || []), ...(t.aliases || [])])]) + festFor(t) + askBlock(p.name + (p.size ? ' ' + p.size : ''), cautionHtml(t)) +
+        '</div></article></div>' +
+        rail('sizes-h', 'Other sizes of ' + esc(p.name), 'ఇతర సైజులు', otherSizes.map((x) => sizeCard(line, x))) +
+        rail('brands-h', 'Other ' + esc(typeShort(t)), 'ఇతర బ్రాండ్లు', otherBrands.slice(0, 16).map((l) => lineCard(l)), many ? '<a class="link-arrow" href="' + productUrl(t) + '">All ' + ps.length + ' ' + icon('arrow') + '</a>' : '') +
+        (sameBrandElsewhere.length ? rail('brand-h', 'More from ' + esc(p.brandName), '', sameBrandElsewhere.map((l) => lineCard(l))) : '') +
+        moreInCategory(t, c),
+    })
+  }
 }
 
 // Festivals: list + one page per festival (same horizontal item strip as the home page).
@@ -829,6 +942,23 @@ await page('/about/', {
 </section>`,
 })
 
+// My list (filled in by list.js from this browser's saved list)
+await page('/list/', {
+  title: 'My list | Janardhan General Stores',
+  description: 'Your shopping list for Janardhan General Stores. Choose sizes and quantities, then send it to the shop on WhatsApp and pick up at the shop.',
+  current: 'list',
+  noindex: true,
+  body: `<section class="page-hero plain"><div class="container">
+  ${crumbs([['Home', '/'], ['My list', '/list/']])}
+  <h1>My list</h1>${te('నా జాబితా', 'p', 'te')}
+  <p class="sub">Choose sizes and quantities, then send your list to the shop on WhatsApp. Pick up at the shop.</p>
+</div></section>
+<section class="container section list-section">
+  <div data-list-page data-wa="${shop.whatsappNumber}"><p class="list-loading">Loading your list…</p></div>
+  <noscript><p>Your list needs JavaScript. You can still <a href="${whatsappHref('Hello Janardhan General Stores, I need these items:')}">send your items on WhatsApp</a> or call ${esc(shop.phoneDisplay)}.</p></noscript>
+</section>`,
+})
+
 // Offline fallback (shown by the app/service worker when a page that was never opened is requested without internet)
 await page('/offline/', {
   title: 'You are offline | Janardhan General Stores',
@@ -938,17 +1068,17 @@ await page('/contact/', {
   const shortName = (n) => n.replace(/\s*\(.*\)\s*$/, '')
   const brandMap = new Map()
   for (const p of products) {
-    const bp = brandPhotos(p)
-    for (const b of p.brands || []) {
+    for (const it of skusOf(p.slug)) {
+      if (!it.brandName) continue
+      const b = it.brandName
       const e = brandMap.get(b) || { name: b, items: [], photo: null }
       if (!e.items.includes(shortName(p.name))) e.items.push(shortName(p.name))
-      if (!e.photo && bp.byBrand[b]) e.photo = thumb(bp.byBrand[b].ph)
+      const own = skuMain(it)
+      if (!e.photo && own) e.photo = thumb(own)
       brandMap.set(b, e)
     }
   }
   const brandsSorted = [...brandMap.values()].sort((a, b) => a.name.localeCompare(b.name))
-  const MONO = ['#355b45', '#a34b32', '#70413b', '#4f6d4a', '#8d3f2b', '#2f5d62', '#6a4c93', '#b58a38']
-  const monoColor = (s) => MONO[[...s].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) >>> 0, 7) % MONO.length]
   const initials = (s) => s.split(/[\s&]+/).filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join('')
   const brandCard = (b) => `<li><a class="brand-card" href="/search/?q=${encodeURIComponent(b.name)}">
       ${b.photo ? `<img src="${b.photo}" alt="" width="56" height="56" loading="lazy" decoding="async">` : `<span class="mono" style="--mc:${monoColor(b.name)}" aria-hidden="true">${esc(initials(b.name))}</span>`}
@@ -1097,7 +1227,7 @@ await writeFile(join(dist, 'site.webmanifest'), JSON.stringify({
 // Service worker: pages = network first (always the latest catalogue when online, saved copy when offline or slow),
 // hashed CSS/JS/photos/fonts = cache first (they never change under the same name). A new build = a new version,
 // and old caches are deleted.
-const PRECACHE = ['/', '/offline/', '/about/', '/visit/', '/contact/', '/kirana/', '/puja-samagri/', '/search/', CSS, SITE_JS, SEARCH_JS, SEARCH_INDEX,
+const PRECACHE = ['/', '/offline/', '/list/', '/about/', '/visit/', '/contact/', '/kirana/', '/puja-samagri/', '/search/', CSS, SITE_JS, SEARCH_JS, LIST_JS, SEARCH_INDEX,
   '/brand/logo-mark.webp', '/fonts/fraunces-latin.woff2', '/fonts/noto-sans-telugu.woff2', '/icons/icon-192.png']
 const htmlHash = hash(sitemap.join('|') + (await readFile(join(dist, 'index.html'), 'utf8')))
 const SW_VERSION = hash(PRECACHE.join('|') + htmlHash)
