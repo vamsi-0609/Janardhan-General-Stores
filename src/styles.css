@@ -155,7 +155,7 @@ h1 [lang='te'], h2 [lang='te'] { font-family: var(--font-body); }
 .search-form input:focus { outline: none; border-color: var(--forest); box-shadow: 0 0 0 4px rgb(53 91 69 / 15%); }
 .search-form .search-icon { position: absolute; left: 16px; top: 50%; translate: 0 -50%; color: var(--muted); pointer-events: none; }
 .search-form button {
-  position: absolute; right: 4px; top: 4px; bottom: 4px; aspect-ratio: 1;
+  position: absolute; right: 3px; top: 3px; bottom: 3px; aspect-ratio: 1; min-width: 40px;
   border-radius: 999px; border: 0; background: var(--forest); color: #fff; cursor: pointer;
   display: grid; place-items: center;
 }

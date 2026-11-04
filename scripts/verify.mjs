@@ -74,7 +74,17 @@ console.log(`Static: ${htmlFiles.length} HTML files, ${linkCount} internal links
 const browser = await chromium.launch({ executablePath })
 const keyRoutes = ['/', '/kirana/', '/puja-samagri/', '/kirana/spices-masalas/', '/puja-samagri/pooja-kits/', '/kirana/pulses-dals/toor-dal/', '/puja-samagri/kumkum-turmeric/kumkum/', '/about/', '/visit/', '/contact/', '/search/?q=agarbatti', '/credits/', '/this-page-does-not-exist']
 const plan = []
-for (const r of [...routes, '/this-page-does-not-exist']) {
+// QUICK=1: key pages, every section/category page, the first product of each category, and new/changed products.
+const QUICK_EXTRA = ['/kirana/paper-plates-cups/buffet-plates/', '/puja-samagri/other-devotional/puja-prasadam-cups/', '/puja-samagri/wicks-deepam-oil/deepam-oil/']
+const seenCat = new Set()
+const quickPick = (r) => {
+  const parts = r.split('/').filter(Boolean)
+  if (keyRoutes.includes(r) || QUICK_EXTRA.includes(r) || parts.length <= 2) return true
+  const cat = parts.slice(0, 2).join('/')
+  if (seenCat.has(cat)) return false
+  seenCat.add(cat); return true
+}
+for (const r of [...routes, '/this-page-does-not-exist'].filter((r) => !(process.env.QUICK || process.argv.includes('--quick')) || quickPick(r))) {
   const widths = process.env.VERIFY_ALL || keyRoutes.includes(r) ? WIDTHS : [390, 1366]
   for (const w of widths) plan.push([r, w])
 }
@@ -104,9 +114,14 @@ for (const w of WIDTHS) {
       for (let y = 0; y < document.body.scrollHeight; y += 700) { window.scrollTo(0, y); await new Promise((r) => setTimeout(r, 20)) }
       window.scrollTo(0, 0)
     })
-    await page.waitForLoadState('networkidle')
+    await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {})
     const report = await page.evaluate(async () => {
-      await Promise.all([...document.images].map((i) => i.complete ? null : new Promise((r) => { i.onload = i.onerror = r })))
+      // Lazy images below the fold may never start loading; force them, and never wait more than 5 s.
+      document.querySelectorAll('img[loading="lazy"]').forEach((i) => { i.loading = 'eager' })
+      await Promise.race([
+        Promise.all([...document.images].map((i) => i.complete ? null : new Promise((r) => { i.addEventListener('load', r); i.addEventListener('error', r) }))),
+        new Promise((r) => setTimeout(r, 5000)),
+      ])
       const broken = [...document.images].filter((i) => !i.naturalWidth).map((i) => i.currentSrc || i.src)
       const overflowX = document.documentElement.scrollWidth - window.innerWidth
       const clipped = [...document.querySelectorAll('.cat-tile .en, .cat-tile .te, .chip, .card .en, .card .te, .btn, .nav-bar a, .brand-name, h1, h2')]
@@ -128,6 +143,7 @@ for (const w of WIDTHS) {
     })
     stats.pages++
     stats.images += report.imgs
+    if (r === '/this-page-does-not-exist') errors = errors.filter((e) => !/status of 404/.test(e))
     if (errors.length) fail(where, `console errors: ${errors.join(' | ')}`)
     if (external.length) fail(where, `external/API requests: ${[...new Set(external)].join(', ')}`)
     if (report.broken.length) fail(where, `broken images: ${report.broken.join(', ')}`)

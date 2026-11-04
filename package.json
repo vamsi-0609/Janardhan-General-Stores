@@ -10,6 +10,7 @@
     "preview": "node scripts/serve.mjs",
     "images": "node scripts/fetch-images.mjs && node scripts/make-thumbs.mjs",
     "verify": "node scripts/verify.mjs",
+    "verify:quick": "node scripts/verify.mjs --quick",
     "shop-photos": "node scripts/import-shop-photos.mjs"
   },
   "devDependencies": {
