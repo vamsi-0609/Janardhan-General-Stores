@@ -293,3 +293,6 @@ legend { font-weight: 700; color: var(--forest-d); padding: 0 6px; }
 .sizechip:hover { border-color: var(--forest); }
 .sizechip.off { background: #f1ede6; color: #9a9384; border-color: var(--line); text-decoration: line-through; }
 .sizechip.add { background: #fff; border-style: dashed; color: var(--forest); }
+
+.guide { display: grid; gap: 6px; margin: 0 0 18px; padding-left: 22px; line-height: 1.55; }
+.help h2 { margin-top: 18px; }
