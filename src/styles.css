@@ -1171,3 +1171,4 @@ a.v-chip { text-decoration: none; }
 .pdp-info .chip { max-width: 100%; }
 @media (max-width: 767px) { .pdp { gap: 14px; } .buy-box { padding: 14px; } }
 @media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+.map-card { overflow: hidden; position: relative; }
