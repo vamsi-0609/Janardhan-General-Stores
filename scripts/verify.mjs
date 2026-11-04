@@ -87,7 +87,7 @@ const browser = await chromium.launch({ executablePath })
 const keyRoutes = ['/', '/kirana/', '/puja-samagri/', '/kirana/spices-masalas/', '/puja-samagri/pooja-kits/', '/kirana/pulses-dals/toor-dal/', '/puja-samagri/kumkum-turmeric/kumkum/', '/about/', '/visit/', '/contact/', '/search/?q=agarbatti', '/credits/', '/this-page-does-not-exist']
 const plan = []
 // QUICK=1: key pages, every section/category page, the first product of each category, and new/changed products.
-const QUICK_EXTRA = ['/kirana/paper-plates-cups/buffet-plates/', '/puja-samagri/other-devotional/puja-prasadam-cups/', '/puja-samagri/wicks-deepam-oil/deepam-oil/']
+const QUICK_EXTRA = ['/kirana/paper-plates-cups/paper-plates/', '/puja-samagri/other-devotional/puja-prasadam-cups/', '/puja-samagri/wicks-deepam-oil/deepam-oil/']
 const seenCat = new Set()
 const quickPick = (r) => {
   const parts = r.split('/').filter(Boolean)
@@ -176,7 +176,7 @@ async function searchCount(q, section) {
   await page.waitForFunction(() => document.querySelector('[data-status]').textContent.length > 0)
   return page.$$eval('[data-results] li', (l) => l.length)
 }
-const searches = [['kandi pappu', 1], ['Toor', 1], ['పసుపు', 2], ['కర్పూరం', 1], ['agarbathi', 4], ['tumeric', 1], ['jeelakarra', 1], ['sambrani', 2], ['biyyam', 3], ['tide', 1], ['bokula sabbu', 1], ['navaratnalu', 1], ['buffet plates', 1], ['ollu sabbu', 1], ['maggi', 1], ['appalalu', 1], ['macroni', 1], ['nuvvulu', 2], ['yendu draksha', 1], ['biryani spices', 5], ['xyzqqq', 0]]
+const searches = [['kandi pappu', 1], ['Toor', 1], ['పసుపు', 2], ['కర్పూరం', 1], ['agarbathi', 4], ['tumeric', 1], ['jeelakarra', 1], ['sambrani', 2], ['biyyam', 3], ['tide', 1], ['bokula sabbu', 1], ['navaratnalu', 1], ['paper plates', 1], ['ollu sabbu', 1], ['maggi', 1], ['appalalu', 1], ['macroni', 1], ['nuvvulu', 2], ['yendu draksha', 1], ['biryani spices', 5], ['xyzqqq', 0]]
 for (const [q, min] of searches) {
   const n = await searchCount(q)
   if (min === 0 ? n !== 0 : n < min) fail('search', `"${q}" → ${n} results (expected ${min === 0 ? 0 : `≥${min}`})`)
@@ -188,10 +188,14 @@ const puj = await searchCount('oil', 'puja-samagri')
 if (!(kir > 0 && puj > 0 && kir + puj === all)) fail('search', `section filter inconsistent: all=${all} kirana=${kir} puja=${puj}`)
 else console.log(`  search "oil" all=${all} kirana=${kir} puja=${puj}`)
 // Brand searches show that brand's own photo (or a brand tile), never another brand's photo
-for (const [q, want] of [['cinthol', 'bath-soap-2.webp'], ['సింథాల్ సబ్బు', 'bath-soap-2.webp'], ['santoor', 'TILE'], ['candy pappu', 'toor-dal.webp']]) {
+// (photo N of a product is <slug>.webp for the main photo, <slug>-N.webp for the others)
+const soap = JSON.parse(readFileSync(join(root, 'src', 'data', 'catalogue.json'), 'utf8')).categories.flatMap((c) => c.products).find((p) => p.slug === 'bath-soap')
+const ci = (soap?.photoBrands || []).indexOf('Cinthol')
+const cintholPhoto = ci < 0 ? 'TILE' : ci === 0 ? 'bath-soap.webp' : `bath-soap-${ci + 1}.webp`
+for (const [q, want] of [['cinthol', cintholPhoto], ['సింథాల్ సబ్బు', cintholPhoto], ['santoor', 'TILE'], ['candy pappu', 'toor-dal.webp']]) {
   await page.goto(`${BASE}/search/?q=${encodeURIComponent(q)}`)
   await page.waitForFunction(() => document.querySelector('[data-results] li'), null, { timeout: 4000 }).catch(() => {})
-  const got = await page.$eval('[data-results] li', (l) => (l.querySelector('.brand-tile') ? 'TILE' : (l.querySelector('.ph img')?.getAttribute('src') || '').split('/').pop().split('?')[0])).catch(() => 'none')
+  const got = await page.$eval('[data-results] li', (l) => (l.querySelector('.brand-tile') ? 'TILE' : (l.querySelector('.ph img')?.getAttribute('src') || '').split('/').pop().split('?')[0].replace(/\.[0-9a-f]{8}\.webp$/, '.webp'))).catch(() => 'none')
   if (got !== want) fail('brand photo', `"${q}" first result shows ${got} (expected ${want})`)
   else console.log(`  brand/sound-alike search "${q}" → ${got}`)
 }

@@ -14,8 +14,8 @@
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Photos: every photo URL has a ?v=<content code> that changes when the photo changes,
-# so they can be cached for a long time without ever showing an old photo.
+# Photos: every photo is published under a name with a content code (turmeric-powder.05e23433.webp),
+# so a changed photo gets a new name and long caching can never show an old photo.
 /img/*
   Cache-Control: public, max-age=31536000, immutable
 /brand/*

@@ -5,7 +5,7 @@
  *   SITE_URL=https://shop.myconnect.sbs node scripts/build.mjs
  */
 import { rm, mkdir, cp, readFile, writeFile, access, readdir } from 'node:fs/promises'
-import { existsSync, readFileSync } from 'node:fs'
+import { existsSync, readFileSync, mkdirSync, copyFileSync } from 'node:fs'
 import { createHash } from 'node:crypto'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -29,14 +29,23 @@ const theme = (sectionSlug) => (sectionSlug === 'puja-samagri' ? 'puja' : 'kiran
 const sectionUrl = (s) => `/${s}/`
 const categoryUrl = (c) => `/${c.section}/${c.slug}/`
 const productUrl = (p) => `/${p.section}/${p.category}/${p.slug}/`
-// Image URLs carry a short version code from the file contents (?v=…). When a photo is replaced, its URL changes,
-// so browsers and Cloudflare fetch the new photo at once instead of showing a cached old one.
+// Every photo is published under a name that contains a code made from its contents (turmeric-powder.05e23433.webp).
+// A changed photo therefore gets a brand-new address. (A ?v= code is not enough: while Cloudflare switches to a new
+// version it can answer the new ?v= address with the OLD photo and then keep that wrong copy for a year.)
+// A request for a name that does not exist yet just fails and is never cached.
 const versions = new Map()
 function versioned(path) {
   if (!versions.has(path)) {
     let file = join(root, 'public', path)
     if (!existsSync(file) && path.startsWith('/img/products/')) file = join(root, 'public', 'img', 'placeholder.webp')
-    versions.set(path, existsSync(file) ? `${path}?v=${createHash('sha1').update(readFileSync(file)).digest('hex').slice(0, 8)}` : path)
+    if (!existsSync(file)) versions.set(path, path)
+    else {
+      const code = createHash('sha1').update(readFileSync(file)).digest('hex').slice(0, 8)
+      const named = path.replace(/\.webp$/, `.${code}.webp`)
+      mkdirSync(dirname(join(dist, named)), { recursive: true })
+      copyFileSync(file, join(dist, named))
+      versions.set(path, named)
+    }
   }
   return versions.get(path)
 }
