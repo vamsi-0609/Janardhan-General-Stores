@@ -800,18 +800,6 @@
           "q": "coarse sea salt crystals"
         },
         {
-          "slug": "rock-salt",
-          "name": "Rock Salt",
-          "te": "సైంధవ లవణం",
-          "aliases": [
-            "saindhava lavanam",
-            "sendha namak",
-            "pink salt"
-          ],
-          "desc": "Mineral rock salt, often used during fasting.",
-          "q": "rock salt himalayan"
-        },
-        {
           "slug": "jaggery",
           "name": "Jaggery",
           "te": "బెల్లం",
@@ -944,10 +932,24 @@
             "chai",
             "tea dust",
             "tea leaves",
-            "tea podi"
+            "tea podi",
+            "Red label",
+            "Taj Mahal",
+            "3 Roses"
           ],
           "desc": "Black tea for everyday chai.",
-          "q": "black tea leaves CTC"
+          "q": "black tea leaves CTC",
+          "brands": [
+            "Red Label",
+            "Taj Mahal",
+            "3 Roses"
+          ],
+          "sizes": "Rs 10 . 100 GR. 250GR",
+          "photoBrands": [
+            "3 Roses",
+            "Red Label",
+            "Taj Mahal"
+          ]
         },
         {
           "slug": "instant-coffee",
@@ -968,7 +970,9 @@
           ],
           "sizes": "Rs 2 Sachets - Half KG packets",
           "photoBrands": [
-            "Nescafe"
+            "Nescafe",
+            "Continental",
+            "Bru"
           ]
         },
         {
@@ -994,7 +998,17 @@
             "drinking water"
           ],
           "desc": "Bottled drinking water.",
-          "q": "drinking water bottle"
+          "q": "drinking water bottle",
+          "brands": [
+            "kinley",
+            "bisleri",
+            "bindu"
+          ],
+          "photoBrands": [
+            "kinley",
+            "bindu",
+            "bisleri"
+          ]
         }
       ]
     },
@@ -1066,6 +1080,9 @@
           "desc": "Thin wheat noodles for payasam and upma.",
           "q": "vermicelli",
           "brands": [
+            "Bambino"
+          ],
+          "photoBrands": [
             "Bambino"
           ]
         },
@@ -1351,11 +1368,15 @@
           "brands": [
             "Cinthol",
             "Mysore Sandal",
-            "Santoor"
+            "Santoor",
+            "dettol"
           ],
+          "price": "Rs 10 - Rs 45",
           "photoBrands": [
             "Cinthol",
-            "Mysore Sandal"
+            "Mysore Sandal",
+            "Santoor",
+            "dettol"
           ]
         },
         {
@@ -1375,11 +1396,17 @@
             "Clinic Plus",
             "Head & Shoulders",
             "Meera",
-            "Karthika"
+            "Karthika",
+            "Dove"
           ],
           "sizes": "Sachets",
           "photoBrands": [
-            "Clinic Plus"
+            "Clinic Plus",
+            "Dove",
+            "Chik",
+            "Karthika",
+            "Meera",
+            "Head & Shoulders"
           ]
         },
         {
@@ -1404,7 +1431,17 @@
             "tooth paste"
           ],
           "desc": "Toothpaste for daily oral care.",
-          "q": "toothpaste on toothbrush"
+          "q": "toothpaste on toothbrush",
+          "brands": [
+            "colgate",
+            "close up",
+            "dabur red"
+          ],
+          "photoBrands": [
+            "colgate",
+            "dabur red",
+            "close up"
+          ]
         },
         {
           "slug": "toothbrush",
@@ -1430,6 +1467,17 @@
           ],
           "desc": "Sanitary pads for women.",
           "q": "sanitary napkin"
+        },
+        {
+          "slug": "kids-dypers",
+          "name": "Kids Dypers",
+          "te": "పిల్లల డైపర్లు",
+          "aliases": [
+            "dypers",
+            "pampers"
+          ],
+          "desc": "Used for kids.",
+          "sizes": "S . M . L . XL"
         }
       ]
     },

@@ -206,11 +206,12 @@
     "source": ""
   },
   "mustard-oil": {
-    "file": "File:Mustard Oil & Seeds - Kolkata 2003-10-31 00537.JPG",
-    "author": "Biswarup Ganguly",
-    "license": "CC BY 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Mustard_Oil_%26_Seeds_-_Kolkata_2003-10-31_00537.JPG"
+    "own": true,
+    "file": "mustard-oil.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "ghee": {
     "own": true,
@@ -361,39 +362,36 @@
     "source": ""
   },
   "sugar": {
-    "file": "File:Granulated White Sugar with Large Crystals, Bright Front Light.jpg",
-    "author": "Tobias Erbsland",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Granulated_White_Sugar_with_Large_Crystals,_Bright_Front_Light.jpg"
+    "own": true,
+    "file": "sugar.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "salt": {
-    "file": "File:Comparison of Table Salt with Kitchen Salt.png",
-    "author": "Lexlex",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Comparison_of_Table_Salt_with_Kitchen_Salt.png"
+    "own": true,
+    "file": "salt.jpeg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "crystal-salt": {
-    "file": "File:Salt crystals on the hand.jpg",
-    "author": "Quangkhanhhuynh",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Salt_crystals_on_the_hand.jpg"
-  },
-  "rock-salt": {
-    "file": "File:2015-03-07 Pakistanisches, sogenanntes Himalaya-Salz 0399.jpg",
-    "author": "Hubertl",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:2015-03-07_Pakistanisches,_sogenanntes_Himalaya-Salz_0399.jpg"
+    "own": true,
+    "file": "crystal-salt.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "jaggery": {
-    "file": "File:Jaggery cubes.jpg",
-    "author": "Mangosapiens",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Jaggery_cubes.jpg"
+    "own": true,
+    "file": "jaggery.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "jaggery-powder": {
     "file": "File:An image of jaggery powder.JPG",
@@ -410,39 +408,44 @@
     "source": "https://commons.wikimedia.org/wiki/File:Kandiszucker_--_2018_--_3588.jpg"
   },
   "palm-jaggery": {
-    "file": "File:Organic palm jaggery.jpg",
-    "author": "Rohini",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Organic_palm_jaggery.jpg"
+    "own": true,
+    "file": "palm-jaggery.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "cashew-nuts": {
-    "file": "File:Cashew nuts in West Bengal of India.jpg",
-    "author": "Billjones94",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Cashew_nuts_in_West_Bengal_of_India.jpg"
+    "own": true,
+    "file": "cashew-nuts.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "almonds": {
-    "file": "File:Almonds 1.jpg",
-    "author": "Loadmaster (David R. Tribble This image was made by Loadmaster (David R. Tribble). Email the author: David R. Tribble Also see my personal gallery at Google Photos",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Almonds_1.jpg"
+    "own": true,
+    "file": "almonds.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "raisins": {
-    "file": "File:2023 Rodzynki (1).jpg",
-    "author": "Jacek Halicki",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:2023_Rodzynki_(1).jpg"
+    "own": true,
+    "file": "raisins.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "dates": {
-    "file": "File:Dried dates.jpg",
-    "author": "stu_spivack",
-    "license": "CC BY-SA 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Dried_dates.jpg"
+    "own": true,
+    "file": "dates.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "pistachios": {
     "file": "File:Pistachio.jpg",
@@ -492,46 +495,52 @@
     "source": ""
   },
   "idli-rava": {
-    "file": "File:Rava idli (south Indian dishes).jpg",
-    "author": "Parmeyes",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Rava_idli_(south_Indian_dishes).jpg"
+    "own": true,
+    "file": "idli-rava.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "wheat-rava": {
-    "file": "File:Bulgur lose 26022015 8675.jpg",
-    "author": "Johann Jaritz",
-    "license": "CC BY-SA 3.0 at",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/at/deed.en",
-    "source": "https://commons.wikimedia.org/wiki/File:Bulgur_lose_26022015_8675.jpg"
+    "own": true,
+    "file": "wheat-rava.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "poha": {
-    "file": "File:Poha.jpg",
-    "author": "Sanjay Acharya, aka Sanjay ach at en.wikipedia",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-    "source": "https://commons.wikimedia.org/wiki/File:Poha.jpg"
+    "own": true,
+    "file": "poha.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "vermicelli": {
-    "file": "File:Sindhi vermicelli.jpg",
-    "author": "سونھن راڻي",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Sindhi_vermicelli.jpg"
+    "own": true,
+    "file": "vermicelli.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "sago": {
-    "file": "File:Sago gs.jpg",
-    "author": "Gausanchennai",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Sago_gs.jpg"
+    "own": true,
+    "file": "sago.jpeg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "puffed-rice": {
-    "file": "File:Puffed Rice 1.jpg",
-    "author": "Gaurav Dhwaj Khadka",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Puffed_Rice_1.jpg"
+    "own": true,
+    "file": "puffed-rice.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "detergent-powder": {
     "own": true,
@@ -1311,6 +1320,14 @@
   "rasam-powder": {
     "own": true,
     "file": "rasam-powder.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
+  },
+  "kids-dypers": {
+    "own": true,
+    "file": "kids-dypers.jpg",
     "author": "Janardhan General Stores and Puja Samagri",
     "license": "Supplied by the shop",
     "licenseUrl": "",
