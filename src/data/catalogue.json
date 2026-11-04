@@ -747,6 +747,13 @@
           ],
           "desc": "Dried leaves used whole in biryani and pulao.",
           "q": "bay leaves dried"
+        },
+        {
+          "slug": "rasam-powder",
+          "name": "Rasam Powder",
+          "te": "రసం పొడి",
+          "aliases": [],
+          "desc": "Used to prepare Rasam"
         }
       ]
     },

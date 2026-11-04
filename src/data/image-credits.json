@@ -1,25 +1,27 @@
 {
   "sona-masoori-rice": {
     "own": true,
-    "file": "sona-masoori-rice.jpg",
+    "file": "sona-masoori-rice.png",
     "author": "Janardhan General Stores and Puja Samagri",
     "license": "Supplied by the shop",
     "licenseUrl": "",
     "source": ""
   },
   "basmati-rice": {
-    "file": "File:Long grain rice.jpg",
-    "author": "Gaurav Dhwaj Khadka",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Long_grain_rice.jpg"
+    "own": true,
+    "file": "basmati-rice.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "boiled-rice": {
-    "file": "File:Riso parboiled.jpg",
-    "author": "Luigi Chiesa",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-    "source": "https://commons.wikimedia.org/wiki/File:Riso_parboiled.jpg"
+    "own": true,
+    "file": "boiled-rice.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "toor-dal": {
     "own": true,
@@ -219,74 +221,84 @@
     "source": ""
   },
   "red-chilli-powder": {
-    "file": "File:Byadgi chili powder.jpg",
-    "author": "GI tagged products",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Byadgi_chili_powder.jpg"
+    "own": true,
+    "file": "red-chilli-powder.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "dry-red-chillies": {
-    "file": "File:Dried Korean red chillies.jpg",
-    "author": "ally j",
-    "license": "CC0",
-    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "source": "https://commons.wikimedia.org/wiki/File:Dried_Korean_red_chillies.jpg"
+    "own": true,
+    "file": "dry-red-chillies.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "turmeric-powder": {
-    "file": "File:Turmeric Powder on a Spoon - Black Background.jpg",
-    "author": "formulatehealth",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Turmeric_Powder_on_a_Spoon_-_Black_Background.jpg"
+    "own": true,
+    "file": "turmeric-powder.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "coriander-powder": {
-    "file": "File:Coriander Powder.jpg",
-    "author": "Gaurav Dhwaj Khadka",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Coriander_Powder.jpg"
+    "own": true,
+    "file": "coriander-powder.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "coriander-seeds": {
-    "file": "File:Coriander Seeds.jpg",
-    "author": "Sanjay Acharya",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Coriander_Seeds.jpg"
+    "own": true,
+    "file": "coriander-seeds.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "cumin-seeds": {
-    "file": "File:Seeds of Cumin.jpg",
-    "author": "Sanjay Acharya",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Seeds_of_Cumin.jpg"
+    "own": true,
+    "file": "cumin-seeds.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "mustard-seeds": {
-    "file": "File:Black mustard seeds.jpg",
-    "author": "Theredgiant",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Black_mustard_seeds.jpg"
+    "own": true,
+    "file": "mustard-seeds.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "fenugreek-seeds": {
-    "file": "File:Fenugreek seeds.jpg",
-    "author": "Sanjay Acharya",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-    "source": "https://commons.wikimedia.org/wiki/File:Fenugreek_seeds.jpg"
+    "own": true,
+    "file": "fenugreek-seeds.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "black-pepper": {
-    "file": "File:Black Peppercorns (4422070187).jpg",
-    "author": "Ryan Snyder",
-    "license": "CC BY 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Black_Peppercorns_(4422070187).jpg"
+    "own": true,
+    "file": "black-pepper.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "cardamom": {
-    "file": "File:Green Cardamom Pods.jpg",
-    "author": "Misterneedlemouse",
-    "license": "CC0",
-    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "source": "https://commons.wikimedia.org/wiki/File:Green_Cardamom_Pods.jpg"
+    "own": true,
+    "file": "cardamom.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "cloves": {
     "file": "File:2023 Goździki.jpg",
@@ -303,18 +315,20 @@
     "source": "https://commons.wikimedia.org/wiki/File:Cinnamomum_verum_spices.jpg"
   },
   "garam-masala": {
-    "file": "File:Garam Masala.JPG",
-    "author": "Miansari66",
-    "license": "Public domain",
+    "own": true,
+    "file": "garam-masala.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
     "licenseUrl": "",
-    "source": "https://commons.wikimedia.org/wiki/File:Garam_Masala.JPG"
+    "source": ""
   },
   "sambar-powder": {
-    "file": "File:Anchochilipowder.JPG",
-    "author": "Badagnani (talk)",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Anchochilipowder.JPG"
+    "own": true,
+    "file": "sambar-powder.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "asafoetida": {
     "file": "File:Asafoetida resin (Iran).jpg",
@@ -324,11 +338,12 @@
     "source": "https://commons.wikimedia.org/wiki/File:Asafoetida_resin_(Iran).jpg"
   },
   "tamarind": {
-    "file": "File:Tamarind pulp.jpg",
-    "author": "einalem",
-    "license": "CC BY-SA 2.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Tamarind_pulp.jpg"
+    "own": true,
+    "file": "tamarind.jpeg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "star-anise": {
     "file": "File:Illicium verum20170511 7548.jpg",
@@ -338,11 +353,12 @@
     "source": "https://commons.wikimedia.org/wiki/File:Illicium_verum20170511_7548.jpg"
   },
   "bay-leaves": {
-    "file": "File:Dried bay leaves.jpg",
-    "author": "Mauro Cateb",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Dried_bay_leaves.jpg"
+    "own": true,
+    "file": "bay-leaves.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "sugar": {
     "file": "File:Granulated White Sugar with Large Crystals, Bright Front Light.jpg",
@@ -1119,18 +1135,20 @@
     "source": "https://commons.wikimedia.org/wiki/File:Macaronis.jpeg"
   },
   "white-sesame": {
-    "file": "File:Sesame seeds2.jpg",
-    "author": "Tiia Monto",
-    "license": "CC BY-SA 3.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "source": "https://commons.wikimedia.org/wiki/File:Sesame_seeds2.jpg"
+    "own": true,
+    "file": "white-sesame.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "black-sesame": {
-    "file": "File:BLACK SESAME SEEDS.jpg",
-    "author": "Ranjithkumar Murugesan",
-    "license": "CC0",
-    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "source": "https://commons.wikimedia.org/wiki/File:BLACK_SESAME_SEEDS.jpg"
+    "own": true,
+    "file": "black-sesame.jpg",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
   },
   "bathroom-cleaner": {
     "own": true,
@@ -1285,6 +1303,14 @@
   "pearl-millet": {
     "own": true,
     "file": "pearl-millet.png",
+    "author": "Janardhan General Stores and Puja Samagri",
+    "license": "Supplied by the shop",
+    "licenseUrl": "",
+    "source": ""
+  },
+  "rasam-powder": {
+    "own": true,
+    "file": "rasam-powder.png",
     "author": "Janardhan General Stores and Puja Samagri",
     "license": "Supplied by the shop",
     "licenseUrl": "",
