@@ -1,0 +1,7 @@
+# Friendly short links only. Everything else is a real static file; unknown paths get /404.html automatically.
+/puja        /puja-samagri/  301
+/pooja       /puja-samagri/  301
+/pooja-samagri /puja-samagri/ 301
+/directions  /visit/         301
+/map         /visit/         301
+/home        /               301
