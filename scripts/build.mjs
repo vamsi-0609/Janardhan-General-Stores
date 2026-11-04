@@ -5,7 +5,7 @@
  *   SITE_URL=https://shop.myconnect.sbs node scripts/build.mjs
  */
 import { rm, mkdir, cp, readFile, writeFile, access, readdir } from 'node:fs/promises'
-import { existsSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { createHash } from 'node:crypto'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -29,13 +29,26 @@ const theme = (sectionSlug) => (sectionSlug === 'puja-samagri' ? 'puja' : 'kiran
 const sectionUrl = (s) => `/${s}/`
 const categoryUrl = (c) => `/${c.section}/${c.slug}/`
 const productUrl = (p) => `/${p.section}/${p.category}/${p.slug}/`
-const img = (slug) => `/img/products/${slug}.webp`
-const thumb = (slug) => `/img/products/thumb/${slug}.webp`
+// Image URLs carry a short version code from the file contents (?v=…). When a photo is replaced, its URL changes,
+// so browsers and Cloudflare fetch the new photo at once instead of showing a cached old one.
+const versions = new Map()
+function versioned(path) {
+  if (!versions.has(path)) {
+    let file = join(root, 'public', path)
+    if (!existsSync(file) && path.startsWith('/img/products/')) file = join(root, 'public', 'img', 'placeholder.webp')
+    versions.set(path, existsSync(file) ? `${path}?v=${createHash('sha1').update(readFileSync(file)).digest('hex').slice(0, 8)}` : path)
+  }
+  return versions.get(path)
+}
+const imgPath = (slug) => `/img/products/${slug}.webp`
+const thumbPath = (slug) => `/img/products/thumb/${slug}.webp`
+const img = (slug) => versioned(imgPath(slug))
+const thumb = (slug) => versioned(thumbPath(slug))
 
 // Products without a photo yet (e.g. just added in the editor) get a placeholder in dist/ — never a broken image.
 const missingPhoto = []
 for (const p of products) {
-  if (!(await exists(join(root, 'public', img(p.photo || p.slug))))) missingPhoto.push(p.photo || p.slug)
+  if (!(await exists(join(root, 'public', imgPath(p.photo || p.slug))))) missingPhoto.push(p.photo || p.slug)
 }
 if (missingPhoto.length) console.warn(`⚠ No photo yet for: ${[...new Set(missingPhoto)].join(', ')} (showing a placeholder).`)
 const slugs = new Set()
@@ -68,8 +81,8 @@ await rm(dist, { recursive: true, force: true })
 await mkdir(join(dist, 'assets'), { recursive: true })
 await cp(join(root, 'public'), dist, { recursive: true })
 for (const slug of new Set(missingPhoto)) {
-  await cp(join(root, 'public', 'img', 'placeholder.webp'), join(dist, img(slug)))
-  await cp(join(root, 'public', 'img', 'placeholder.webp'), join(dist, thumb(slug)))
+  await cp(join(root, 'public', 'img', 'placeholder.webp'), join(dist, imgPath(slug)))
+  await cp(join(root, 'public', 'img', 'placeholder.webp'), join(dist, thumbPath(slug)))
 }
 
 async function asset(src, ext) {
@@ -393,7 +406,7 @@ for (const f of festivals) for (const days of f.dates) for (const [d] of days) i
 
 // Banner design chosen in the editor: pattern, decoration symbol, background photo (+ darkness), texts.
 const PATTERNS = new Set(['dots', 'sparkle', 'waves', 'rangoli', 'none'])
-const festImage = (f) => (existsSync(join(root, 'public', 'img', 'festivals', `${f.id}.webp`)) ? `/img/festivals/${f.id}.webp` : '')
+const festImage = (f) => (existsSync(join(root, 'public', 'img', 'festivals', `${f.id}.webp`)) ? versioned(`/img/festivals/${f.id}.webp`) : '')
 function festStyle(f) {
   const b = f.banner || {}
   const image = festImage(f)

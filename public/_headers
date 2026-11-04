@@ -14,9 +14,10 @@
 /fonts/*
   Cache-Control: public, max-age=31536000, immutable
 
-# Photos and brand images: cache for a week.
+# Photos: every photo URL has a ?v=<content code> that changes when the photo changes,
+# so they can be cached for a long time without ever showing an old photo.
 /img/*
-  Cache-Control: public, max-age=604800
+  Cache-Control: public, max-age=31536000, immutable
 /brand/*
   Cache-Control: public, max-age=604800
 

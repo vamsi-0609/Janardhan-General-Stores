@@ -64,7 +64,7 @@ for (const f of htmlFiles) {
     if (!ok) fail(route, `broken link ${attr}`)
   }
   for (const [, s] of html.matchAll(/srcset="([^"]+)"/g)) for (const part of s.split(',')) {
-    const u = part.trim().split(' ')[0]
+    const u = part.trim().split(' ')[0].split('?')[0]
     if (!checked.has(u)) checked.set(u, await exists(join(dist, u)))
     if (!checked.get(u)) fail(route, `broken srcset ${u}`)
   }
