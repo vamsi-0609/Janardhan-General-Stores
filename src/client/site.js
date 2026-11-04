@@ -113,7 +113,16 @@
     let raf = 0
     track.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(update) }, { passive: true })
     addEventListener('resize', () => go(current))
+    // Opened from a brand search (?photo=3): start on that brand's photo.
+    const want = Number(new URLSearchParams(location.search).get('photo')) - 1
+    if (want > 0 && want < slides.length) track.scrollLeft = want * track.clientWidth
     update()
+    // Brand buttons on the product page ("Brands at the shop") show that brand's photo.
+    document.querySelectorAll('[data-g-go]').forEach((a) => a.addEventListener('click', (e) => {
+      e.preventDefault()
+      go(Number(a.dataset.gGo))
+      if (g.getBoundingClientRect().top < 0) g.scrollIntoView({ block: 'start', behavior: 'smooth' })
+    }))
   })
 
   // 5. In-category filter.

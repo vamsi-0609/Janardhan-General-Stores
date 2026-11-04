@@ -232,13 +232,26 @@
           h('button', { class: 'icon-btn', type: 'button', title: 'Delete photo', 'aria-label': 'Delete photo', onclick: () => photoAct('delete', { name: ph.name }) }, '🗑')),
         ph.hasSource
           ? h('button', { class: 'btn small adjust', type: 'button', onclick: () => openCropper(p.slug, ph, async () => { await load(); drawPhotos() }) }, ph.crop ? '✂ Adjust (custom)' : '✂ Adjust / crop')
-          : h('p', { class: 'hint adjust-note' }, 'Stock photo: add your own photo to adjust it')))
+          : h('p', { class: 'hint adjust-note' }, 'Stock photo: add your own photo to adjust it'),
+        brandPick(ph, i)))
       photoBox.replaceChildren(
         h('div', { class: 'photos' }, cards, drop),
         queue.length ? h('div', {}, h('p', { class: 'hint' }, `${queue.length} photo(s) will be added when you save:`), h('div', { class: 'queue' }, queue.map((q) => h('img', { src: q.url, alt: '' })))) : '',
         h('p', { class: 'hint' }, 'The first photo is the main one (used on cards and lists). On the product page people can swipe through all of them.',
           list[0]?.stock ? ' The current main photo is a stock photo; the first photo you add replaces it.' : ''),
       )
+    }
+    // "Brand in this photo": search shows this photo when someone looks for that brand (e.g. Cinthol → the Cinthol photo).
+    function brandPick(ph, i) {
+      const saved = productBySlug(p.slug)?.brands || []
+      if (isNew || !saved.length) return ''
+      const cur = productBySlug(p.slug)?.photoBrands?.[i] || ''
+      const sel = h('select', { 'aria-label': `Brand shown in photo ${i + 1}`, onchange: async (e) => {
+        e.stopPropagation()
+        if (await act(() => api('POST', `/api/photo/${p.slug}/brand`, { name: ph.name, brand: sel.value }), sel.value ? `Photo ${i + 1} = ${sel.value} ✓` : 'Photo marked as general ✓')) { await load(); drawPhotos() }
+      } }, h('option', { value: '' }, 'General / all brands'), saved.map((b) => h('option', { value: b, selected: b === cur }, b)))
+      sel.addEventListener('input', (e) => e.stopPropagation())
+      return h('label', { class: 'pbrand' }, 'Brand in this photo', sel)
     }
     async function addFiles(files) {
       if (!files.length) return
@@ -767,6 +780,141 @@
       h('p', {}, 'Close the black editor window (or press Ctrl+C in it) when you are done. Your changes are already saved.'),
     ))
   }
+
+  // ───────── TELUGU TYPING: type in English letters, get Telugu (like Google's Telugu keyboard) ─────────
+  // Works in every Telugu box (lang="te"). Type "kandi pappu" → కంది పప్పు. Each word turns into Telugu when you
+  // press Space, Enter, Tab or a comma/full stop. A small list shows other spellings: click one, or press 1–6.
+  // Esc keeps the word in English. Words come from Google's Telugu engine; without internet, built-in rules are used.
+  const TeIME = (() => {
+    let on = localStorage.getItem('te-ime') !== 'off'
+    const cache = new Map() // word → options
+    const V = { a: ['అ', ''], aa: ['ఆ', 'ా'], i: ['ఇ', 'ి'], ii: ['ఈ', 'ీ'], ee: ['ఈ', 'ీ'], u: ['ఉ', 'ు'], uu: ['ఊ', 'ూ'], oo: ['ఊ', 'ూ'],
+      e: ['ఎ', 'ె'], ae: ['ఏ', 'ే'], ai: ['ఐ', 'ై'], o: ['ఒ', 'ొ'], oa: ['ఓ', 'ో'], au: ['ఔ', 'ౌ'], ou: ['ఔ', 'ౌ'] }
+    const C = { ksh: 'క్ష', chh: 'ఛ', kh: 'ఖ', gh: 'ఘ', ch: 'చ', jh: 'ఝ', th: 'త', dh: 'ద', ph: 'ఫ', bh: 'భ', sh: 'శ', k: 'క', g: 'గ', c: 'చ', j: 'జ',
+      t: 'ట', d: 'డ', n: 'న', p: 'ప', f: 'ఫ', b: 'బ', m: 'మ', y: 'య', r: 'ర', l: 'ల', v: 'వ', w: 'వ', s: 'స', h: 'హ', x: 'క్స', z: 'జ', q: 'క' }
+    const vKeys = Object.keys(V).sort((a, b) => b.length - a.length)
+    const cKeys = Object.keys(C).sort((a, b) => b.length - a.length)
+    /** Offline fallback: simple phonetic rules (Google's engine is used whenever there is internet). */
+    function rules(word) {
+      const w = word.toLowerCase()
+      let out = '', i = 0, afterC = false
+      while (i < w.length) {
+        const v = vKeys.find((k) => w.startsWith(k, i))
+        if (v) { out += afterC ? V[v][1] : V[v][0]; i += v.length; afterC = false; continue }
+        const c = cKeys.find((k) => w.startsWith(k, i))
+        if (!c) { i++; continue }
+        const atEnd = i + c.length === w.length
+        const nextIsC = !atEnd && !vKeys.some((k) => w.startsWith(k, i + c.length))
+        // n/m before another consonant (kandi, pampu) and m at the end (deepam) become the round "ం".
+        if ((c === 'n' || c === 'm') && out && !afterC && (nextIsC || (c === 'm' && atEnd))) { out += 'ం'; i += c.length; continue }
+        if (afterC) out += '్'
+        out += C[c]; i += c.length; afterC = true
+      }
+      if (afterC) out += '్'
+      return out
+    }
+    async function options(word) {
+      const key = word.toLowerCase()
+      if (cache.has(key)) return cache.get(key)
+      let list = []
+      try { list = (await api('GET', `/api/telugu?text=${encodeURIComponent(key)}`)).options || [] } catch {}
+      if (!list.length) { const local = rules(key); if (local) list = [local] }
+      else cache.set(key, list)
+      return list
+    }
+
+    const box = h('div', { class: 'te-ime', role: 'listbox', 'aria-label': 'Telugu spellings', hidden: true })
+    document.body.append(box)
+    let cur = null // { el, start, end, word, list, pick, seq }
+    let seq = 0
+    const isTe = (el) => el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') && el.lang === 'te' && !el.readOnly
+    function wordAtCaret(el) {
+      const end = el.selectionStart
+      if (end == null || end !== el.selectionEnd) return null
+      const m = el.value.slice(0, end).match(/[A-Za-z]+$/)
+      return m ? { start: end - m[0].length, end, word: m[0] } : null
+    }
+    function hide() { box.hidden = true; cur = null }
+    function draw() {
+      if (!cur || !cur.list.length) { box.hidden = true; return }
+      box.replaceChildren(
+        ...cur.list.map((o, i) => h('button', { type: 'button', role: 'option', 'aria-selected': String(i === cur.pick), class: i === cur.pick ? 'on' : '', lang: 'te',
+          onmousedown: (e) => { e.preventDefault(); cur.pick = i; commit('') } }, h('small', {}, String(i + 1)), o)),
+        h('span', { class: 'te-ime-hint' }, 'Space = use · 1–6 = choose · Esc = keep English'))
+      const r = cur.el.getBoundingClientRect()
+      box.style.left = `${Math.max(8, Math.min(r.left, innerWidth - 380))}px`
+      box.style.top = `${r.bottom + 4}px`
+      box.hidden = false
+    }
+    async function refresh(el) {
+      const w = wordAtCaret(el)
+      if (!w) { hide(); return }
+      const my = ++seq
+      const local = rules(w.word)
+      cur = { el, ...w, list: cache.get(w.word.toLowerCase()) || (local ? [local] : []), pick: 0, seq: my }
+      draw()
+      const list = await options(w.word)
+      if (!cur || cur.seq !== my) return
+      cur.list = list
+      cur.pick = 0
+      draw()
+    }
+    /** Replace the English word with the chosen Telugu word (and add `after`, e.g. a space). */
+    function commit(after) {
+      if (!cur) return false
+      const { el, start, end, word } = cur
+      const te = cur.list[cur.pick] || rules(word)
+      if (el.value.slice(start, end) !== word || !te) { hide(); return false }
+      el.setRangeText(te + after, start, end, 'end')
+      hide()
+      el.dispatchEvent(new Event('input', { bubbles: true }))
+      return true
+    }
+    /** Wait for Google's answer before converting (people often press Space very quickly). */
+    async function commitWhenReady(after) {
+      const c = cur
+      if (!c) return
+      const list = await options(c.word)
+      if (cur !== c) return
+      if (list.length) { c.list = list; c.pick = Math.min(c.pick, list.length - 1) }
+      commit(after)
+    }
+    document.addEventListener('input', (e) => { if (on && e.isTrusted && isTe(e.target)) refresh(e.target) })
+    document.addEventListener('keydown', (e) => {
+      if (!on || !isTe(e.target) || !cur || cur.el !== e.target) return
+      if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); hide(); return }
+      if (/^[1-6]$/.test(e.key) && cur.list[Number(e.key) - 1]) { e.preventDefault(); cur.pick = Number(e.key) - 1; commit(''); return }
+      if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && cur.list.length) { e.preventDefault(); cur.pick = (cur.pick + (e.key === 'ArrowDown' ? 1 : cur.list.length - 1)) % cur.list.length; draw(); return }
+      const after = { ' ': ' ', Enter: '', Tab: '', ',': ', ', '.': '. ', '!': '! ', '?': '? ' }[e.key]
+      if (after === undefined) return
+      if (e.key === 'Tab') { commit(''); return } // Tab still moves to the next box
+      e.preventDefault()
+      commitWhenReady(e.key === 'Enter' && e.target.tagName === 'TEXTAREA' ? '\n' : after)
+    }, true)
+    document.addEventListener('focusout', (e) => { if (cur && cur.el === e.target) commit('') })
+    addEventListener('scroll', () => { if (cur) draw() }, true)
+    addEventListener('resize', () => { if (cur) draw() })
+    // Hint on every Telugu box.
+    document.addEventListener('focusin', (e) => {
+      if (isTe(e.target) && (!e.target.placeholder || e.target.dataset.imeHint)) {
+        e.target.placeholder = on ? 'Type in English, e.g. kandi pappu → కంది పప్పు' : ''
+        e.target.dataset.imeHint = '1'
+      }
+    })
+    function toggle() {
+      on = !on
+      localStorage.setItem('te-ime', on ? 'on' : 'off')
+      hide()
+      paint()
+      toast(on ? 'Telugu typing ON: type English letters in Telugu boxes' : 'Telugu typing OFF: Telugu boxes take what you type as it is')
+    }
+    const btn = h('button', { type: 'button', class: 'btn small te-toggle', title: 'Type English letters in Telugu boxes and get Telugu letters (Ctrl+G)', onclick: toggle })
+    function paint() { btn.textContent = on ? 'అ Telugu typing: ON' : 'అ Telugu typing: OFF'; btn.classList.toggle('off', !on) }
+    paint()
+    document.addEventListener('keydown', (e) => { if (e.ctrlKey && !e.altKey && (e.key === 'g' || e.key === 'G')) { e.preventDefault(); toggle() } })
+    return { btn, rules }
+  })()
+  document.querySelector('.top-actions')?.prepend(TeIME.btn)
 
   // ───────── tabs ─────────
   function render() {

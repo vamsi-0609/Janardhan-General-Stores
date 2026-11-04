@@ -187,6 +187,14 @@ const kir = await searchCount('oil', 'kirana')
 const puj = await searchCount('oil', 'puja-samagri')
 if (!(kir > 0 && puj > 0 && kir + puj === all)) fail('search', `section filter inconsistent: all=${all} kirana=${kir} puja=${puj}`)
 else console.log(`  search "oil" all=${all} kirana=${kir} puja=${puj}`)
+// Brand searches show that brand's own photo (or a brand tile), never another brand's photo
+for (const [q, want] of [['cinthol', 'bath-soap-2.webp'], ['సింథాల్ సబ్బు', 'bath-soap-2.webp'], ['santoor', 'TILE'], ['candy pappu', 'toor-dal.webp']]) {
+  await page.goto(`${BASE}/search/?q=${encodeURIComponent(q)}`)
+  await page.waitForFunction(() => document.querySelector('[data-results] li'), null, { timeout: 4000 }).catch(() => {})
+  const got = await page.$eval('[data-results] li', (l) => (l.querySelector('.brand-tile') ? 'TILE' : (l.querySelector('.ph img')?.getAttribute('src') || '').split('/').pop().split('?')[0])).catch(() => 'none')
+  if (got !== want) fail('brand photo', `"${q}" first result shows ${got} (expected ${want})`)
+  else console.log(`  brand/sound-alike search "${q}" → ${got}`)
+}
 // Header search submits to /search/
 await page.goto(`${BASE}/`)
 await page.fill('#q-mobile', 'ghee')

@@ -190,12 +190,30 @@ async function applyOrder(slug, ordered, credits, crops) {
 }
 async function photoOp(slug, op, body) {
   const cat = await readJson(catalogueFile)
-  const p = allProducts(cat).find((x) => x.slug === slug)
+  const p = cat.categories.flatMap((c) => c.products).find((x) => x.slug === slug)
   must(p, 'Product not found. Save the product first, then add photos.')
   must(!p.photo, `This product uses the photos of "${p.photo}". Edit photos there.`)
   const credits = await readJson(creditsFile)
   const crops = await readCrops()
   let names = await listPhotoNames(slug)
+  // Which brand each photo shows (photoBrands[i] belongs to photo i); kept with its photo when photos move.
+  const brandOf = Object.fromEntries(names.map((n, i) => [n, p.photoBrands?.[i] || null]))
+  const saveBrands = async () => {
+    const tags = names.map((n) => (p.brands || []).includes(brandOf[n]) ? brandOf[n] : null)
+    while (tags.length && !tags[tags.length - 1]) tags.pop()
+    const before = JSON.stringify(p.photoBrands || [])
+    if (tags.length) p.photoBrands = tags
+    else delete p.photoBrands
+    if (JSON.stringify(p.photoBrands || []) !== before) await writeJson(catalogueFile, cat)
+  }
+  if (op === 'brand') {
+    must(names.includes(body.name), 'Photo not found.')
+    const b = str(body.brand, 80)
+    must(!b || (p.brands || []).includes(b), 'Add the brand to "Brands at the shop" and save first.')
+    brandOf[body.name] = b || null
+    await saveBrands()
+    return
+  }
   if (op === 'crop') {
     must(names.includes(body.name), 'Photo not found.')
     const src = await sourceOf(body.name)
@@ -235,6 +253,7 @@ async function photoOp(slug, op, body) {
   await applyOrder(slug, names, credits, crops)
   await writeJson(creditsFile, credits)
   await writeCrops(crops)
+  await saveBrands()
 }
 
 // ───────────────────────── build + preview ─────────────────────────
@@ -407,6 +426,24 @@ const readBody = (req, limit) => new Promise((resolve, reject) => {
 })
 const json = async (req) => { try { return JSON.parse((await readBody(req, 2e6)).toString('utf8') || '{}') } catch (e) { throw e instanceof Bad ? e : new Bad('Invalid data.') } }
 
+// ───────────────────────── English letters → Telugu ─────────────────────────
+// Asks Google Input Tools (the same engine as Google's Telugu keyboard) for the best Telugu spellings of a word.
+// Without internet, falls back to the built-in phonetic rules in the editor page.
+const teluguCache = new Map()
+async function teluguOptions(text) {
+  const word = text.toLowerCase().replace(/[^a-z]/g, '')
+  if (!word) return { options: [] }
+  if (teluguCache.has(word)) return { options: teluguCache.get(word) }
+  try {
+    const u = `https://inputtools.google.com/request?itc=te-t-i0-und&num=6&cp=0&cs=1&ie=utf-8&oe=utf-8&text=${encodeURIComponent(word)}`
+    const r = await fetch(u, { signal: AbortSignal.timeout(3500) })
+    const d = await r.json()
+    const options = d[0] === 'SUCCESS' && Array.isArray(d[1]?.[0]?.[1]) ? d[1][0][1].filter((x) => typeof x === 'string' && /^[ఀ-౿]+$/.test(x)).slice(0, 6) : []
+    if (options.length) { teluguCache.set(word, options); if (teluguCache.size > 2000) teluguCache.delete(teluguCache.keys().next().value) }
+    return { options, online: true }
+  } catch { return { options: [], online: false } }
+}
+
 async function state() {
   const cat = await readJson(catalogueFile)
   const fest = await readJson(festivalsFile)
@@ -450,6 +487,7 @@ async function handle(req, res) {
       return existsSync(f) ? send(res, 200, await readFile(f), TYPES['.webp']) : send(res, 404, 'Not found', 'text/plain')
     }
     if (path === '/api/state') return send(res, 200, await state())
+    if (path === '/api/telugu') return send(res, 200, await teluguOptions(str(url.searchParams.get('text'), 60)))
     if (path === '/api/publish') return send(res, 200, { ...publish, summary: publish.running ? null : await changeSummary(), liveUrl: LIVE_URL })
     if (path === '/api/build') return send(res, 200, { build, changes: await gitChanges() })
     return send(res, 404, 'Not found', 'text/plain')
@@ -479,6 +517,11 @@ async function handle(req, res) {
     if (isNew) must(!existing, `A product with the web name "${p.slug}" already exists.`)
     else must(existing, 'Product not found.')
     if (p.photo) must(allProducts(cat).some((x) => x.slug === p.photo && !x.photo), `"Use photos of" must be an existing product.`)
+    if (existing?.photoBrands) {
+      const tags = existing.photoBrands.map((b) => ((p.brands || []).includes(b) ? b : null))
+      while (tags.length && !tags[tags.length - 1]) tags.pop()
+      if (tags.length) p.photoBrands = tags
+    }
     if (isNew) target.products.push(p)
     else {
       const from = cat.categories.find((c) => c.products.some((x) => x.slug === p.slug))
@@ -524,7 +567,7 @@ async function handle(req, res) {
   }
 
   // Photos
-  m = path.match(/^\/api\/photo\/([a-z0-9-]+)\/(add|main|move|delete|crop)$/)
+  m = path.match(/^\/api\/photo\/([a-z0-9-]+)\/(add|main|move|delete|crop|brand)$/)
   if (req.method === 'POST' && m) {
     const body = m[2] === 'add' ? { data: await readBody(req, 20 * 1024 * 1024), filename: url.searchParams.get('filename') || '' } : await json(req)
     await photoOp(m[1], m[2], body)

@@ -5,9 +5,11 @@
  * catalogue.json:
  *   sections:   [{ slug, name, te, title, blurb, blurbTe, theme }]
  *   categories: [{ section, slug, name, te, blurb, products: [product] }]
- *   product:    { slug, name, te, aliases[], desc, q?, brands?[], sizes?, price?, priceTe?, caution?, cautionTe?, photo? }
+ *   product:    { slug, name, te, aliases[], desc, q?, brands?[], sizes?, price?, priceTe?, caution?, cautionTe?, photo?, photoBrands?[] }
  *     q      – search words used only by scripts/fetch-images.mjs to find a Wikimedia Commons photo
  *     photo  – reuse another product's photos (slug), e.g. the same item listed in two sections
+ *     photoBrands – which brand each photo shows, in photo order (null = general photo). Set in the editor;
+ *              a brand search shows that brand's photo, never another brand's.
  */
 import { readFileSync } from 'node:fs'
 

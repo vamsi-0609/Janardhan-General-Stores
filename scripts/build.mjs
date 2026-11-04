@@ -70,6 +70,7 @@ const ICONS = {
   chat: '<path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.5A8.4 8.4 0 1 1 21 11.5Z"/>',
   list: '<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
   store: '<path d="M3 9h18l-1.5-5h-15L3 9Zm0 0v11h18V9M9 20v-6h6v6"/>',
+  mic: '<rect x="9" y="2.5" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3.5M8.5 21.5h7"/>',
 }
 const WA_PATH = '<path class="icon-fill" d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3ZM12 2a10 10 0 0 0-8.6 15l-1.4 5 5.1-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/>'
 const icon = (name, size = '') => name === 'whatsapp'
@@ -95,10 +96,40 @@ const CSS = await asset('src/styles.css', 'css')
 const SITE_JS = await asset('src/client/site.js', 'js')
 const SEARCH_JS = await asset('src/client/search.js', 'js')
 
+// ───────────────────────── product photo galleries ─────────────────────────
+// Main photo: img/products/<slug>.webp. Extra photos: <slug>-2.webp, <slug>-3.webp … (from shop-photos/).
+const productFiles = new Set(await readdir(join(root, 'public', 'img', 'products')))
+function photosOf(p) {
+  const base = p.photo || p.slug
+  const extras = [...productFiles]
+    .map((f) => f.match(/^(.+)-(\d{1,2})\.webp$/))
+    .filter((m) => m && m[1] === base)
+    .map((m) => [Number(m[2]), `${base}-${m[2]}`])
+    .sort((a, b) => a[0] - b[0])
+    .map(([, name]) => name)
+  return [base, ...extras]
+}
+
+// Which photo shows which brand (set in the editor: "Brand in this photo"). Untagged photos are general.
+function brandPhotos(p) {
+  const src = p.photo ? products.find((x) => x.slug === p.photo) || p : p
+  const tags = src.photoBrands || []
+  const photos = photosOf(p)
+  const byBrand = {}
+  photos.forEach((ph, i) => { if (tags[i] && (p.brands || []).includes(tags[i]) && !(tags[i] in byBrand)) byBrand[tags[i]] = { ph, n: i + 1 } })
+  const gi = photos.findIndex((_, i) => !tags[i])
+  return { photos, byBrand, general: gi < 0 ? null : { ph: photos[gi], n: gi + 1 }, mainTagged: !!tags[0] }
+}
+
 const sectionLabelShort = (slug) => (slug === 'puja-samagri' ? 'Puja Samagri' : 'Kirana')
 const searchIndex = products.map((p) => {
   const c = categoryOf(p.category)
-  return { n: p.name, t: p.te, a: [...p.aliases, ...(p.brands || [])], b: p.brands || [], c: c.name, ct: c.te, s: sectionLabelShort(p.section), sec: p.section, u: productUrl(p), i: thumb(p.photo || p.slug) }
+  const bp = brandPhotos(p)
+  const e = { n: p.name, t: p.te, a: [...p.aliases, ...(p.brands || [])], b: p.brands || [], c: c.name, ct: c.te, s: sectionLabelShort(p.section), sec: p.section, u: productUrl(p), i: thumb(p.photo || p.slug) }
+  // bp: brand → [photo, photo number]; g: a general photo to use for brands without their own photo (0 = none).
+  if (Object.keys(bp.byBrand).length) e.bp = Object.fromEntries(Object.entries(bp.byBrand).map(([b, x]) => [b, [thumb(x.ph), x.n]]))
+  if (bp.mainTagged) e.g = bp.general ? [thumb(bp.general.ph), bp.general.n] : 0
+  return e
 })
 // Categories are searchable ("dal" → Pulses & Dals).
 for (const c of categories) {
@@ -166,7 +197,8 @@ function searchForm(id, value = '') {
     <label class="visually-hidden" for="${id}">Search products in English or Telugu</label>
     ${icon('search').replace('class="icon"', 'class="icon search-icon"')}
     <input id="${id}" name="q" type="search" value="${esc(value)}" placeholder="Search rice, kandi pappu, agarbatti, పసుపు…" autocomplete="off" enterkeyhint="search">
-    <button type="submit" aria-label="Search">${icon('arrow')}</button>
+    <button class="mic-btn" type="button" data-voice hidden aria-label="Search by voice (Telugu or English)" title="Search by voice">${icon('mic')}</button>
+    <button class="go-btn" type="submit" aria-label="Search">${icon('arrow')}</button>
   </form>`
 }
 
@@ -300,20 +332,6 @@ ${footer()}
   await mkdir(dirname(out), { recursive: true })
   await writeFile(out, html)
   if (!noindex) sitemap.push(path)
-}
-
-// ───────────────────────── product photo galleries ─────────────────────────
-// Main photo: img/products/<slug>.webp. Extra photos: <slug>-2.webp, <slug>-3.webp … (from shop-photos/).
-const productFiles = new Set(await readdir(join(root, 'public', 'img', 'products')))
-function photosOf(p) {
-  const base = p.photo || p.slug
-  const extras = [...productFiles]
-    .map((f) => f.match(/^(.+)-(\d{1,2})\.webp$/))
-    .filter((m) => m && m[1] === base)
-    .map((m) => [Number(m[2]), `${base}-${m[2]}`])
-    .sort((a, b) => a[0] - b[0])
-    .map(([, name]) => name)
-  return [base, ...extras]
 }
 
 function gallery(p) {
@@ -618,7 +636,9 @@ for (const p of products) {
       ${te(p.te, 'p', 'te-name')}
       <p class="desc">${esc(p.desc)}</p>
       ${p.price ? `<p class="price-tag"><span class="lbl">Price at the shop</span><strong>${esc(p.price)}</strong>${te(p.priceTe, 'span', 'te')}</p>` : ''}
-      ${p.brands || p.sizes ? `<div class="stock-info">${p.brands ? `<div class="aka"><h2>Brands at the shop</h2><ul class="brand-list">${p.brands.map((b) => `<li><a href="/search/?q=${encodeURIComponent(b)}">${esc(b)}</a></li>`).join('')}</ul></div>` : ''}${p.sizes ? `<p class="sizes"><span>Pack sizes</span> ${esc(p.sizes)}</p>` : ''}</div>` : ''}
+      ${p.brands || p.sizes ? `<div class="stock-info">${p.brands ? `<div class="aka"><h2>Brands at the shop</h2><ul class="brand-list">${(() => { const bp = brandPhotos(p); return p.brands.map((b) => bp.byBrand[b] && bp.photos.length > 1
+        ? `<li><a class="has-photo" href="#g-${bp.byBrand[b].n}" data-g-go="${bp.byBrand[b].n - 1}"><img src="${thumb(bp.byBrand[b].ph)}" alt="" width="28" height="28" loading="lazy" decoding="async">${esc(b)}</a></li>`
+        : `<li><a href="/search/?q=${encodeURIComponent(b)}">${esc(b)}</a></li>`).join('') })()}</ul></div>` : ''}${p.sizes ? `<p class="sizes"><span>Pack sizes</span> ${esc(p.sizes)}</p>` : ''}</div>` : ''}
       ${p.aliases.length ? `<div class="aka"><h2>Also known as</h2><ul>${p.aliases.map((a) => `<li>${esc(a)}</li>`).join('')}</ul></div>` : ''}
       ${(() => {
         const fs = festivals.filter((f) => f.items.includes(p.slug) || (p.photo && f.items.includes(p.photo)))
@@ -830,36 +850,83 @@ await page('/contact/', {
 })
 
 // Search
-await page('/search/', {
-  title: 'Search the catalogue | Janardhan General Stores',
-  description: 'Search Janardhan General Stores’ Kirana and Puja Samagri catalogue in English or Telugu.',
-  current: 'search',
-  scripts: [SEARCH_JS],
-  noindex: true,
-  body: `<section class="page-hero plain"><div class="container">
+{
+  // Brands: each card shows that brand's own photo when one is marked in the editor, otherwise a lettered tile
+  // (never another brand's photo).
+  const shortName = (n) => n.replace(/\s*\(.*\)\s*$/, '')
+  const brandMap = new Map()
+  for (const p of products) {
+    const bp = brandPhotos(p)
+    for (const b of p.brands || []) {
+      const e = brandMap.get(b) || { name: b, items: [], photo: null }
+      if (!e.items.includes(shortName(p.name))) e.items.push(shortName(p.name))
+      if (!e.photo && bp.byBrand[b]) e.photo = thumb(bp.byBrand[b].ph)
+      brandMap.set(b, e)
+    }
+  }
+  const brandsSorted = [...brandMap.values()].sort((a, b) => a.name.localeCompare(b.name))
+  const MONO = ['#355b45', '#a34b32', '#70413b', '#4f6d4a', '#8d3f2b', '#2f5d62', '#6a4c93', '#b58a38']
+  const monoColor = (s) => MONO[[...s].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) >>> 0, 7) % MONO.length]
+  const initials = (s) => s.split(/[\s&]+/).filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join('')
+  const brandCard = (b) => `<li><a class="brand-card" href="/search/?q=${encodeURIComponent(b.name)}">
+      ${b.photo ? `<img src="${b.photo}" alt="" width="56" height="56" loading="lazy" decoding="async">` : `<span class="mono" style="--mc:${monoColor(b.name)}" aria-hidden="true">${esc(initials(b.name))}</span>`}
+      <span class="bc-t"><strong>${esc(b.name)}</strong><span>${esc(b.items.slice(0, 2).join(' · '))}${b.items.length > 2 ? ` +${b.items.length - 2}` : ''}</span></span></a></li>`
+  const POPULAR = [['Rice', 'బియ్యం'], ['Kandi pappu', 'కంది పప్పు'], ['Oil', 'నూనె'], ['Agarbatti', 'అగరబత్తి'], ['Karpuram', 'కర్పూరం'], ['Coconut', 'కొబ్బరికాయ'], ['Ghee', 'నెయ్యి'], ['Soap', 'సబ్బు'], ['Tea powder', 'టీ పొడి'], ['Pramidalu', 'ప్రమిదలు']]
+  const catTile = (c) => {
+    const cover = c.products[0]
+    return `<li><a class="sc-tile" href="${categoryUrl(c)}" data-theme="${theme(c.section)}"><img src="${thumb(cover.photo || cover.slug)}" alt="" width="64" height="64" loading="lazy" decoding="async">
+      <span class="ct-t"><strong>${esc(c.name)}</strong><span lang="te">${esc(c.te)}</span><small>${c.products.length} items</small></span></a></li>`
+  }
+  await page('/search/', {
+    title: 'Search the catalogue | Janardhan General Stores',
+    description: 'Search Janardhan General Stores’ Kirana and Puja Samagri catalogue in English or Telugu, by typing or by voice.',
+    current: 'search',
+    scripts: [SEARCH_JS],
+    noindex: true,
+    body: `<section class="search-hero"><div class="container">
   ${crumbs([['Home', '/'], ['Search', '/search/']])}
-  <h1>Search the catalogue</h1>${te('ఉత్పత్తుల కోసం వెతకండి', 'p', 'te')}
+  <h1>What are you looking for?</h1>${te('మీకు ఏమి కావాలి? టైప్ చేయండి లేదా మైక్ నొక్కి చెప్పండి', 'p', 'te')}
 </div></section>
-<section class="container section search-page" data-search-root data-index="${SEARCH_INDEX}">
-  ${searchForm('q-page')}
-  <div class="search-tools" data-search-tools hidden>
-    <div class="seg" role="group" aria-label="Filter by section">
-      <button type="button" data-section-filter="all">All</button>
-      <button type="button" data-section-filter="kirana">Kirana</button>
-      <button type="button" data-section-filter="puja-samagri">Puja Samagri</button>
+<section class="container search-page" data-search-root data-index="${SEARCH_INDEX}">
+  <div class="search-bar">
+    ${searchForm('q-page')}
+    <p class="voice-tip" data-voice-tip hidden>${icon('mic')}<span>Tap the mic and say the item’s name — in Telugu or English. <span lang="te">మైక్ నొక్కి వస్తువు పేరు చెప్పండి.</span></span></p>
+    <div class="search-tools" data-search-tools hidden>
+      <div class="seg" role="group" aria-label="Filter by section">
+        <button type="button" data-section-filter="all">All</button>
+        <button type="button" data-section-filter="kirana">Kirana</button>
+        <button type="button" data-section-filter="puja-samagri">Puja Samagri</button>
+      </div>
     </div>
   </div>
-  <div class="brand-filter"><h2>Brands at the shop</h2><ul class="chips">${[...new Set(products.flatMap((p) => p.brands || []))].sort().map((b) => `<li><a class="chip" href="/search/?q=${encodeURIComponent(b)}">${esc(b)}</a></li>`).join('')}</ul></div>
-  <p data-status aria-live="polite" style="color:var(--muted);margin-bottom:16px"></p>
+  <p class="search-status" data-status aria-live="polite"></p>
   <noscript><p>Search needs JavaScript. You can still browse <a href="/kirana/">Kirana</a> and <a href="/puja-samagri/">Puja Samagri</a> by category.</p></noscript>
+  <div class="brand-banner" data-brand-banner hidden></div>
   <ul class="product-grid" data-results></ul>
   <div class="empty" data-empty hidden>
     <p>No matching items in the online catalogue.</p>
     <p>The shop keeps many more items — <a href="${whatsappHref('Hello Janardhan General Stores, do you have this item?')}" target="_blank" rel="noopener">ask on WhatsApp</a> or <a href="${telHref}">call ${esc(shop.phoneDisplay)}</a>.</p>
-    <div class="suggest" style="justify-content:center">${['Rice', 'Kandi pappu', 'Agarbatti', 'కర్పూరం', 'Ghee', 'Diya'].map((s) => `<a class="chip" href="/search/?q=${encodeURIComponent(s)}">${esc(s)}</a>`).join('')}</div>
+    <div class="suggest" style="justify-content:center">${POPULAR.slice(0, 6).map(([s]) => `<a class="chip" href="/search/?q=${encodeURIComponent(s)}">${esc(s)}</a>`).join('')}</div>
+  </div>
+  <div class="search-browse" data-browse>
+    <section class="sb-block" aria-labelledby="sb-pop">
+      <h2 id="sb-pop">Popular searches</h2>
+      <ul class="pop-list">${POPULAR.map(([en, tel]) => `<li><a class="pop" href="/search/?q=${encodeURIComponent(en)}"><span>${esc(en)}</span><span lang="te">${esc(tel)}</span></a></li>`).join('')}</ul>
+    </section>
+    <section class="sb-block" aria-labelledby="sb-cat">
+      <h2 id="sb-cat">Browse by category</h2>
+      ${sections.map((s) => `<h3 class="sb-sec" data-theme="${theme(s.slug)}">${esc(s.name)} <span lang="te">${esc(s.te)}</span></h3>
+      <ul class="sc-tiles">${categoriesOf(s.slug).map(catTile).join('')}</ul>`).join('')}
+    </section>
+    <section class="sb-block" aria-labelledby="sb-brand">
+      <h2 id="sb-brand">Brands at the shop</h2>
+      <p class="sb-sub">Tap a brand to see which items we keep from it.</p>
+      <ul class="brand-cards">${brandsSorted.map(brandCard).join('')}</ul>
+    </section>
   </div>
 </section>`,
-})
+  })
+}
 
 // Image credits (one overall page; licences for Commons photos require author + licence + source)
 {

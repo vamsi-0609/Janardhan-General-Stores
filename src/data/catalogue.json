@@ -356,7 +356,10 @@
             "Priya",
             "Gold Drop"
           ],
-          "sizes": "1 litre packets · 15 litre cans"
+          "sizes": "1 litre packets · 15 litre cans",
+          "photoBrands": [
+            "Priya"
+          ]
         },
         {
           "slug": "sunflower-oil",
@@ -376,7 +379,10 @@
             "Priya",
             "Gold Drop"
           ],
-          "sizes": "1 litre packets · 15 litre cans"
+          "sizes": "1 litre packets · 15 litre cans",
+          "photoBrands": [
+            "Freedom"
+          ]
         },
         {
           "slug": "rice-bran-oil",
@@ -429,7 +435,10 @@
             "Priya",
             "Gold Drop"
           ],
-          "sizes": "1 litre packets · 15 litre cans"
+          "sizes": "1 litre packets · 15 litre cans",
+          "photoBrands": [
+            "Priya"
+          ]
         },
         {
           "slug": "mustard-oil",
@@ -920,7 +929,10 @@
             "Nescafe",
             "Continental"
           ],
-          "sizes": "Rs 2 Sachets - Half KG packets"
+          "sizes": "Rs 2 Sachets - Half KG packets",
+          "photoBrands": [
+            "Nescafe"
+          ]
         },
         {
           "slug": "soft-drinks",
@@ -1083,7 +1095,10 @@
             "Rin",
             "Ariel"
           ],
-          "sizes": "₹10 packets · 1 kg · 3 kg"
+          "sizes": "₹10 packets · 1 kg · 3 kg",
+          "photoBrands": [
+            "Tide"
+          ]
         },
         {
           "slug": "washing-bar",
@@ -1129,6 +1144,9 @@
           "q": "dishwashing liquid bottle",
           "brands": [
             "Vim"
+          ],
+          "photoBrands": [
+            "Vim"
           ]
         },
         {
@@ -1144,6 +1162,9 @@
           "desc": "Fragrant floor-cleaning liquid for mopping.",
           "q": "floor mop bucket cleaning",
           "brands": [
+            "Lizol"
+          ],
+          "photoBrands": [
             "Lizol"
           ]
         },
@@ -1249,6 +1270,9 @@
           "q": "insecticide spray",
           "brands": [
             "HIT"
+          ],
+          "photoBrands": [
+            "HIT"
           ]
         },
         {
@@ -1291,6 +1315,10 @@
             "Cinthol",
             "Mysore Sandal",
             "Santoor"
+          ],
+          "photoBrands": [
+            "Mysore Sandal",
+            "Cinthol"
           ]
         },
         {
@@ -1312,7 +1340,10 @@
             "Meera",
             "Karthika"
           ],
-          "sizes": "Sachets"
+          "sizes": "Sachets",
+          "photoBrands": [
+            "Clinic Plus"
+          ]
         },
         {
           "slug": "shikakai",
