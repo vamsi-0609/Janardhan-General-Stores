@@ -241,6 +241,7 @@
   function drawHome(bad) {
     const list = Object.entries(store).filter(([, r]) => r.count).sort(([, a], [, b]) => (b.seen || 0) - (a.seen || 0))
     root.innerHTML = `${bad ? '<p class="rp-bad">This reply link is not complete. Open it again from the customer’s WhatsApp message.</p>' : ''}
+      ${shopPhone() ? '' : `<div class="rp-pin"><p><strong>Shop’s own phone?</strong> Add <strong>🧾 Shop reply</strong> to this phone’s ☰ menu, so you can open this page from the app. Customers’ phones never show it.</p><button type="button" class="btn btn-primary" data-pin="on">📌 Show Shop reply in this phone’s menu</button></div>`}
       <div class="rp-head rp-paste">
         <h2>Open a customer’s list</h2>
         <ol class="rp-steps"><li>In WhatsApp, <strong>press and hold</strong> the customer’s list message → tap <strong>Copy</strong>.</li><li>Open this page. The list opens by itself. (First time: tap the green button and choose <strong>Allow</strong>.)</li></ol>
@@ -249,6 +250,8 @@
         <p class="rp-err" data-paste-err hidden>No shop code found. Copy the whole list message (it ends with “Shop code: …”) and try again.</p>
         <p class="rp-safe">🔒 Never tap links inside customer messages. Open lists only from here.</p>
       </div>
+      ${shopPhone() ? `<div class="rp-pin on"><p>✓ This phone shows <strong>🧾 Shop reply</strong> at the bottom of the ☰ menu.</p><button type="button" class="link-btn" data-pin="off">Remove it from this phone</button></div>`
+        : ''}
       <h3 class="rp-recent-h">Lists opened on this phone</h3>
       ${list.length ? `<ul class="rp-recent">${list.map(([c, r]) => `<li><a href="#${esc(c)}"><strong>${esc(r.name || 'Customer')}</strong><span>${r.phone ? `${esc(phoneText(r.phone))} · ` : ''}${r.count} item${r.count === 1 ? '' : 's'}${r.at ? ` · ${esc(when(r.at))}` : ''}</span>
         <em class="${r.sent ? 'ok' : 'wait'}">${r.sent ? '✓ Replied' : 'Not replied yet'}</em></a></li>`).join('')}</ul>` : '<p class="rp-empty">No lists yet.</p>'}`
@@ -261,6 +264,15 @@
     if (!m) { if (err) err.hidden = false; return }
     location.hash = m[1]
   }
+  // "Shop reply" in the ☰ menu: only on phones where the shop switched it on here (site.js reads this).
+  const PIN = 'jgs-shop-phone'
+  function shopPhone() { try { return localStorage.getItem(PIN) === '1' } catch { return false } }
+  root.addEventListener('click', (e) => {
+    const b = e.target.closest('[data-pin]')
+    if (!b) return
+    try { if (b.dataset.pin === 'on') localStorage.setItem(PIN, '1'); else localStorage.removeItem(PIN) } catch {}
+    location.reload()
+  })
   root.addEventListener('click', async (e) => {
     if (!e.target.closest('[data-paste]')) return
     try { const t = await navigator.clipboard.readText(); const m = String(t).match(/Shop code:\s*([A-Za-z0-9_-]{8,})/); if (m) { try { localStorage.setItem(AUTO, m[1]) } catch {} } openPasted(t) } catch { root.querySelector('[data-paste-box]')?.focus() }

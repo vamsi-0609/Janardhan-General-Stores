@@ -1418,3 +1418,9 @@ li.pc .card .size { margin-top: 6px; }
 .rp-err { color: #a3321f; font-weight: 700; }
 .rp-safe { font-size: .88rem; font-weight: 700; color: var(--forest); }
 .rp-recent-h { margin: 22px 2px 0; font-size: 1.05rem; }
+
+.menu-panel a.menu-shop { background: #e7f6ec; color: #1f6b41; font-weight: 800; }
+.rp-pin { margin-top: 14px; padding: 14px 16px; border-radius: 14px; background: #fff; border: 1px solid var(--line); display: grid; gap: 10px; }
+.rp-pin.on { background: #e7f6ec; border-color: #c7e6d1; }
+.rp-pin .btn { justify-self: start; }
+.rp-pin:not(.on) { margin: 0 0 14px; border: 2px solid #f0d27a; background: #fff8e1; }

@@ -20,6 +20,19 @@
 
   // 2. Mobile menu (<details>): close on Escape and on outside click.
   const menu = document.querySelector('details.menu')
+  // The shop's own phone (switched on once on /reply/): "Shop reply" at the bottom of the menu. Never on customers' phones.
+  let shopPhone = false
+  try { shopPhone = localStorage.getItem('jgs-shop-phone') === '1' } catch {}
+  if (shopPhone) {
+    const panel = document.querySelector('.menu-panel')
+    if (panel) {
+      const a = document.createElement('a')
+      a.href = '/reply/'
+      a.className = 'menu-shop'
+      a.innerHTML = '<span>🧾 Shop reply</span><span lang="te">షాప్ జవాబు</span>'
+      panel.append(a)
+    }
+  }
   if (menu) {
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && menu.open) {
