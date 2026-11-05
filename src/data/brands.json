@@ -158,7 +158,8 @@
     },
     {
       "id": "priya",
-      "name": "Priya"
+      "name": "Priya",
+      "logo": true
     },
     {
       "id": "priya-gold",
