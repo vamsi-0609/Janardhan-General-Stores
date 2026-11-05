@@ -199,6 +199,10 @@
     let slugTouched = !isNew
     f.slug.addEventListener('input', () => (slugTouched = true))
     f.name.addEventListener('input', () => { if (!slugTouched) f.slug.value = slugify(f.name.value) })
+    const alsoChecks = S.sections.map((sec) => h('div', { class: 'also-sec' }, h('p', { class: 'sd-h' }, sec.name),
+      h('div', { class: 'checks' }, S.categories.filter((c) => c.section === sec.slug).map((c) => h('label', { 'data-cat': c.slug }, h('input', { type: 'checkbox', value: c.slug, checked: (p.alsoIn || []).includes(c.slug) }), c.name)))))
+    const syncAlso = () => alsoChecks.forEach((d) => d.querySelectorAll('label').forEach((l) => { const own = l.dataset.cat === f.category.value; l.hidden = own; if (own) l.querySelector('input').checked = false }))
+    f.category.addEventListener('change', syncAlso); syncAlso()
     const festChecks = S.festivals.map((fe) => {
       const cb = h('input', { type: 'checkbox', value: fe.id, checked: !isNew && fe.items.includes(p.slug) })
       return h('label', {}, cb, `${fe.name}`)
@@ -279,6 +283,9 @@
           field('Category', f.category, 'Section (Kirana / Puja Samagri) comes from the category.', true),
           field('Web name (in the link)', f.slug, isNew ? 'Filled in from the English name. Small letters, numbers and dashes. Cannot be changed later.' : 'Cannot be changed.', true)),
         field('Description', f.desc, 'One or two short sentences shown on the product page.', true)),
+      h('fieldset', {}, h('legend', {}, 'Also show in (optional)'),
+        h('p', { class: 'hint' }, 'For items used both ways, e.g. Ghee (Kirana › Cooking Oils) also in Puja Samagri › Deepam & Oil. The item keeps one page, and it is also listed in the ticked categories and found by search in their section.'),
+        alsoChecks),
       h('fieldset', {}, h('legend', {}, 'Photos'), photoBox),
       h('fieldset', {}, h('legend', {}, 'Names people search for'),
         field('Also known as', f.aliases.el, 'Telugu-English spellings, local names, common misspellings. Used by the search box.')),
@@ -299,6 +306,7 @@
         slug: f.slug.value.trim(), name: f.name.value, te: f.te.value, desc: f.desc.value,
         aliases: f.aliases.get(), price: f.price.value, priceTe: f.priceTe.value,
         caution: f.caution.value, cautionTe: f.cautionTe.value, q: p.q, photo: p.photo,
+        alsoIn: alsoChecks.flatMap((d) => [...d.querySelectorAll('input:checked')].map((c) => c.value)),
       }
       const festivals = festChecks.map((l) => l.querySelector('input')).filter((c) => c.checked).map((c) => c.value)
       const r = await act(() => api('POST', '/api/product', { product, category: f.category.value, originalSlug: isNew ? null : p.slug, festivals }))

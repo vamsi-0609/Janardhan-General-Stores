@@ -77,6 +77,8 @@ function cleanProduct(input, { isNew }) {
   if (brands.length) p.brands = brands
   for (const k of ['sizes', 'price', 'priceTe', 'caution', 'cautionTe']) if (str(input[k])) p[k] = str(input[k])
   if (str(input.photo)) p.photo = str(input.photo, 80)
+  const alsoIn = strList(input.alsoIn)
+  if (alsoIn.length) p.alsoIn = alsoIn
   return p
 }
 
@@ -587,6 +589,7 @@ async function handle(req, res) {
     if (!isNew) must(p.slug === originalSlug, 'The web name of an existing product cannot be changed.')
     const target = cat.categories.find((c) => c.slug === category)
     must(target, 'Choose a category.')
+    if (p.alsoIn) { p.alsoIn = p.alsoIn.filter((s) => s !== category && cat.categories.some((c) => c.slug === s)); if (!p.alsoIn.length) delete p.alsoIn }
     const existing = allProducts(cat).find((x) => x.slug === p.slug)
     if (isNew) must(!existing, `A product with the web name "${p.slug}" already exists.`)
     else must(existing, 'Product not found.')
@@ -751,6 +754,8 @@ async function handle(req, res) {
     const own = (name) => name.startsWith('p--')
     if (req.method === 'DELETE' && !ms[2]) {
       data.products = data.products.filter((x) => x !== p)
+      // kits that held this size lose that item
+      for (const x of data.products) if (x.kit) { x.kit = x.kit.filter((k) => k.id !== p.id); if (!x.kit.length) delete x.kit }
       await writeJson(productsFile, data)
       for (const name of p.photos || []) if (own(name) && !data.products.some((x) => (x.photos || []).includes(name))) await deleteSet(name)
       scheduleBuild()

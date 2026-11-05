@@ -9,6 +9,8 @@
  *                  type:       { slug, name, te, aliases[], desc, q?, price?, priceTe?, caution?, cautionTe?, photo? }
  *                    q – words used by scripts/fetch-images.mjs to find a stock photo      photo – reuse another type's photos
  *                    price – a price NOTE for the whole type ("₹30 – ₹45, depending on size")
+ *                    alsoIn – other category slugs where the type is ALSO shown (e.g. Ghee also in Puja › Deepam & Oil).
+ *                             It keeps one page (in its own category); it is listed and searchable in the others too.
  * brands.json      brands:     [{ id, name, te? }]
  * products.json    products:   [{ id, type, brand?, name, te?, size, loose?, unit?, quick?[], price?, desc?, aliases?[], photos?[], off? }]
  *                    size  – "½ kg packet", "₹10 sachet", "Small" …    loose – bought loose by weight (from 250 g)
@@ -47,6 +49,14 @@ export const categories = data.categories
 /** Every visible TYPE (called "products" for historical reasons), with its category and section. */
 export const products = categories.flatMap((c) => c.products.map((p) => ({ ...p, category: c.slug, section: c.section })))
 
+/** Types from other categories that are also shown in this one (alsoIn). */
+export function extrasOf(catSlug) {
+  return products.filter((t) => t.category !== catSlug && (t.alsoIn || []).includes(catSlug))
+}
+/** Every section a type is shown in: its own, plus those of its alsoIn categories. */
+export function sectionsOfType(t) {
+  return [...new Set([t.section, ...(t.alsoIn || []).map((s) => categories.find((c) => c.slug === s)?.section).filter(Boolean)])]
+}
 export function sectionOf(slug) {
   return sections.find((s) => s.slug === slug)
 }

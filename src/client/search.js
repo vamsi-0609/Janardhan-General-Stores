@@ -156,7 +156,7 @@
     if (!raw.length) return []
     // Short words are matched exactly; longer ones in the loose (spelling-tolerant) form.
     const terms = raw.map((w) => (w.length <= 2 || loose(w).length < 3 ? { t: w, short: true } : { t: loose(w), short: false })).filter((x) => x.t)
-    const pool = section === 'all' ? index : index.filter((i) => i.sec === section)
+    const pool = section === 'all' ? index : index.filter((i) => i.sec === section || (i.secs && i.secs.includes(section)))
     const out = []
     for (const item of pool) {
       let total = 0

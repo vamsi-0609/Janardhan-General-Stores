@@ -10,7 +10,7 @@ import { createHash } from 'node:crypto'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { shop, telHref, mailHref, whatsappHref } from '../src/data/shop.mjs'
-import { sections, categories, products, categoriesOf, sectionOf, categoryOf, skus, skusOf, skuById, brandById, allTypeSlugs } from '../src/data/catalogue.mjs'
+import { sections, categories, products, categoriesOf, sectionOf, categoryOf, extrasOf, sectionsOfType, skus, skusOf, skuById, brandById, allTypeSlugs } from '../src/data/catalogue.mjs'
 import { festivals } from '../src/data/festivals.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
@@ -248,7 +248,7 @@ const searchIndex = []
 for (const t of products) {
   const c = categoryOf(t.category)
   const ls = linesOf(t.slug)
-  const common = { c: c.name, ct: c.te, s: sectionLabelShort(t.section), sec: t.section }
+  const common = { c: c.name, ct: c.te, s: sectionLabelShort(t.section), sec: t.section, ...(sectionsOfType(t).length > 1 ? { secs: sectionsOfType(t) } : {}) }
   if (ls.length > 1) searchIndex.push({ k: 't', n: t.name, t: t.te, a: [...(t.aliases || [])], b: [...new Set(skusOf(t.slug).map((x) => x.brandName).filter(Boolean))], ...common, u: productUrl(t), i: thumb(t.photo || t.slug), cnt: ls.length })
   for (const line of ls) {
     const p = firstIn(line), main = lineMain(line)
@@ -715,7 +715,8 @@ ${askStrip(`Hello Janardhan General Stores, I am looking for a ${s.name} item.`)
 }
 
 // Category pages
-for (const c of categories) {
+for (const c0 of categories) {
+  const c = { ...c0, products: [...c0.products.map((p) => ({ ...p, category: c0.slug, section: c0.section })), ...extrasOf(c0.slug)] }
   const s = sectionOf(c.section)
   const siblings = categoriesOf(c.section)
   await page(categoryUrl(c), {
@@ -735,9 +736,9 @@ for (const c of categories) {
 <nav class="container chip-row" aria-label="${esc(s.name)} categories">
   <details class="cat-switch">
     <summary>Browse other ${esc(s.name)} categories <span class="n">(${siblings.length})</span></summary>
-    <ul class="chips">${siblings.map((x) => `<li><a class="chip" href="${categoryUrl(x)}"${x.slug === c.slug ? ' aria-current="page"' : ''}>${esc(x.name)} <span class="n">${x.products.length}</span></a></li>`).join('')}</ul>
+    <ul class="chips">${siblings.map((x) => `<li><a class="chip" href="${categoryUrl(x)}"${x.slug === c.slug ? ' aria-current="page"' : ''}>${esc(x.name)} <span class="n">${x.products.length + extrasOf(x.slug).length}</span></a></li>`).join('')}</ul>
   </details>
-  <ul class="chips chips-wide">${siblings.map((x) => `<li><a class="chip" href="${categoryUrl(x)}"${x.slug === c.slug ? ' aria-current="page"' : ''}>${esc(x.name)} <span class="n">${x.products.length}</span></a></li>`).join('')}</ul>
+  <ul class="chips chips-wide">${siblings.map((x) => `<li><a class="chip" href="${categoryUrl(x)}"${x.slug === c.slug ? ' aria-current="page"' : ''}>${esc(x.name)} <span class="n">${x.products.length + extrasOf(x.slug).length}</span></a></li>`).join('')}</ul>
 </nav>
 <section class="container section" aria-label="${esc(c.name)} items" style="padding-top:20px">
   <div class="filter">

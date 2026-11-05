@@ -185,7 +185,8 @@ for (const [q, min] of searches) {
 const all = await searchCount('oil')
 const kir = await searchCount('oil', 'kirana')
 const puj = await searchCount('oil', 'puja-samagri')
-if (!(kir > 0 && puj > 0 && kir + puj === all)) fail('search', `section filter inconsistent: all=${all} kirana=${kir} puja=${puj}`)
+// items shown in both sections ("Also show in") are counted in each
+if (!(kir > 0 && puj > 0 && kir + puj >= all && Math.max(kir, puj) <= all)) fail('search', `section filter inconsistent: all=${all} kirana=${kir} puja=${puj}`)
 else console.log(`  search "oil" all=${all} kirana=${kir} puja=${puj}`)
 // Brand searches open THAT brand's product (with its own photo, never another brand's)
 const skuList = JSON.parse(readFileSync(join(root, 'src', 'data', 'products.json'), 'utf8')).products
