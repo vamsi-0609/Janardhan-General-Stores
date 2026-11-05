@@ -277,7 +277,13 @@
     },
     {
       "id": "lizol",
-      "name": "Lizol"
+      "name": "Lizol",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "maggi",
