@@ -676,7 +676,7 @@ ${(() => {
   if (!withLogo.length) return ''
   // One row of logos that moves slowly by itself (CSS). The set is repeated so the row is always full, then the whole
   // row is doubled so the loop is seamless; only the first set is read out / reachable by keyboard.
-  const item = ([id, name], hidden) => '<li' + (hidden ? ' aria-hidden="true"' : '') + '><a href="/search/?q=' + encodeURIComponent(name) + '" title="' + esc(name) + '"' + (hidden ? ' tabindex="-1"' : '') + '><img src="' + brandLogo(id) + '" alt="' + (hidden ? '' : esc(name)) + '" loading="lazy" decoding="async"></a></li>'
+  const item = ([id, name], hidden) => '<li' + (hidden ? ' aria-hidden="true"' : '') + '><a href="/search/?q=' + encodeURIComponent(name) + '" title="' + esc(name) + '"' + (hidden ? ' tabindex="-1"' : '') + '><img src="' + brandLogo(id) + '" alt="' + (hidden ? '' : esc(name)) + '" loading="eager" decoding="async" width="120" height="60"></a></li>'
   const reps = Math.max(1, Math.ceil(10 / withLogo.length))
   const set = Array.from({ length: reps }, (_, k) => withLogo.map((b) => item(b, k > 0))).flat().join('')
   const copy = Array.from({ length: reps }, () => withLogo.map((b) => item(b, true))).flat().join('')
