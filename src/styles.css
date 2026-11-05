@@ -1509,3 +1509,26 @@ button.bl-item strong { text-decoration: underline; text-decoration-color: #c9cf
 .fest-days li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; font-size: .95rem; line-height: 1.35; opacity: .95; }
 .fest-days b { font-weight: 800; white-space: nowrap; }
 .fest-days b + span::before { content: '·'; margin-right: 10px; opacity: .7; }
+
+/* ── Cards: size pill always at the bottom, so pills line up across a row ── */
+.card .body { display: flex; flex-direction: column; flex: 1 1 auto; }
+.card .body .size, li.pc .card .body .size { margin-top: auto; align-self: flex-start; }
+.card .body > .te { margin-bottom: 6px; }
+
+/* ── Festival countdown (tap "In 2 days") ── */
+button.fest-pill { border: 0; font-family: var(--font-body); font-size: inherit; cursor: default; }
+button.fest-pill:disabled { opacity: 1; }
+.fest-pill.has-timer { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; box-shadow: 0 0 0 0 rgb(255 255 255 / 0%); transition: box-shadow .2s; }
+.fest-pill.has-timer:hover, .fest-pill.has-timer[aria-expanded='true'] { box-shadow: 0 0 0 3px rgb(255 255 255 / 35%); }
+.fest-pill .fp-ic { font-size: .95em; }
+.fest-count { max-width: 380px; margin: 0 0 14px; padding: 12px 12px 14px; border-radius: 18px; background: rgb(0 0 0 / 24%); border: 1px solid rgb(255 255 255 / 22%); box-shadow: inset 0 1px 0 rgb(255 255 255 / 12%); animation: fc-in .25s ease; }
+.fest-count[hidden] { display: none; }
+.fc-h { margin: 0 0 10px; font-weight: 700; font-size: .92rem; }
+.fc-h [lang='te'] { font-weight: 500; opacity: .85; }
+.fc-boxes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.fc-box { display: grid; justify-items: center; gap: 1px; padding: 10px 4px 8px; border-radius: 14px; background: rgb(255 255 255 / 14%); border: 1px solid rgb(255 255 255 / 20%); }
+.fc-box b { font: 800 clamp(1.5rem, 6vw, 1.9rem)/1 var(--font-body); font-variant-numeric: tabular-nums; letter-spacing: .01em; }
+.fc-box small { font-size: .68rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; opacity: .9; margin-top: 4px; }
+.fc-box small[lang='te'] { margin-top: 0; font-size: .66rem; letter-spacing: 0; text-transform: none; font-weight: 500; opacity: .8; }
+@keyframes fc-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .fest-count { animation: none; } }

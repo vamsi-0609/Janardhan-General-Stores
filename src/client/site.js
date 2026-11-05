@@ -72,6 +72,7 @@
       if (!isDay) {
         const n = dayDiff(today, start)
         when.textContent = n === 1 ? 'Tomorrow' : n <= 60 ? `In ${n} days` : 'Coming up'
+        if (!q) countdown(active, when, start)
       } else {
         const i = days.findIndex((d) => d.d === today)
         const d = days[i]
@@ -90,6 +91,38 @@
       note.textContent = `Preview mode: showing the page as on ${new Date(q + 'T00:00:00Z').toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })}. Remove “?fest-date=…” from the address to see today.`
       ;(active || fests[0]).before(note)
     }
+  }
+
+  // 3b. Festival countdown: tapping "In 2 days" opens a live timer (days · hours · minutes · seconds) until the
+  //     festival starts (midnight, India time, of its first day). Ticks only while it is open.
+  function countdown(fest, pill, start) {
+    const panel = fest.querySelector('[data-fest-count]')
+    if (!panel) return
+    const target = Date.parse(start + 'T00:00:00+05:30')
+    if (!(target > Date.now())) return
+    const name = fest.getAttribute('aria-label') || 'The festival'
+    pill.disabled = false
+    pill.classList.add('has-timer')
+    pill.innerHTML = `<span>${pill.textContent}</span><span class="fp-ic" aria-hidden="true">⏱</span>`
+    pill.setAttribute('aria-controls', panel.id = `${fest.id || 'fest'}-count`)
+    const units = [['Days', 'రోజులు'], ['Hours', 'గంటలు'], ['Mins', 'నిమిషాలు'], ['Secs', 'సెకన్లు']]
+    panel.innerHTML = `<p class="fc-h">${name.replace(/[<>&]/g, '')} begins in <span lang="te">ఇంకా</span></p>
+      <div class="fc-boxes">${units.map(([en, te]) => `<span class="fc-box"><b>0</b><small>${en}</small><small lang="te">${te}</small></span>`).join('')}</div>`
+    const boxes = [...panel.querySelectorAll('b')]
+    let timer = 0
+    const tick = () => {
+      const s = Math.max(0, Math.floor((target - Date.now()) / 1000))
+      const v = [Math.floor(s / 86400), Math.floor((s % 86400) / 3600), Math.floor((s % 3600) / 60), s % 60]
+      boxes.forEach((b, i) => (b.textContent = i ? String(v[i]).padStart(2, '0') : String(v[i])))
+      if (!s) clearInterval(timer)
+    }
+    pill.addEventListener('click', () => {
+      const open = panel.hidden
+      panel.hidden = !open
+      pill.setAttribute('aria-expanded', String(open))
+      clearInterval(timer)
+      if (open) { tick(); timer = setInterval(tick, 1000) }
+    })
   }
 
   // 4. Product photo gallery: swipe (native scroll-snap) + arrows, dots/thumbnails and keyboard.

@@ -585,7 +585,8 @@ function festBlock(f, days, { id, hidden = true, onPage = false } = {}) {
   ${festDecor(f)}
   <div class="container fest-inner">
     <div class="fest-copy">
-      <p class="fest-kicker"><span class="fest-pill" data-fest-when>${days ? 'Coming up' : 'Festival'}</span></p>
+      <p class="fest-kicker"><button type="button" class="fest-pill" data-fest-when aria-expanded="false" disabled>${days ? 'Coming up' : 'Festival'}</button></p>
+      <div class="fest-count" data-fest-count hidden></div>
       <ul class="fest-days">${dateText}</ul>
       <div data-phase="before"><h2>${esc(f.before.title)}</h2>${te(f.before.titleTe, 'p', 'te fest-te')}<p class="fest-text">${esc(f.before.text)}</p></div>
       <div data-phase="day" hidden><h2 data-fest-title>${esc(f.day.title)}</h2>${te(f.day.titleTe, 'p', 'te fest-te')}<p class="fest-text">${esc(f.day.text)}</p></div>
