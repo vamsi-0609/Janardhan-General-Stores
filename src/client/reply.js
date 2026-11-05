@@ -291,7 +291,7 @@
       : `<tr class="${isNo(l.key) ? 'bp-no' : ''}"><td>${k + 1}</td><td>${name(l.id)}${l.note ? `<br><small>Note: ${esc(l.note)}</small>` : ''}</td><td>${esc(qtyOf(l.id, l.amt))}</td>${cell(l)}</tr>`).join('')
     const miss = missing().length
     root.innerHTML = `<div class="bp bp-screen">
-      <header class="bp-head"><img src="/brand/logo-mark.webp" alt="" width="72" height="72"><h1>${esc(shop.name)}</h1><p>${esc(shop.address)}</p><p>Phone / WhatsApp: ${esc(shop.phone)}</p></header>
+      <header class="bp-head"><img src="/brand/emblem.webp" alt="" width="72" height="72"><h1>${esc(shop.name)}</h1><p>${esc(shop.address)}</p><p>Phone / WhatsApp: ${esc(shop.phone)}</p></header>
       <h2 class="bp-title">Bill</h2>
       <table class="bp-info"><tr><td>Customer: <strong>${esc(data.n || '—')}</strong></td><td>Date: <strong>${esc(when(rec.sent))}</strong></td></tr>
         <tr><td>Phone: <strong>${esc(phoneText(data.p) || '—')}</strong></td><td>${pickupText() ? `Pickup: <strong>${esc(pickupText().replace(/ \(.*\)$/, ''))}</strong>` : ''}</td></tr></table>
@@ -340,7 +340,7 @@
   const loadImg = (src) => new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src })
   async function makePdf() {
     await document.fonts?.ready
-    const logo = await loadImg('/brand/logo-mark.webp').catch(() => null)
+    const logo = await loadImg('/brand/emblem.jpg').catch(() => null)
     const W = 1240, H = 1754, P = 70, S = 1.5 // A5 (148 × 210 mm) at about 210 dpi, drawn 1.5× as sharp
     const body = getComputedStyle(document.body).fontFamily || 'sans-serif'
     const head = getComputedStyle(document.querySelector('h1') || document.body).fontFamily || body

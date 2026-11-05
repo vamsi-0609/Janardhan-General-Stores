@@ -53,7 +53,7 @@ A kit is a product with a `kit` list of other products and amounts (edit it in t
 
 ### Shop QR poster and app (PWA)
 
-* **About page → Shop QR code:** a printable poster (one A4 page via *Print poster*) and a *Download QR image* button. The QR (logo in the middle, error correction H) is `public/brand/qr-site.svg` / `.png`. App icons are in `public/icons/`. Both are made by `npm run brand-assets` and committed. Re-run it only if the logo or web address changes (`QR_URL=… npm run brand-assets`).
+* **About page → Shop QR code:** a printable poster (one A4 page via *Print poster*) and a *Download QR image* button. The QR (logo in the middle, error correction H) is `public/brand/qr-shop.svg` / `.png`. App icons are in `public/icons/`. Both are made by `npm run brand-assets` and committed. Re-run it only if the logo or web address changes (`QR_URL=… npm run brand-assets`).
 * **App:** the site can be installed on Android, iPhone and Windows/Mac. See *About → Janardhan Stores app*, the footer link *Get the app*, or the browser's own install option. The build writes `dist/site.webmanifest` and `dist/sw.js`. Pages are network first, so customers always see the latest catalogue when online and saved copies when offline. Photos, CSS and JS are cache first. A page never opened before shows `/offline/` when there's no internet. Each publish creates a new service worker version, so installed apps update automatically.
 
 ### Using your own shop photos (recommended)

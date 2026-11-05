@@ -3,9 +3,9 @@
  *   npm run brand-assets
  * The results are committed in public/, so the normal build needs nothing extra.
  *
- *   public/brand/qr-site.svg  — branded QR (logo in the middle) shown on the About page poster
- *   public/brand/qr-site.png  — 1200 px copy of the same QR, for "Download QR" / WhatsApp / printing elsewhere
- *   public/icons/*.png        — app icons (normal + "maskable" for Android round/squircle icons)
+ *   public/brand/qr-shop.svg  — branded QR (logo in the middle) shown on the About page poster
+ *   public/brand/qr-shop.png  — 1200 px copy of the same QR, for "Download QR" / WhatsApp / printing elsewhere
+ *   public/icons/app-*.png    — app icons (normal + "maskable" for Android round/squircle icons)
  *
  * Fast scanning: error correction H (30 %), short upper-case address (QR alphanumeric mode → only 29×29 modules),
  * very dark modules on white, a 4-module quiet zone, and the logo covers under 6 % of the code.
@@ -18,7 +18,7 @@ import QRCode from 'qrcode'
 import sharp from 'sharp'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
-const LOGO = join(root, 'brand-source', 'janardhan-logo-original.jpg')
+const LOGO = join(root, 'brand-source', 'janardhan-emblem-kalash.png')
 // Upper case keeps the code small (alphanumeric mode). Phones open it as https://shop.myconnect.sbs/
 const URL_TEXT = (process.env.QR_URL || 'HTTPS://SHOP.MYCONNECT.SBS/').toUpperCase()
 
@@ -73,8 +73,8 @@ const logoJpg = await sharp(LOGO).resize(240, 240).jpeg({ quality: 82, mozjpeg: 
 const logoData = `data:image/jpeg;base64,${logoJpg.toString('base64')}`
 await mkdir(join(root, 'public', 'brand'), { recursive: true })
 const svg = await qrSvg(logoData)
-await writeFile(join(root, 'public', 'brand', 'qr-site.svg'), svg)
-await sharp(Buffer.from(svg), { density: 600 }).resize(1200, 1200).png({ palette: true, quality: 95, compressionLevel: 9 }).toFile(join(root, 'public', 'brand', 'qr-site.png'))
+await writeFile(join(root, 'public', 'brand', 'qr-shop.svg'), svg)
+await sharp(Buffer.from(svg), { density: 600 }).resize(1200, 1200).png({ palette: true, quality: 95, compressionLevel: 9 }).toFile(join(root, 'public', 'brand', 'qr-shop.png'))
 console.log(`QR: "${URL_TEXT}" → version ${qr.version} (${n}×${n} modules), error correction H`)
 
 // ── App icons ──
@@ -82,11 +82,20 @@ const iconsDir = join(root, 'public', 'icons')
 await mkdir(iconsDir, { recursive: true })
 for (const size of [192, 512]) {
   // "any": the round logo as-is.
-  await sharp(LOGO).resize(size, size).png({ palette: true, quality: 90 }).toFile(join(iconsDir, `icon-${size}.png`))
+  await sharp(LOGO).resize(size, size).png({ palette: true, quality: 90 }).toFile(join(iconsDir, `app-${size}.png`))
   // "maskable": logo inside Android's 80 % safe circle on the logo's own dark background.
   const inner = Math.round(size * 0.78)
   const logo = await sharp(LOGO).resize(inner, inner).png().toBuffer()
-  await sharp({ create: { width: size, height: size, channels: 3, background: '#2a0e0b' } })
-    .composite([{ input: logo, gravity: 'centre' }]).png({ palette: true, quality: 90 }).toFile(join(iconsDir, `maskable-${size}.png`))
+  await sharp({ create: { width: size, height: size, channels: 3, background: '#240203' } })
+    .composite([{ input: logo, gravity: 'centre' }]).png({ palette: true, quality: 90 }).toFile(join(iconsDir, `app-maskable-${size}.png`))
 }
-console.log('Icons: public/icons/icon-{192,512}.png, maskable-{192,512}.png')
+console.log('Icons: public/icons/app-{192,512}.png, app-maskable-{192,512}.png')
+
+// ── Logo files used by the site (new names whenever the logo changes, so browsers never show an old copy) ──
+//   brand/emblem.webp  192 px: header, footer, bill page     brand/emblem.jpg  512 px: sharing preview, PDF bill
+//   favicon-k.png 64 px (browser tab)     apple-touch-icon.png 180 px (iPhone home screen)
+await sharp(LOGO).resize(192, 192).webp({ quality: 88 }).toFile(join(root, 'public', 'brand', 'emblem.webp'))
+await sharp(LOGO).resize(512, 512).jpeg({ quality: 88, mozjpeg: true }).toFile(join(root, 'public', 'brand', 'emblem.jpg'))
+await sharp(LOGO).resize(64, 64).png().toFile(join(root, 'public', 'favicon-k.png'))
+await sharp(LOGO).resize(180, 180).png().toFile(join(root, 'public', 'apple-touch-icon.png'))
+console.log('Logo: public/brand/emblem.webp, emblem.jpg, favicon-k.png, apple-touch-icon.png')

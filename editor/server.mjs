@@ -547,7 +547,7 @@ async function handle(req, res) {
     if (fi) { const file = join(festImgDir, `${fi[1]}.webp`); return existsSync(file) ? send(res, 200, await readFile(file), TYPES['.webp']) : send(res, 404, 'Not found', 'text/plain') }
     const bl = path.match(/^\/brandlogo\/([a-z0-9-]+)\.webp$/)
     if (bl) { const file = join(brandImgDir, `${bl[1]}.webp`); return existsSync(file) ? send(res, 200, await readFile(file), TYPES['.webp']) : send(res, 404, 'Not found', 'text/plain') }
-    if (path === '/logo.webp') return send(res, 200, await readFile(join(root, 'public', 'brand', 'logo-mark.webp')), TYPES['.webp'])
+    if (path === '/logo.webp') return send(res, 200, await readFile(join(root, 'public', 'brand', 'emblem.webp')), TYPES['.webp'])
     // Original photo for the crop window (upright, optionally rotated, max 1400 px).
     const ms = path.match(/^\/photo\/source\/([a-z0-9_-]+)$/)
     if (ms) {

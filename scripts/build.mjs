@@ -281,8 +281,8 @@ const storeLd = {
   alternateName: [shop.name, shop.fullNameTe],
   description: 'Local Kirana and Puja Samagri store on Main Road, near Sathya Show Room, Rajampet, Andhra Pradesh.',
   url: `${SITE}/`,
-  logo: `${SITE}/brand/logo.jpg`,
-  image: `${SITE}/brand/logo.jpg`,
+  logo: `${SITE}/brand/emblem.jpg`,
+  image: `${SITE}/brand/emblem.jpg`,
   telephone: shop.phoneE164,
   email: shop.email,
   address: {
@@ -334,7 +334,7 @@ function header(current) {
 <header class="site-header">
   <div class="container header-row">
     <a class="brand" href="/" aria-label="${esc(shop.fullName)} — home">
-      <img src="/brand/logo-mark.webp" alt="" width="48" height="48">
+      <img src="/brand/emblem.webp" alt="" width="48" height="48">
       <span class="brand-text"><span class="brand-name">Janardhan</span><span class="brand-sub">General Stores &amp; Puja Samagri</span></span>
     </a>
     <div class="header-search">${searchForm('q-desktop')}</div>
@@ -375,7 +375,7 @@ function footer() {
   <div class="container footer-grid">
     <div>
       <div class="foot-brand">
-        <img src="/brand/logo-mark.webp" alt="${esc(shop.fullName)} logo" width="64" height="64" loading="lazy">
+        <img src="/brand/emblem.webp" alt="${esc(shop.fullName)} logo" width="64" height="64" loading="lazy">
         <div class="brand-text"><span class="brand-name">Janardhan</span><span class="brand-sub">General Stores &amp; Puja Samagri</span>${te(shop.fullNameTe, 'span', 'brand-te')}</div>
       </div>
       <address>${shop.address.lines.map(esc).join('<br>')}</address>
@@ -421,7 +421,7 @@ function footer() {
 
 async function page(path, { title, description, current = '', themeName = 'kirana', body, jsonld = [], scripts = [], ogImage, noindex = false, file }) {
   const url = `${SITE}${path}`
-  const og = ogImage ? `${SITE}${ogImage}` : `${SITE}/brand/logo.jpg`
+  const og = ogImage ? `${SITE}${ogImage}` : `${SITE}/brand/emblem.jpg`
   const html = `<!doctype html>
 <html lang="en" data-open="${shop.hours.open}" data-close="${shop.hours.close}" data-search-index="${SEARCH_INDEX}">
 <head>
@@ -431,7 +431,7 @@ async function page(path, { title, description, current = '', themeName = 'kiran
 <meta name="description" content="${esc(description)}">
 ${noindex ? '<meta name="robots" content="noindex">' : `<link rel="canonical" href="${url}">`}
 <meta name="theme-color" content="#3a1512">
-<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="icon" type="image/png" href="/favicon-k.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <meta name="mobile-web-app-capable" content="yes">
@@ -953,7 +953,7 @@ await page('/about/', {
   <div class="poster-wrap">
     <article class="poster" aria-label="Printable shop poster with QR code">
       <header class="poster-top">
-        <img src="/brand/logo.jpg" alt="" width="96" height="96" loading="lazy">
+        <img src="/brand/emblem.jpg" alt="" width="96" height="96" loading="lazy">
         <p class="poster-name">Janardhan</p>
         <p class="poster-sub">General Stores &amp; Puja Samagri</p>
         ${te(shop.fullNameTe, 'p', 'poster-te')}
@@ -961,7 +961,7 @@ await page('/about/', {
       <div class="poster-body">
         <p class="poster-cta">Scan to see all our items</p>
         ${te('మా అన్ని వస్తువులు చూడటానికి స్కాన్ చేయండి', 'p', 'poster-cta-te')}
-        <div class="poster-qr"><img src="/brand/qr-site.svg" alt="QR code that opens shop.myconnect.sbs" width="320" height="320"></div>
+        <div class="poster-qr"><img src="/brand/qr-shop.svg" alt="QR code that opens shop.myconnect.sbs" width="320" height="320"></div>
         <p class="poster-url">shop.myconnect.sbs</p>
         <ul class="poster-facts">
           <li>${icon('phone')}<span>Call / WhatsApp <strong>${esc(shop.phoneDisplay)}</strong></span></li>
@@ -973,14 +973,14 @@ await page('/about/', {
     </article>
     <div class="poster-actions">
       <button class="btn btn-primary" type="button" data-print-poster hidden>${icon('print')}Print poster (A4)</button>
-      <a class="btn btn-light" href="/brand/qr-site.png" download="janardhan-general-stores-qr.png">Download QR image</a>
+      <a class="btn btn-light" href="/brand/qr-shop.png" download="janardhan-general-stores-qr.png">Download QR image</a>
       <p>The poster prints on one A4 page. Keep the QR at least 3 cm wide so phones read it at a glance.</p>
     </div>
   </div>
 </section>
 <section class="container section" id="app">
   <div class="install-card">
-    <img src="/icons/icon-192.png" alt="" width="72" height="72" loading="lazy">
+    <img src="/icons/app-192.png" alt="" width="72" height="72" loading="lazy">
     <div>
       <h2>Janardhan Stores app ${te('యాప్')}</h2>
       <p>Add this catalogue to your phone or computer like an app. It opens in one tap from your home screen, opens instantly and works even with weak or no internet for pages you have opened before. There’s nothing to download from a store.</p>
@@ -1296,16 +1296,16 @@ await writeFile(join(dist, 'site.webmanifest'), JSON.stringify({
   theme_color: '#3a1512',
   categories: ['shopping', 'food', 'lifestyle'],
   icons: [
-    { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
-    { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
-    { src: '/icons/maskable-192.png', sizes: '192x192', type: 'image/png', purpose: 'maskable' },
-    { src: '/icons/maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+    { src: '/icons/app-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+    { src: '/icons/app-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+    { src: '/icons/app-maskable-192.png', sizes: '192x192', type: 'image/png', purpose: 'maskable' },
+    { src: '/icons/app-maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
   ],
   shortcuts: [
-    { name: 'Kirana', short_name: 'Kirana', url: '/kirana/', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
-    { name: 'Puja Samagri', short_name: 'Puja', url: '/puja-samagri/', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
-    { name: 'Search items', short_name: 'Search', url: '/search/', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
-    { name: 'Visit & directions', short_name: 'Visit', url: '/visit/', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
+    { name: 'Kirana', short_name: 'Kirana', url: '/kirana/', icons: [{ src: '/icons/app-192.png', sizes: '192x192' }] },
+    { name: 'Puja Samagri', short_name: 'Puja', url: '/puja-samagri/', icons: [{ src: '/icons/app-192.png', sizes: '192x192' }] },
+    { name: 'Search items', short_name: 'Search', url: '/search/', icons: [{ src: '/icons/app-192.png', sizes: '192x192' }] },
+    { name: 'Visit & directions', short_name: 'Visit', url: '/visit/', icons: [{ src: '/icons/app-192.png', sizes: '192x192' }] },
   ],
 }, null, 2))
 
@@ -1313,7 +1313,7 @@ await writeFile(join(dist, 'site.webmanifest'), JSON.stringify({
 // hashed CSS/JS/photos/fonts = cache first (they never change under the same name). A new build = a new version,
 // and old caches are deleted.
 const PRECACHE = ['/', '/offline/', '/list/', '/reply/', REPLY_JS, '/about/', '/visit/', '/contact/', '/kirana/', '/puja-samagri/', '/search/', CSS, SITE_JS, SEARCH_JS, LIST_JS, SEARCH_INDEX,
-  '/brand/logo-mark.webp', '/fonts/fraunces-latin.woff2', '/fonts/noto-sans-telugu.woff2', '/icons/icon-192.png']
+  '/brand/emblem.webp', '/fonts/fraunces-latin.woff2', '/fonts/noto-sans-telugu.woff2', '/icons/app-192.png']
 const htmlHash = hash(sitemap.join('|') + (await readFile(join(dist, 'index.html'), 'utf8')))
 const SW_VERSION = hash(PRECACHE.join('|') + htmlHash)
 await writeFile(join(dist, 'sw.js'), `// Janardhan General Stores — service worker (generated by scripts/build.mjs; do not edit dist/sw.js).
