@@ -1038,6 +1038,7 @@ await page('/bill/', {
   noindex: true,
   scripts: [REPLY_JS],
   body: `<section class="container section reply-section" style="padding-top:18px">
+  <h1 class="visually-hidden">Your bill</h1>
   <div data-reply-page data-view="bill" data-shop-name="${esc(shop.fullName)}" data-shop-address="${esc(shop.address.lines.join(', '))}" data-shop-phone="${esc(shop.phoneDisplay)}"><p class="list-loading">Loading your bill…</p></div>
   <noscript><p>This page needs JavaScript.</p></noscript>
 </section>`,
