@@ -137,7 +137,7 @@ for (const w of WIDTHS) {
       const broken = [...document.images].filter((i) => !i.naturalWidth).map((i) => i.currentSrc || i.src)
       const overflowX = document.documentElement.scrollWidth - window.innerWidth
       const clipped = [...document.querySelectorAll('.cat-tile .en, .cat-tile .te, .chip, .card .en, .card .te, .btn, .nav-bar a, .brand-name, h1, h2')]
-        .filter((el) => el.offsetParent && getComputedStyle(el).webkitLineClamp === 'none' && getComputedStyle(el).textOverflow !== 'ellipsis' && (el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 2)) // names cut short on purpose (3 lines, or one line with …) are fine
+        .filter((el) => el.offsetParent && !el.closest('.visually-hidden') && getComputedStyle(el).webkitLineClamp === 'none' && getComputedStyle(el).textOverflow !== 'ellipsis' && (el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 2)) // names cut short on purpose (3 lines, or one line with …) are fine
         .map((el) => el.textContent.trim().slice(0, 40))
       const offscreen = [...document.querySelectorAll('main *, header *')].filter((el) => {
         if (!el.offsetParent) return false
