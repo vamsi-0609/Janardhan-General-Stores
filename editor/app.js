@@ -605,7 +605,7 @@
 
     // ── one size: loose settings, count word, quick amounts, description, names, photos, kit contents ──
     function details(r) {
-      const G = [25, 50, 100, 250, 500, 1000]
+      const G = [10, 25, 50, 100, 250, 500, 1000]
       const loose = h('input', { type: 'checkbox', checked: r.loose })
       const min = h('select', {}, G.map((g) => h('option', { value: g, selected: g === r.min }, fmtG(g))))
       const stp = h('select', {}, G.map((g) => h('option', { value: g, selected: g === r.step }, fmtG(g))))
@@ -622,7 +622,7 @@
       return h('div', { class: 'size-details' },
         h('div', { class: 'sd-col' },
           h('label', { class: 'check-line' }, loose, h('span', {}, h('strong', {}, 'Sold loose by weight'), ' — customers choose how much')),
-          r.loose ? h('div', {}, h('div', { class: 'grid2' }, field('Starts from', min, 'Smallest amount.'), field('Each + adds', stp, '25 g for costly items, 250 g for dals, rice, chillies.')), prev) : '',
+          r.loose ? h('div', {}, h('div', { class: 'grid2' }, field('Starts from', min, 'Smallest amount.'), field('Each + adds', stp, '10 g or 25 g for costly items, 250 g for dals, rice, chillies.')), prev) : '',
           !r.loose ? field('Counted in (when there is no size)', unit, 'Used in the WhatsApp list, e.g. “3 bars”, “2 sets”.') : '',
           !r.loose ? field('Quick amounts (optional)', quickIn, 'Buttons customers can tap, e.g. 5, 10, 25 for diyas.') : '',
           field('Description of this size (optional)', desc, 'Shown on this size’s page instead of the product description.'),
@@ -1272,7 +1272,7 @@
       h('h2', {}, 'Loose items (rice, dals, spices sold by weight)'),
       h('ul', { class: 'guide' },
         h('li', {}, 'Open ', s('More ▾'), ' on the size and tick ', s('Sold loose by weight'), '. Then choose ', s('Starts from'), ' (smallest amount) and ', s('Each + adds'), ' (the step).'),
-        h('li', {}, 'Examples: dals, rice, dry chillies → starts 250 g, + adds 250 g. Cardamom, cloves, kaju → starts 25 g, + adds 25 g.'),
+        h('li', {}, 'Examples: dals, rice, dry chillies → starts 250 g, + adds 250 g. Cardamom, cloves, kaju → starts 25 g, + adds 25 g. Very costly items (e.g. pista, japathri) → starts 10 g, + adds 10 g.'),
         h('li', {}, 'Customers can also type an amount (e.g. 7 kg). It is rounded to your steps.')),
       h('h2', {}, 'Types and brands'),
       h('ul', { class: 'guide' },

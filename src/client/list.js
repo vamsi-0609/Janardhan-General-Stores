@@ -46,7 +46,7 @@
   const shortName = (n) => n.replace(/\s*\(.*\)\s*$/, '')
   function defaultAmt(v) {
     const q = (v.q || []).filter((x) => x > 0)
-    if (v.w) { const qq = quickOf(v); return stepOf(v) < 250 ? qq[1] || minOf(v) : Math.max(minOf(v), qq.includes(1000) ? 1000 : qq[0]) }
+    if (v.w) { const qq = quickOf(v); if (minOf(v) < 25) return minOf(v); return stepOf(v) < 250 ? qq[1] || minOf(v) : Math.max(minOf(v), qq.includes(1000) ? 1000 : qq[0]) }
     return q.length ? q[0] : 1
   }
   const amtText = (v, amt) => (v.w ? fmtW(amt) : v.l ? `${amt}` : `${amt} ${plural(v.un || 'item', amt)}`)

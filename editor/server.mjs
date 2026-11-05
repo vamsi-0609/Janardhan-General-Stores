@@ -100,8 +100,8 @@ function cleanSku(input, prev, types, brandIds) {
   // loose: starts from `min` grams, then fixed steps of `step` grams (defaults 250 / 250)
   if (p.loose) {
     const m = Number(input.min), st = Number(input.step)
-    if ([25, 50, 100, 500, 1000].includes(m)) p.min = m
-    if ([25, 50, 100, 250, 500, 1000].includes(st) && st !== ((p.min || 250) < 250 ? 25 : 250)) p.step = st
+    if ([10, 25, 50, 100, 500, 1000].includes(m)) p.min = m
+    if ([10, 25, 50, 100, 250, 500, 1000].includes(st) && st !== ((p.min || 250) < 250 ? 25 : 250)) p.step = st
     else if ((p.min || 250) < 250) p.step = 25
   }
   const quick = (Array.isArray(input.quick) ? input.quick : prev?.quick || []).map((x) => Math.round(Number(x))).filter((x) => Number.isFinite(x) && x > 0 && x <= 100000)
