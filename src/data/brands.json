@@ -213,6 +213,21 @@
       "logo": true
     },
     {
+      "id": "harpic",
+      "name": "Harpic",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": {
+          "x": 0,
+          "y": 0,
+          "w": 0.9557275541795666,
+          "h": 0.9860608552631579
+        },
+        "clean": true
+      }
+    },
+    {
       "id": "head-shoulders",
       "name": "Head & Shoulders",
       "logo": true,
@@ -224,7 +239,13 @@
     },
     {
       "id": "hit",
-      "name": "HIT"
+      "name": "HIT",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "india-gate",

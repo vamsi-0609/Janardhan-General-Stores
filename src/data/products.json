@@ -1646,6 +1646,7 @@
     {
       "id": "washing-bar-soap",
       "type": "washing-bar",
+      "brand": "rin",
       "name": "Washing Bar Soap (Battala Sabbu)",
       "size": "",
       "unit": "bar",
@@ -1753,6 +1754,7 @@
     {
       "id": "toilet-cleaner-small-bottle",
       "type": "toilet-cleaner",
+      "brand": "harpic",
       "name": "Toilet Cleaner",
       "size": "Small bottle",
       "photos": [
@@ -1762,6 +1764,7 @@
     {
       "id": "toilet-cleaner-medium-bottle",
       "type": "toilet-cleaner",
+      "brand": "harpic",
       "name": "Toilet Cleaner",
       "size": "Medium bottle",
       "photos": [
@@ -1771,6 +1774,7 @@
     {
       "id": "toilet-cleaner-big-bottle",
       "type": "toilet-cleaner",
+      "brand": "harpic",
       "name": "Toilet Cleaner",
       "size": "Big bottle",
       "photos": [
@@ -1780,6 +1784,7 @@
     {
       "id": "bathroom-cleaner-small-bottle",
       "type": "bathroom-cleaner",
+      "brand": "harpic",
       "name": "Bathroom Cleaner",
       "size": "Small bottle",
       "photos": [
@@ -1789,6 +1794,7 @@
     {
       "id": "bathroom-cleaner-medium-bottle",
       "type": "bathroom-cleaner",
+      "brand": "harpic",
       "name": "Bathroom Cleaner",
       "size": "Medium bottle",
       "photos": [
@@ -1798,6 +1804,7 @@
     {
       "id": "bathroom-cleaner-big-bottle",
       "type": "bathroom-cleaner",
+      "brand": "harpic",
       "name": "Bathroom Cleaner",
       "size": "Big bottle",
       "photos": [
@@ -1817,7 +1824,8 @@
     {
       "id": "broom",
       "type": "broom",
-      "name": "Broom",
+      "name": "Coconut Fiber Broom Stick",
+      "te": "టెంకాయ పుల్లల పొరక",
       "size": "",
       "unit": "piece",
       "photos": [
