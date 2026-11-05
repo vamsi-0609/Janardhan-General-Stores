@@ -1494,3 +1494,12 @@ button.bl-item strong { text-decoration: underline; text-decoration-color: #c9cf
 .pk-slot input:disabled + .pk-row { opacity: .5; cursor: not-allowed; }
 .pk-slot input:disabled + .pk-row .pk-time { color: #a3321f; }
 .pk-sum { margin: 10px 0 2px; padding: 8px 12px; border-radius: 12px; background: #e7f6ec; color: #1f6b41; font-weight: 600; }
+.bp-contact { display: grid; gap: 8px; margin-top: 4px; padding-top: 14px; border-top: 1px solid var(--line); }
+.bp-contact p { font-weight: 700; }
+.bp-contact p [lang='te'] { font-weight: 500; color: var(--muted); }
+.bp-contact-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.bp-contact-btns .btn { min-height: 50px; justify-content: center; text-align: center; font-size: .95rem; padding: 8px 10px; }
+@media (max-width: 360px) { .bp-contact-btns { grid-template-columns: 1fr; } }
+.rp-actions { min-width: 0; }
+.bp-contact-btns { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+@media (max-width: 480px) { .bp-contact-btns { grid-template-columns: minmax(0, 1fr); } }

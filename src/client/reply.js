@@ -300,7 +300,13 @@
       <div class="bp-note">${noteLines().map(([k, t]) => `<p class="${k}"${k === 'te' ? ' lang="te"' : ''}>${esc(t)}</p>`).join('')}</div>
       <p class="bp-thanks">Thank you! · ధన్యవాదాలు!</p></div>
       <div class="rp-actions"><button type="button" class="btn btn-primary" data-pdf>⬇ Download PDF bill</button>
-        <p class="hint">Questions about the bill? Call or WhatsApp the shop: ${esc(shop.phone)}.</p></div>`
+        <div class="bp-contact">
+          <p>Questions about the bill? <span lang="te">సందేహాలు ఉంటే:</span></p>
+          <div class="bp-contact-btns">
+            <a class="btn btn-light" href="tel:+91${esc(shop.phone.replace(/\D/g, ''))}">📞 Call ${esc(shop.phone)}</a>
+            <a class="btn btn-wa" href="https://wa.me/91${esc(shop.phone.replace(/\D/g, ''))}?text=${encodeURIComponent(`Hello Janardhan General Stores, I have a question about my bill (${data.n || ''}).`)}" target="_blank" rel="noopener">💬 WhatsApp ${esc(shop.phone)}</a>
+          </div>
+        </div></div>`
     root.querySelector('[data-pdf]').addEventListener('click', async () => savePdf(await makePdf()))
   }
 
