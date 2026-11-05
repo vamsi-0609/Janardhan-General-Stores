@@ -219,7 +219,7 @@ function lineCard(line, { eager = false, showCat = false } = {}) {
 /** One size in the "Other sizes" row. */
 function sizeCard(line, p) {
   const main = skuMain(p) || lineMain(line)
-  return '<li class="pc vc' + (p.off ? ' is-off' : '') + '"><a class="card" href="' + skuUrl(p) + '"><div class="ph">' + (main ? '<img src="' + thumb(main) + '" alt="' + esc(p.name + ' ' + sizeText(p)) + '" width="320" height="320" loading="lazy" decoding="async">' : tileHtml(p)) + (p.off ? '<span class="oos-pill">Out of stock</span>' : '') + '</div>' +
+  return '<li class="pc vc' + (p.off ? ' is-off' : '') + '"><a class="card" data-replace href="' + skuUrl(p) + '"><div class="ph">' + (main ? '<img src="' + thumb(main) + '" alt="' + esc(p.name + ' ' + sizeText(p)) + '" width="320" height="320" loading="lazy" decoding="async">' : tileHtml(p)) + (p.off ? '<span class="oos-pill">Out of stock</span>' : '') + '</div>' +
     '<div class="body">' + brandK(p) + '<span class="vc-l">' + esc(sizeText(p)) + '</span><span class="te">' + esc(p.name) + '</span></div></a>' +
     '<div class="buy" ' + buyAttr(line, p.id) + '><p class="b-price">' + esc(p.price || '') + '</p>' + addBtn('Add ' + p.name + ' ' + sizeText(p) + ' to my list', p.off) + '</div></li>'
 }
@@ -574,16 +574,19 @@ function festBlock(f, days, { id, hidden = true, onPage = false } = {}) {
     const named = f.season ? days.slice(1, -1) : days
     const daysAttr = JSON.stringify(named.map(([d, en, tel, title]) => ({ d, en, te: tel, ...(title ? { title } : {}) })))
     attrs = ` data-fest data-from="${addDays(start, -f.lead)}" data-start="${start}" data-end="${end}"${f.season ? ' data-season' : ''} data-days="${esc(daysAttr)}"`
-    dateText = `${esc(f.name)} · ${esc(festDateLine(f, days, onPage))}`
+    // one tidy row per day: "Sat, 7 Nov · Naraka Chaturdashi" (a range for seasons and long festivals)
+    const rows = f.season || days.length > 3 ? [[`${fmtDay(start, onPage)} – ${fmtDay(end, onPage)}`, f.name]] : days.map(([d, en]) => [fmtDay(d, onPage), days.length > 1 ? en : f.name])
+    dateText = rows.map(([d, en]) => `<li><b>${esc(d)}</b><span>${esc(en)}</span></li>`).join('')
   } else {
     attrs = ' data-fest-fallback'
-    dateText = `${esc(f.name)} · dates for the next ${f.season ? 'season' : 'festival'} will be added soon`
+    dateText = `<li><span>${esc(f.name)} · dates for the next ${f.season ? 'season' : 'festival'} will be added soon</span></li>`
   }
   return `<section class="fest ${look.cls}${onPage ? ' fest-page' : ''}" id="${id}" aria-label="${esc(f.name)}"${attrs} style="${look.style}"${hidden ? ' hidden' : ''}>
   ${festDecor(f)}
   <div class="container fest-inner">
     <div class="fest-copy">
-      <p class="fest-kicker"><span class="fest-pill" data-fest-when>${days ? 'Coming up' : 'Festival'}</span><span class="fest-date">${dateText}</span></p>
+      <p class="fest-kicker"><span class="fest-pill" data-fest-when>${days ? 'Coming up' : 'Festival'}</span></p>
+      <ul class="fest-days">${dateText}</ul>
       <div data-phase="before"><h2>${esc(f.before.title)}</h2>${te(f.before.titleTe, 'p', 'te fest-te')}<p class="fest-text">${esc(f.before.text)}</p></div>
       <div data-phase="day" hidden><h2 data-fest-title>${esc(f.day.title)}</h2>${te(f.day.titleTe, 'p', 'te fest-te')}<p class="fest-text">${esc(f.day.text)}</p></div>
       <div class="fest-actions">
@@ -830,7 +833,7 @@ for (const t of products) {
         (line.length > 1
           ? '<p class="bb-h">Size <span lang="te">సైజు</span></p><div class="v-chips" role="list">' + line.map((x) => (x === p
             ? '<span class="v-chip" role="listitem" aria-current="true"><span>' + esc(sizeText(x)) + '</span>' + (x.price ? '<small>' + esc(x.price) + '</small>' : '') + '</span>'
-            : '<a class="v-chip' + (x.off ? ' is-off' : '') + '" role="listitem" href="' + skuUrl(x) + '"><span>' + esc(sizeText(x)) + '</span>' + (x.price ? '<small>' + esc(x.price) + '</small>' : '') + '</a>')).join('') + '</div>'
+            : '<a class="v-chip' + (x.off ? ' is-off' : '') + '" role="listitem" data-replace href="' + skuUrl(x) + '"><span>' + esc(sizeText(x)) + '</span>' + (x.price ? '<small>' + esc(x.price) + '</small>' : '') + '</a>')).join('') + '</div>'
           : size ? '<p class="bb-h">Size <span lang="te">సైజు</span></p><p class="bb-size">' + esc(size) + '</p>' : '') +
         '<p class="bb-price" data-price>' + esc(p.price || '') + '</p>' +
         (!p.price && t.price ? '<p class="price-tag"><span class="lbl">Price at the shop</span><strong>' + esc(t.price) + '</strong></p>' : '') +

@@ -181,6 +181,15 @@
     chipGroup(brandBox, 'data-brand-chip', (v) => (brand = v))
   }
 
+  // 4b. Switching between sizes of the same product (size buttons, "Other sizes" row) replaces the page instead of
+  //     adding a new one, so Back always returns to where the customer came from in one step.
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[data-replace]')
+    if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
+    e.preventDefault()
+    location.replace(a.href)
+  })
+
   // 5a. Sort on category and type pages: shop order (default), name, price. Items without a price go last.
   const sortSel = document.querySelector('[data-sort]')
   const grid = document.querySelector('.product-grid')
