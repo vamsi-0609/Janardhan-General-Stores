@@ -34,7 +34,7 @@
     if (!res.ok) throw new Error(data.error || `Error ${res.status}`)
     return data
   }
-  async function load() { S = await api('GET', '/api/state'); renderStatus(S.build, S.changes) }
+  async function load() { S = await api('GET', '/api/state'); renderStatus(S.build, S.changes); paintSwitch() }
 
   let toastTimer
   function toast(msg, isErr) {
@@ -1355,6 +1355,31 @@
     if (info.running || info.live === 'deploying') poll()
   }
   $('#publish').addEventListener('click', openPublish)
+
+  // ───────── Website ON / OFF switch (top bar) ─────────
+  function paintSwitch() {
+    const siteSwitch = $('#site-switch')
+    if (!siteSwitch || !S) return
+    const on = S.online !== false
+    siteSwitch.setAttribute('aria-checked', String(on))
+    siteSwitch.classList.toggle('off', !on)
+    siteSwitch.querySelector('.ss-label').textContent = on ? 'Website ON' : 'Website OFF'
+    siteSwitch.title = on ? 'The website is open for customers. Click to turn it off.' : 'The website shows “Not available right now”. Click to turn it on.'
+  }
+  $('#site-switch')?.addEventListener('click', async () => {
+    const on = S.online !== false
+    const pending = S.changes || 0
+    const ask = on
+      ? 'Turn the website OFF?\n\nCustomers will see only “Not available right now” until you turn it on again. It takes 1–2 minutes.'
+      : 'Turn the website back ON?\n\nThe full website comes back for customers in 1–2 minutes.'
+    if (!confirm(ask + (pending ? `\n\nYour ${pending} unpublished change(s) will also be published.` : ''))) return
+    if (await act(() => api('POST', '/api/site-online', { online: !on }))) {
+      S.online = !on
+      paintSwitch()
+      openPublish() // shows the progress until it is live
+    }
+  })
+
 
   // ───────── HELP ─────────
   function renderHelp() {

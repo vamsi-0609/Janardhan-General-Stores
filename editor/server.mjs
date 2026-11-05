@@ -33,6 +33,7 @@ const catalogueFile = join(dataDir, 'catalogue.json')
 const festivalsFile = join(dataDir, 'festivals.json')
 const brandsFile = join(dataDir, 'brands.json')
 const productsFile = join(dataDir, 'products.json')
+const siteFile = join(dataDir, 'site.json') // { online: true | false } — the website on/off switch
 const editorDir = join(root, 'editor')
 const festImgDir = join(root, 'public', 'img', 'festivals')
 const brandImgDir = join(root, 'public', 'img', 'brands')
@@ -390,6 +391,7 @@ async function changeSummary() {
   }
   if (files.some((f) => f.path === 'src/data/products.json')) lines.push('Products (sizes, prices, photos) changed')
   if (files.some((f) => f.path === 'src/data/brands.json')) lines.push('Brands changed')
+  if (files.some((f) => f.path === 'src/data/site.json')) lines.push((await readJson(siteFile).catch(() => ({}))).online === false ? 'Website switched OFF (shows “Not available right now”)' : 'Website switched ON')
   const photos = count(/^public\/img\/products\/(?!thumb\/)/)
   if (photos) lines.push(`${photos} product photo(s) added, changed or removed`)
   if (count(/^public\/img\/festivals\//)) lines.push('Festival banner photo(s) changed')
@@ -617,7 +619,8 @@ async function state() {
     const st = await stat(join(outDir, name + '.webp')).catch(() => null)
     photoMeta[name] = { hasSource: srcFiles.has(name), crop: crops[name] || null, v: st ? Math.round(st.mtimeMs) : 0 }
   }
-  return { ...cat, festivals: fest.festivals, brands, skus, photoMeta, festImages, photos, build, changes: await gitChanges(), previewPort: PREVIEW_PORT }
+  const online = (await readJson(siteFile).catch(() => ({ online: true }))).online !== false
+  return { ...cat, online, festivals: fest.festivals, brands, skus, photoMeta, festImages, photos, build, changes: await gitChanges(), previewPort: PREVIEW_PORT }
 }
 
 async function handle(req, res) {
@@ -672,6 +675,14 @@ async function handle(req, res) {
   if (req.method === 'POST' && path === '/api/rebuild') { runBuild(); return send(res, 200, { ok: true }) }
 
   // Publish
+  // Website on/off switch: save the setting and publish straight away.
+  if (req.method === 'POST' && path === '/api/site-online') {
+    must(!publish.running, 'Publishing is already in progress. Try again in a minute.')
+    const { online } = await json(req)
+    await writeJson(siteFile, { online: !!online })
+    doPublish(online ? 'Website switched ON' : 'Website switched OFF')
+    return send(res, 200, { ok: true })
+  }
   if (req.method === 'POST' && path === '/api/publish') {
     must(!publish.running, 'Publishing is already in progress.')
     const { note } = await json(req)

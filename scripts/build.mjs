@@ -98,6 +98,33 @@ for (const slug of new Set(missingPhoto)) {
   await cp(join(root, 'public', 'img', 'placeholder.webp'), join(dist, thumbPath(slug)))
 }
 
+// ───────────────────────── website switched OFF (editor's top-bar switch) ─────────────────────────
+// src/data/site.json { "online": false } → every address shows one plain "Not available right now" page and the app's
+// saved pages are cleared. Switching it on again brings the full site back.
+const siteCfg = JSON.parse(await readFile(join(root, 'src/data/site.json'), 'utf8').catch(() => '{"online":true}'))
+if (siteCfg.online === false) {
+  const closedCss = `html,body{height:100%;margin:0}body{display:grid;place-items:center;background:#fff;color:#444;font:600 1.15rem/1.4 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;text-align:center}`
+  await writeFile(join(dist, 'closed.css'), closedCss)
+  const closedHtml = `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Not available right now</title><meta name="robots" content="noindex"><link rel="stylesheet" href="/closed.css"></head>
+<body><p>Not available right now</p></body></html>
+`
+  await writeFile(join(dist, 'index.html'), closedHtml)
+  await writeFile(join(dist, '404.html'), closedHtml)
+  // installed app: remove saved pages and stop working offline, so it shows the closed page too
+  await writeFile(join(dist, 'sw.js'), `// Website switched off: clear saved pages and remove this service worker.
+self.addEventListener('install', () => self.skipWaiting())
+self.addEventListener('activate', (e) => e.waitUntil((async () => {
+  for (const k of await caches.keys()) await caches.delete(k)
+  await self.registration.unregister()
+  for (const c of await self.clients.matchAll({ type: 'window' })) c.navigate(c.url)
+})()))
+`)
+  console.log('Website is switched OFF: built only the "Not available right now" page → dist/')
+  process.exit(0)
+}
+
 async function asset(src, ext) {
   const body = await readFile(join(root, src), 'utf8')
   const name = `/assets/${src.split('/').pop().replace(/\.\w+$/, '')}.${hash(body)}.${ext}`
