@@ -122,6 +122,7 @@
   // ───────── drawer ─────────
   function openDrawer(title, body, foot, guard) {
     const d = $('#drawer')
+    d.classList.remove('narrow')
     d.replaceChildren(
       h('div', { class: 'drawer-head' }, h('h2', { id: 'drawer-title' }, title), h('button', { class: 'icon-btn', type: 'button', 'aria-label': 'Close', onclick: () => closeDrawer() }, '✕')),
       h('div', { class: 'drawer-body' }, body),
@@ -808,12 +809,13 @@
       if (fl && await act(() => api('POST', `/api/brand/${b.id}/logo`, undefined, fl), 'Logo saved ✓')) { await load(); closeDrawer(true); render(); editBrand(b.id) }
     })
     const removeLogo = async () => { if (confirm('Remove this logo?') && await act(() => api('DELETE', `/api/brand/${b.id}/logo`), 'Logo removed')) { await load(); closeDrawer(true); render(); editBrand(b.id) } }
-    const logoBox = isNew ? h('p', { class: 'hint' }, 'Save the brand first, then you can add its logo (optional).') : h('div', { class: 'logo-edit' },
-      b.logo ? h('div', { class: 'logo-prev' }, h('img', { src: brandLogoUrl(b), alt: `${b.name} logo` })) : h('div', { class: 'logo-prev empty' }, 'No logo'),
-      h('div', { class: 'vtools' }, h('label', { class: 'btn' }, b.logo ? 'Change logo' : '＋ Add logo', logoFile),
-        b.logo ? h('button', { type: 'button', class: 'btn', onclick: () => { closeDrawer(true); openLogoEditor(b) } }, '✂ Crop / rotate / background') : '',
-        b.logo ? h('button', { type: 'button', class: 'btn danger', onclick: removeLogo }, 'Remove logo') : ''),
-      h('p', { class: 'hint' }, 'Optional. Any picture of the logo works (PNG, JPG, a photo). A plain white or grey background is removed automatically. Use ✂ to choose exactly which part to keep.'))
+    const logoBox = isNew ? h('p', { class: 'hint' }, 'Save the brand first, then you can add its logo (optional).') : h('div', { class: 'logo-row' },
+      h('div', { class: 'logo-frame' + (b.logo ? '' : ' empty') }, b.logo ? h('img', { src: brandLogoUrl(b), alt: `${b.name} logo` }) : h('span', {}, 'No logo yet')),
+      h('div', { class: 'logo-side' },
+        h('label', { class: 'btn' + (b.logo ? '' : ' primary') }, b.logo ? '⇪ Change logo' : '＋ Add logo', logoFile),
+        b.logo ? h('button', { type: 'button', class: 'btn', onclick: () => { closeDrawer(true); openLogoEditor(b) } }, '✂ Crop · rotate · background') : '',
+        b.logo ? h('button', { type: 'button', class: 'btn danger', onclick: removeLogo }, '🗑 Remove logo') : ''),
+      h('p', { class: 'hint logo-hint' }, 'Optional. Any picture of the logo works (PNG, JPG or a photo). A plain white or grey background is removed automatically. Use ✂ to choose exactly which part to keep.'))
     const save = async () => { if (await act(() => api('POST', '/api/brand', { brand: { id: b.id, name: f.name.value, te: f.te.value }, originalId: isNew ? null : b.id }), 'Saved ✓')) { await load(); closeDrawer(true); render() } }
     const del = async () => { if (!confirm(`Delete the brand “${b.name}”?`)) return; if (await act(() => api('DELETE', `/api/brand/${b.id}`), 'Brand deleted')) { await load(); closeDrawer(true); render() } }
     openDrawer(isNew ? 'Add a brand' : `Edit brand: ${b.name}`, h('form', { id: 'bform', onsubmit: (e) => { e.preventDefault(); save() } },
@@ -824,6 +826,7 @@
       h('span', { class: 'spacer' }),
       !isNew ? h('button', { class: 'btn danger', type: 'button', onclick: del, disabled: used > 0, title: used ? 'Change or delete its products first' : '' }, 'Delete brand') : '',
     ])
+    $('#drawer').classList.add('narrow')
   }
 
   // ───────── LOGO EDITOR: choose the part to keep, rotate, remove the plain background ─────────
