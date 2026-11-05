@@ -472,8 +472,8 @@
     }
     lines.push('', `Name: ${state.name.trim()}`, `Phone: ${mobile(state.phone) || state.phone.trim()}`, `Pickup at the shop: ${pickupText()}`, '', 'Please confirm which items are available.')
     if (state.askPrice) lines.push('Please also tell me the estimated total price for these items.')
-    // No link here on purpose: the shop never taps links in customer messages. It copies the message into its own reply page.
-    lines.push('', `Shop code: ${replyCode()}`)
+    // The shop taps this link: on its phone it opens inside the installed Janardhan app (a changed link would not).
+    lines.push('', '— For the shop (tap to reply) —', `${location.origin}/reply/#${replyCode()}`)
     return lines.join('\n')
   }
   // The shop pastes the message into its reply page (/reply/) to mark ✓ Have / ✗ No and send a bill. The list travels in the code.
