@@ -108,6 +108,7 @@ const CSS = await asset('src/styles.css', 'css')
 const SITE_JS = await asset('src/client/site.js', 'js')
 const SEARCH_JS = await asset('src/client/search.js', 'js')
 const LIST_JS = await asset('src/client/list.js', 'js')
+const REPLY_JS = await asset('src/client/reply.js', 'js')
 
 // ───────────────────────── product photo galleries ─────────────────────────
 // Main photo: img/products/<slug>.webp. Extra photos: <slug>-2.webp, <slug>-3.webp … (from shop-photos/).
@@ -1013,6 +1014,22 @@ await page('/list/', {
 </section>`,
 })
 
+// Shop reply page: opened by the shop from the link at the bottom of a customer's WhatsApp list.
+await page('/reply/', {
+  title: 'Reply to a list | Janardhan General Stores',
+  description: 'For the shop: mark which items of a customer list are available and send the reply on WhatsApp.',
+  current: '',
+  noindex: true,
+  scripts: [REPLY_JS],
+  body: `<section class="page-hero plain"><div class="container">
+  <h1>Reply to a customer’s list</h1>${te('కస్టమర్ జాబితాకు జవాబు', 'p', 'te')}
+</div></section>
+<section class="container section reply-section">
+  <div data-reply-page><p class="list-loading">Loading the list…</p></div>
+  <noscript><p>This page needs JavaScript.</p></noscript>
+</section>`,
+})
+
 // Offline fallback (shown by the app/service worker when a page that was never opened is requested without internet)
 await page('/offline/', {
   title: 'You are offline | Janardhan General Stores',
@@ -1281,7 +1298,7 @@ await writeFile(join(dist, 'site.webmanifest'), JSON.stringify({
 // Service worker: pages = network first (always the latest catalogue when online, saved copy when offline or slow),
 // hashed CSS/JS/photos/fonts = cache first (they never change under the same name). A new build = a new version,
 // and old caches are deleted.
-const PRECACHE = ['/', '/offline/', '/list/', '/about/', '/visit/', '/contact/', '/kirana/', '/puja-samagri/', '/search/', CSS, SITE_JS, SEARCH_JS, LIST_JS, SEARCH_INDEX,
+const PRECACHE = ['/', '/offline/', '/list/', '/reply/', REPLY_JS, '/about/', '/visit/', '/contact/', '/kirana/', '/puja-samagri/', '/search/', CSS, SITE_JS, SEARCH_JS, LIST_JS, SEARCH_INDEX,
   '/brand/logo-mark.webp', '/fonts/fraunces-latin.woff2', '/fonts/noto-sans-telugu.woff2', '/icons/icon-192.png']
 const htmlHash = hash(sitemap.join('|') + (await readFile(join(dist, 'index.html'), 'utf8')))
 const SW_VERSION = hash(PRECACHE.join('|') + htmlHash)

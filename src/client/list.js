@@ -163,7 +163,7 @@
     document.querySelectorAll('[data-list-count]').forEach((el) => { el.textContent = n; el.hidden = !n })
     document.querySelectorAll('[data-buy]').forEach(drawBlock)
     kitPanels.forEach((p) => p.draw())
-    if (!page) drawBar(n)
+    if (!page && !document.querySelector('[data-reply-page]')) drawBar(n) // not on the shop's reply page
   }
 
   document.addEventListener('change', (ev) => {
@@ -470,7 +470,38 @@
     }
     lines.push('', `Name: ${state.name.trim()}`, `Pickup at the shop: ${pickupText()}`, '', 'Please confirm which items are available.')
     if (state.askPrice) lines.push('Please also tell me the estimated total price for these items.')
+    lines.push('', '— For the shop: tap to reply —', replyLink())
     return lines.join('\n')
+  }
+  // The shop taps this link to mark ✓ Have / ✗ No and send a ready-made reply (/reply/). The list travels in the #part.
+  //   { n: name, d: day, s: slot, a: asked for total, t: minutes since 1970, i: [[size id, amount, note] | [kit size id, kits, [[size id, amount]…], note]] }
+  // Compressed when the browser can (about half as long); the plain form is always correct as a fallback.
+  const b64u = (bytes) => { let bin = ''; for (const b of bytes) bin += String.fromCharCode(b); return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '') }
+  function replyJson(t) {
+    const i = state.items.map((e) => {
+      const x = e.kit ? [e.v, e.amt, e.kit.map((k) => [k.v, k.amt])] : [e.v, e.amt]
+      if (e.note) x.push(e.note)
+      return x
+    })
+    return JSON.stringify({ n: state.name.trim().slice(0, 40), d: state.day, s: state.slot, a: state.askPrice ? 1 : 0, t, i })
+  }
+  let zLink = { key: '', url: '' }
+  async function packLink() {
+    const t = Math.round(Date.now() / 60000)
+    const key = replyJson(0)
+    if (key === zLink.key || !('CompressionStream' in window)) return
+    try {
+      const stream = new Blob([replyJson(t)]).stream().pipeThrough(new CompressionStream('deflate-raw'))
+      const bytes = new Uint8Array(await new Response(stream).arrayBuffer())
+      zLink = { key, url: `${location.origin}/reply/#z${b64u(bytes)}` }
+      const pv = page && page.querySelector('[data-preview]')
+      if (pv) pv.textContent = message()
+    } catch {}
+  }
+  function replyLink() {
+    if (zLink.key === replyJson(0)) return zLink.url
+    packLink()
+    return `${location.origin}/reply/#${b64u(new TextEncoder().encode(replyJson(Math.round(Date.now() / 60000))))}`
   }
   // "Repeat my last list": the list is remembered when it is sent on WhatsApp.
   const LAST = 'jgs-last-v1'
