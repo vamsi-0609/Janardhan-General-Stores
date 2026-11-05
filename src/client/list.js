@@ -15,7 +15,9 @@
   const MIN_G = 250 // loose items start here unless the product says otherwise (v.m, e.g. 25 g for cardamom)
 
   // ───────── storage ─────────
-  const blank = () => ({ items: [], name: '', day: '', slot: '', askPrice: true })
+  const blank = () => ({ items: [], name: '', phone: '', day: '', slot: '', askPrice: true })
+  /** Indian mobile number: 10 digits starting 6–9 (a leading +91 / 91 / 0 is removed). '' if not valid. */
+  const mobile = (s) => { const d = String(s || '').replace(/\D/g, '').replace(/^(91|0)(?=\d{10}$)/, ''); return /^[6-9]\d{9}$/.test(d) ? d : '' }
   function load() {
     try {
       const d = JSON.parse(localStorage.getItem(KEY))
@@ -468,12 +470,13 @@
         } else lines.push(`${k}. ${e.c.n}${e.c.t ? ` / ${e.c.t}` : ''} – ${qtyText(e)}${e.note ? ` – Note: ${e.note}` : ''}`)
       }
     }
-    lines.push('', `Name: ${state.name.trim()}`, `Pickup at the shop: ${pickupText()}`, '', 'Please confirm which items are available.')
+    lines.push('', `Name: ${state.name.trim()}`, `Phone: ${mobile(state.phone) || state.phone.trim()}`, `Pickup at the shop: ${pickupText()}`, '', 'Please confirm which items are available.')
     if (state.askPrice) lines.push('Please also tell me the estimated total price for these items.')
-    lines.push('', '— For the shop: tap to reply —', replyLink())
+    // No link here on purpose: the shop never taps links in customer messages. It copies the message into its own reply page.
+    lines.push('', `Shop code: ${replyCode()}`)
     return lines.join('\n')
   }
-  // The shop taps this link to mark ✓ Have / ✗ No and send a ready-made reply (/reply/). The list travels in the #part.
+  // The shop pastes the message into its reply page (/reply/) to mark ✓ Have / ✗ No and send a bill. The list travels in the code.
   //   { n: name, d: day, s: slot, a: asked for total, t: minutes since 1970, i: [[size id, amount, note] | [kit size id, kits, [[size id, amount]…], note]] }
   // Compressed when the browser can (about half as long); the plain form is always correct as a fallback.
   const b64u = (bytes) => { let bin = ''; for (const b of bytes) bin += String.fromCharCode(b); return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '') }
@@ -483,7 +486,7 @@
       if (e.note) x.push(e.note)
       return x
     })
-    return JSON.stringify({ n: state.name.trim().slice(0, 40), d: state.day, s: state.slot, a: state.askPrice ? 1 : 0, t, i })
+    return JSON.stringify({ n: state.name.trim().slice(0, 40), p: mobile(state.phone), d: state.day, s: state.slot, a: state.askPrice ? 1 : 0, t, i })
   }
   let zLink = { key: '', url: '' }
   async function packLink() {
@@ -493,15 +496,15 @@
     try {
       const stream = new Blob([replyJson(t)]).stream().pipeThrough(new CompressionStream('deflate-raw'))
       const bytes = new Uint8Array(await new Response(stream).arrayBuffer())
-      zLink = { key, url: `${location.origin}/reply/#z${b64u(bytes)}` }
+      zLink = { key, url: `z${b64u(bytes)}` }
       const pv = page && page.querySelector('[data-preview]')
       if (pv) pv.textContent = message()
     } catch {}
   }
-  function replyLink() {
+  function replyCode() {
     if (zLink.key === replyJson(0)) return zLink.url
     packLink()
-    return `${location.origin}/reply/#${b64u(new TextEncoder().encode(replyJson(Math.round(Date.now() / 60000))))}`
+    return b64u(new TextEncoder().encode(replyJson(Math.round(Date.now() / 60000))))
   }
   // "Repeat my last list": the list is remembered when it is sent on WhatsApp.
   const LAST = 'jgs-last-v1'
@@ -604,6 +607,9 @@
         <label class="sp-field"><span>Your name <span lang="te">మీ పేరు</span></span>
           <input type="text" data-name maxlength="40" autocomplete="name" value="${esc(state.name)}" placeholder="e.g. Ravi Kumar" aria-describedby="err-name">
           <small class="sp-err" id="err-name" hidden>Please enter your name.</small></label>
+        <label class="sp-field"><span>Your WhatsApp number <span lang="te">మీ వాట్సాప్ నంబర్</span></span>
+          <input type="tel" data-phone inputmode="numeric" maxlength="17" autocomplete="tel-national" value="${esc(state.phone || '')}" placeholder="10-digit mobile number" aria-describedby="err-phone">
+          <small class="sp-err" id="err-phone" hidden>Please enter your 10-digit mobile number.</small></label>
         <fieldset class="sp-field"><legend>Pickup time <span lang="te">ఎప్పుడు తీసుకెళ్తారు?</span></legend>
           <div class="opts">
             ${[['today', 'Today', 'ఈరోజు'], ['tomorrow', 'Tomorrow', 'రేపు']].map(([v, en, t]) => `<label class="opt"><input type="radio" name="sp-day" value="${v}"${state.day === v ? ' checked' : ''}${v === 'today' && !today ? ' disabled' : ''}><span>${en} <small lang="te">${t}</small></span></label>`).join('')}
@@ -626,6 +632,7 @@
     const pv = page.querySelector('[data-preview]')
     const updatePreview = () => (pv.textContent = message())
     page.querySelector('[data-name]').addEventListener('input', (e) => { state.name = e.target.value; save(); updatePreview(); page.querySelector('#err-name').hidden = true })
+    page.querySelector('[data-phone]').addEventListener('input', (e) => { state.phone = e.target.value.replace(/[^\d+ ]/g, ''); if (state.phone !== e.target.value) e.target.value = state.phone; save(); updatePreview(); if (mobile(state.phone)) page.querySelector('#err-phone').hidden = true })
     page.querySelectorAll('input[name="sp-day"]').forEach((r) => r.addEventListener('change', () => { state.day = r.value; if (state.slot && !slotOk(state.day, state.slot)) state.slot = ''; save(); drawPage(); page.querySelector(`input[name="sp-day"][value="${r.value}"]`).focus() }))
     page.querySelectorAll('input[name="sp-slot"]').forEach((r) => r.addEventListener('change', () => { state.slot = r.value; save(); updatePreview(); page.querySelector('#err-pick').hidden = true }))
     page.querySelector('[data-ask]').addEventListener('change', (e) => { state.askPrice = e.target.checked; save(); updatePreview() })
@@ -662,10 +669,13 @@
     page.querySelectorAll('[data-kit-del]').forEach((b) => b.addEventListener('click', () => kitChange(Number(b.dataset.i), Number(b.dataset.kitDel), (e) => e.kit.splice(Number(b.dataset.kitDel), 1))))
     page.querySelector('[data-send]').addEventListener('click', () => {
       const nameOk = state.name.trim().length > 0
+      const phoneOk = !!mobile(state.phone)
       const pickOk = !!(state.day && state.slot && slotOk(state.day, state.slot))
       page.querySelector('#err-name').hidden = nameOk
+      page.querySelector('#err-phone').hidden = phoneOk
       page.querySelector('#err-pick').hidden = pickOk
       if (!nameOk) return page.querySelector('[data-name]').focus()
+      if (!phoneOk) return page.querySelector('[data-phone]').focus()
       if (!pickOk) return page.querySelector('input[name="sp-day"]:not(:disabled)').focus()
       open(`https://wa.me/${page.dataset.wa}?text=${encodeURIComponent(message())}`, '_blank', 'noopener')
       try { localStorage.setItem(LAST, JSON.stringify({ at: Date.now(), items: state.items })) } catch {}

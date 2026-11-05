@@ -15,6 +15,7 @@
   const SLOTS = { morning: ['Morning', '6 AM – 12 PM'], afternoon: ['Afternoon', '12 – 4 PM'], evening: ['Evening', '4 – 10 PM'] }
   const when = (ms) => new Date(ms).toLocaleString('en-IN', { day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit', timeZone: 'Asia/Kolkata' })
   const rupees = (n) => `₹${Number(n).toLocaleString('en-IN')}`
+  const phoneText = (p) => (p ? `${p.slice(0, 5)} ${p.slice(5)}` : '')
 
   // ── saved marks and prices on this phone ──
   function loadStore() { try { const d = JSON.parse(localStorage.getItem(KEY)); if (d && typeof d === 'object') return d } catch {} return {} }
@@ -26,6 +27,26 @@
   }
 
   // ── the list inside the link: "#z…" = compressed, "#…" = plain ──
+  /** Accept only what a real list can contain: product codes, whole numbers, short text, a 10-digit mobile number.
+   *  Everything is shown as plain text, so a changed code can only show a wrong list, never run anything. */
+  const own = (o, k) => Object.prototype.hasOwnProperty.call(o, k)
+  function clean(d) {
+    if (!d || typeof d !== 'object' || !Array.isArray(d.i) || !d.i.length || d.i.length > 100) return null
+    const str = (x, n) => (typeof x === 'string' ? x.replace(/[\u0000-\u001f]/g, ' ').slice(0, n) : '')
+    const num = (x) => (typeof x === 'number' && Number.isFinite(x) && x > 0 && x <= 100000 ? Math.round(x) : 0)
+    const id = (x) => (typeof x === 'string' && /^[a-z0-9-]{1,90}$/.test(x) ? x : '')
+    const i = d.i.map((x) => {
+      if (!Array.isArray(x) || !id(x[0]) || !num(x[1])) return null
+      if (Array.isArray(x[2])) {
+        const kit = x[2].slice(0, 60).filter((k) => Array.isArray(k) && id(k[0]) && num(k[1])).map((k) => [k[0], num(k[1])])
+        return kit.length ? [x[0], num(x[1]), kit, str(x[3], 80)] : null
+      }
+      return [x[0], num(x[1]), str(x[2], 80)]
+    }).filter(Boolean)
+    if (!i.length) return null
+    return { n: str(d.n, 40), p: typeof d.p === 'string' && /^[6-9]\d{9}$/.test(d.p) ? d.p : '', d: d.d === 'today' || d.d === 'tomorrow' ? d.d : '',
+      s: typeof d.s === 'string' && own(SLOTS, d.s) ? d.s : '', a: d.a ? 1 : 0, t: num(d.t) || (Number.isFinite(d.t) && d.t > 0 && d.t < 1e9 ? Math.round(d.t) : 0), i }
+  }
   async function decode(code) {
     try {
       const z = code.startsWith('z')
@@ -34,7 +55,7 @@
       let bytes = Uint8Array.from(bin, (c) => c.charCodeAt(0))
       if (z) bytes = new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).arrayBuffer())
       const d = JSON.parse(new TextDecoder().decode(bytes))
-      return d && Array.isArray(d.i) ? d : null
+      return clean(d)
     } catch { return null }
   }
 
@@ -67,6 +88,7 @@
     rec.prices = rec.prices || {}
     rec.seen = Date.now()
     rec.name = data.n || ''
+    rec.phone = data.p || ''
     rec.at = (data.t || 0) * 60000
     rec.count = data.i.length
     saveStore()
@@ -126,7 +148,7 @@
       <article class="bill">
         <header class="bill-head">
           <p class="bill-shop">Janardhan General Stores</p>
-          <div class="bill-meta"><span>Customer: <strong>${esc(data.n || '—')}</strong></span>${data.t ? `<span>${esc(when(data.t * 60000))}</span>` : ''}
+          <div class="bill-meta"><span>Customer: <strong>${esc(data.n || '—')}</strong></span>${data.p ? `<span>Phone: <a href="tel:+91${esc(data.p)}"><strong>${esc(phoneText(data.p))}</strong></a></span>` : ''}${data.t ? `<span>${esc(when(data.t * 60000))}</span>` : ''}
             ${slot && data.d ? `<span>Pickup: <strong>${data.d === 'today' ? 'Today' : 'Tomorrow'} ${esc(slot[0].toLowerCase())}</strong></span>` : ''}</div>
           ${data.a ? '<p class="rp-ask">Customer asked for the total price.</p>' : ''}
         </header>
@@ -143,9 +165,11 @@
       </article>
       <div class="rp-actions">
         <button type="button" class="btn btn-wa rp-send" data-send${rec.sent ? ' hidden' : ''}>Send reply on WhatsApp</button>
+        <button type="button" class="btn btn-light rp-print" data-print>🖨 Print / Save as PDF</button>
         <details class="sp-preview"><summary>See the reply</summary><pre data-preview></pre></details>
         <p class="rp-remind" data-remind hidden>Remember: mark the “No” items as out of stock in the editor later, so customers see it on the website.</p>
-      </div>`
+      </div>
+      <div class="bill-print" data-print-area aria-hidden="true"></div>`
     const refreshFoot = () => {
       root.querySelector('[data-total]').textContent = rupees(total())
       const miss = missing().length, up = unpriced().length
@@ -179,22 +203,69 @@
       // "Next" on the keypad jumps to the next price
       inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); (boxes[k + 1] || inp).focus(); if (!boxes[k + 1]) inp.blur() } })
     })
+    root.querySelector('[data-print]').addEventListener('click', () => {
+      root.querySelector('[data-print-area]').innerHTML = printHtml()
+      document.documentElement.classList.add('print-bill')
+      addEventListener('afterprint', () => document.documentElement.classList.remove('print-bill'), { once: true })
+      print()
+    })
     root.querySelector('[data-unlock]')?.addEventListener('click', () => { rec.sent = 0; saveStore(); drawBill() })
     root.querySelector('[data-send]')?.addEventListener('click', () => {
       // WhatsApp asks which chat: the customer's chat is at the top (they just sent the list).
-      open(`https://wa.me/?text=${encodeURIComponent(replyText())}`, '_blank', 'noopener')
+      // Straight to the customer's chat when their number is in the list; otherwise WhatsApp asks which chat.
+      open(`https://wa.me/${data.p ? '91' + data.p : ''}?text=${encodeURIComponent(replyText())}`, '_blank', 'noopener')
       rec.sent = Date.now(); saveStore(); drawBill()
     })
+  }
+
+  /** Clean bill for printing / saving as PDF (Print → Save as PDF). */
+  function printHtml() {
+    const sh = root.dataset
+    const slot = SLOTS[data.s]
+    const cell = (x) => (isNo(x.key) ? '<td class="bp-na">Not available</td>' : `<td class="bp-r">${Number(rec.prices[x.key]) > 0 ? esc(rupees(rec.prices[x.key])) : '—'}</td>`)
+    const rowsHtml = lines(data).map((l, k) => l.kit
+      ? `<tr class="bp-kit"><td>${k + 1}</td><td colspan="3"><strong>${esc(shortName(look(l.id).n))}</strong>${l.amt > 1 ? ` × ${l.amt}` : ''}</td></tr>` +
+        l.kit.map((x) => `<tr class="${isNo(x.key) ? 'bp-no' : ''}"><td></td><td class="bp-sub">${esc(itemName(x.id))}</td><td>${esc(qtyOf(x.id, x.amt))}</td>${cell(x)}</tr>`).join('')
+      : `<tr class="${isNo(l.key) ? 'bp-no' : ''}"><td>${k + 1}</td><td>${esc(itemName(l.id))}${l.note ? `<br><small>Note: ${esc(l.note)}</small>` : ''}</td><td>${esc(qtyOf(l.id, l.amt))}</td>${cell(l)}</tr>`).join('')
+    const miss = missing().length
+    return `<div class="bp">
+      <header class="bp-head"><h1>${esc(sh.shopName || 'Janardhan General Stores')}</h1><p>${esc(sh.shopAddress || '')}</p><p>Phone / WhatsApp: ${esc(sh.shopPhone || '')}</p></header>
+      <h2 class="bp-title">Bill</h2>
+      <table class="bp-info"><tr><td>Customer: <strong>${esc(data.n || '—')}</strong></td><td>Date: <strong>${esc(when(rec.sent || Date.now()))}</strong></td></tr>
+        <tr><td>Phone: <strong>${esc(phoneText(data.p) || '—')}</strong></td><td>${slot && data.d ? `Pickup: <strong>${data.d === 'today' ? 'Today' : 'Tomorrow'} ${esc(slot[0].toLowerCase())}</strong>` : ''}</td></tr></table>
+      <table class="bp-items"><thead><tr><th>No.</th><th>Item</th><th>Qty</th><th class="bp-r">Price</th></tr></thead><tbody>${rowsHtml}</tbody>
+        <tfoot><tr><td colspan="3">Total${miss ? ` <small>(${miss} item${miss === 1 ? '' : 's'} not available)</small>` : ''}</td><td class="bp-r">${esc(rupees(total()))}</td></tr></tfoot></table>
+      <p class="bp-thanks">Thank you! Please pick up your items at the shop. · ధన్యవాదాలు!</p></div>`
   }
 
   function drawHome(bad) {
     const list = Object.entries(store).filter(([, r]) => r.count).sort(([, a], [, b]) => (b.seen || 0) - (a.seen || 0))
     root.innerHTML = `${bad ? '<p class="rp-bad">This reply link is not complete. Open it again from the customer’s WhatsApp message.</p>' : ''}
-      <div class="rp-head"><h2>Lists opened on this phone</h2><p>Open a customer’s list from the link at the bottom of their WhatsApp message. It is kept here, so you can come back to it.</p></div>
-      ${list.length ? `<ul class="rp-recent">${list.map(([c, r]) => `<li><a href="#${esc(c)}"><strong>${esc(r.name || 'Customer')}</strong><span>${r.count} item${r.count === 1 ? '' : 's'}${r.at ? ` · ${esc(when(r.at))}` : ''}</span>
+      <div class="rp-head rp-paste">
+        <h2>Open a customer’s list</h2>
+        <ol class="rp-steps"><li>In WhatsApp, <strong>press and hold</strong> the customer’s list message → tap <strong>Copy</strong>.</li><li>Come back here and tap <strong>Paste</strong>.</li></ol>
+        <button type="button" class="btn btn-primary rp-paste-btn" data-paste>📋 Paste customer’s message</button>
+        <label class="rp-paste-box"><span>Or press and hold in this box → Paste</span><textarea data-paste-box rows="3" placeholder="Paste the message here"></textarea></label>
+        <p class="rp-err" data-paste-err hidden>No shop code found. Copy the whole list message (it ends with “Shop code: …”) and try again.</p>
+        <p class="rp-safe">🔒 Never tap links inside customer messages. Open lists only from here.</p>
+      </div>
+      <h3 class="rp-recent-h">Lists opened on this phone</h3>
+      ${list.length ? `<ul class="rp-recent">${list.map(([c, r]) => `<li><a href="#${esc(c)}"><strong>${esc(r.name || 'Customer')}</strong><span>${r.phone ? `${esc(phoneText(r.phone))} · ` : ''}${r.count} item${r.count === 1 ? '' : 's'}${r.at ? ` · ${esc(when(r.at))}` : ''}</span>
         <em class="${r.sent ? 'ok' : 'wait'}">${r.sent ? '✓ Replied' : 'Not replied yet'}</em></a></li>`).join('')}</ul>` : '<p class="rp-empty">No lists yet.</p>'}`
   }
 
+  // Find the shop code in pasted text ("Shop code: z…"), then open the bill.
+  function openPasted(text) {
+    const m = String(text || '').match(/Shop code:\s*([A-Za-z0-9_-]{8,})/) || String(text || '').match(/reply\/#([A-Za-z0-9_-]{8,})/) || String(text || '').trim().match(/^([A-Za-z0-9_-]{20,})$/)
+    const err = root.querySelector('[data-paste-err]')
+    if (!m) { if (err) err.hidden = false; return }
+    location.hash = m[1]
+  }
+  root.addEventListener('click', async (e) => {
+    if (!e.target.closest('[data-paste]')) return
+    try { openPasted(await navigator.clipboard.readText()) } catch { root.querySelector('[data-paste-box]')?.focus() }
+  })
+  root.addEventListener('input', (e) => { if (e.target.matches('[data-paste-box]') && e.target.value.trim().length > 15) openPasted(e.target.value) })
   addEventListener('hashchange', show)
   root.innerHTML = '<p class="list-loading">Loading the list…</p>'
   fetch(document.documentElement.dataset.searchIndex)

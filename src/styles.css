@@ -1376,3 +1376,45 @@ li.pc .card .size { margin-top: 6px; }
 .bl-price input { width: 92px; }
 .bl-ctl { flex-wrap: nowrap; }
 @media (max-width: 340px) { .bl-ctl { flex-wrap: wrap; } }
+
+/* ── Printable bill (Print / Save as PDF on the reply page) ── */
+.rp-print { justify-self: start; }
+.bill-print { display: none; }
+@media print {
+  html.print-bill body { background: #fff; display: block; min-height: 0; padding: 0 !important; }
+  html.print-bill body > :not(main), html.print-bill main > :not(.reply-section), html.print-bill .reply-section > :not([data-reply-page]),
+  html.print-bill [data-reply-page] > :not(.bill-print) { display: none !important; }
+  html.print-bill .reply-section { padding: 0; max-width: none; }
+  html.print-bill .bill-print { display: block; }
+  @page { size: A5; margin: 12mm; }
+}
+.bp { font: 400 11pt/1.4 var(--font-body); color: #000; }
+.bp-head { text-align: center; border-bottom: 2px solid #000; padding-bottom: 6px; }
+.bp-head h1 { font: 700 16pt var(--font-display); }
+.bp-head p { font-size: 9.5pt; }
+.bp-title { text-align: center; font: 800 12pt var(--font-body); letter-spacing: .2em; text-transform: uppercase; margin: 8px 0; }
+.bp table { width: 100%; border-collapse: collapse; }
+.bp-info td { padding: 2px 0; font-size: 10pt; }
+.bp-info td + td { text-align: right; }
+.bp-items { margin-top: 8px; }
+.bp-items th, .bp-items td { padding: 5px 4px; border-bottom: 1px solid #999; text-align: left; vertical-align: top; }
+.bp-items th { border-bottom: 2px solid #000; font-size: 9.5pt; text-transform: uppercase; }
+.bp-items td:first-child { width: 8mm; }
+.bp-items .bp-r { text-align: right; white-space: nowrap; }
+.bp-items .bp-sub { padding-left: 14px; }
+.bp-items .bp-kit td { border-bottom: 0; padding-bottom: 1px; }
+.bp-items .bp-no td { color: #555; }
+.bp-items .bp-na { text-align: right; font-style: italic; font-size: 9.5pt; }
+.bp-items tfoot td { border-top: 2px solid #000; border-bottom: 0; font: 800 12pt var(--font-body); padding-top: 8px; }
+.bp-items tfoot small { font-weight: 400; font-size: 9pt; }
+.bp-thanks { margin-top: 14px; text-align: center; font-size: 10pt; }
+
+/* ── Reply page: paste the customer's message ── */
+.rp-paste { display: grid; gap: 12px; }
+.rp-steps { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+.rp-paste-btn { min-height: 56px; font-size: 1.1rem; }
+.rp-paste-box { display: grid; gap: 4px; font-size: .88rem; color: var(--muted); }
+.rp-paste-box textarea { width: 100%; padding: 10px 12px; border: 2px dashed var(--line); border-radius: 12px; font: 400 .95rem var(--font-body); resize: vertical; }
+.rp-err { color: #a3321f; font-weight: 700; }
+.rp-safe { font-size: .88rem; font-weight: 700; color: var(--forest); }
+.rp-recent-h { margin: 22px 2px 0; font-size: 1.05rem; }

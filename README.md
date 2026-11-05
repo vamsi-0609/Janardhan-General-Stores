@@ -43,6 +43,10 @@ The top of the home page shows the next festival automatically, using today's da
 
 Every product card has **Add**, then **− n +**. Loose items open a weight panel (from the product's “starts from”, in fixed steps). The list (`/list/`) asks for the customer's name and pickup time (pickup only, no delivery), can ask for an estimated total, and opens WhatsApp with the whole list typed in. The list is stored only in the customer's browser, grouped as Kirana, Puja Samagri and Puja kits. When it is sent, a copy is kept so the customer can repeat the last list. Search understands sizes: “rin 1 kg”, “tide ₹10”, “అర కిలో కంది పప్పు”.
 
+### Shop reply (bill)
+
+The customer's WhatsApp list ends with a plain **Shop code** (no link, so the shop never has to tap links in customer messages). The shop copies the message and pastes it on `/reply/` (also a shortcut on the installed app's icon). The list opens as a bill: ✓ Have / ✗ No per item, a price box (number keypad) for each available item, an automatic total, **Send reply on WhatsApp** (straight to the customer's number) and **Print / Save as PDF**. Marks and prices are kept on that phone, so a list can be reopened and corrected. The code is checked strictly and everything is shown as plain text.
+
 ### Puja kits
 
 A kit is a product with a `kit` list of other products and amounts (edit it in the editor: product → More ▾ → Contents of this kit). Its page shows **What's inside**: customers untick items, change sizes and amounts, then add the kit in one tap. In My list and on WhatsApp the items are listed under the kit's name. The home page and the Puja Samagri page show a “Ready puja kits” row.

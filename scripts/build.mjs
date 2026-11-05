@@ -1025,7 +1025,7 @@ await page('/reply/', {
   <h1>Reply to a customer’s list</h1>${te('కస్టమర్ జాబితాకు జవాబు', 'p', 'te')}
 </div></section>
 <section class="container section reply-section">
-  <div data-reply-page><p class="list-loading">Loading the list…</p></div>
+  <div data-reply-page data-shop-name="${esc(shop.fullName)}" data-shop-address="${esc(shop.address.lines.join(', '))}" data-shop-phone="${esc(shop.phoneDisplay)}"><p class="list-loading">Loading the list…</p></div>
   <noscript><p>This page needs JavaScript.</p></noscript>
 </section>`,
 })
@@ -1292,6 +1292,7 @@ await writeFile(join(dist, 'site.webmanifest'), JSON.stringify({
     { name: 'Puja Samagri', short_name: 'Puja', url: '/puja-samagri/', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
     { name: 'Search items', short_name: 'Search', url: '/search/', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
     { name: 'Visit & directions', short_name: 'Visit', url: '/visit/', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
+    { name: 'For the shop: reply to a list', short_name: 'Shop reply', url: '/reply/', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
   ],
 }, null, 2))
 
