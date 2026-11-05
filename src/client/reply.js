@@ -83,6 +83,13 @@
   let code = '', data = null, rec = null
   async function show() {
     code = location.hash.slice(1)
+    if (root.dataset.view === 'bill') {
+      const b = code ? await decodeBill(code) : null
+      if (!b) return drawCustomerBill(true)
+      data = b.d
+      rec = { marks: b.marks, prices: b.prices, sent: b.at }
+      return drawCustomerBill(false)
+    }
     data = code ? await decode(code) : null
     if (!data) return drawHome(!!code)
     rec = store[code] || (store[code] = { marks: {}, prices: {}, sent: 0, first: Date.now() })
@@ -164,11 +171,14 @@
         </footer>
       </article>
       <div class="rp-actions">
-        <button type="button" class="btn btn-wa rp-send" data-send${rec.sent ? ' hidden' : ''}>📄 Send bill on WhatsApp</button>
-        <p class="rp-send-help"${rec.sent ? ' hidden' : ''}>Makes the PDF bill, saves a copy on this phone, then choose <strong>WhatsApp</strong> → <strong>${esc(data.n || 'the customer')}</strong>.</p>
+        <div class="rp-two"${rec.sent ? ' hidden' : ''}>
+          <button type="button" class="btn btn-wa" data-send>📄 Send bill</button>
+          <button type="button" class="btn btn-wa-light" data-text>💬 Send text</button>
+        </div>
+        <p class="rp-send-help"${rec.sent ? ' hidden' : ''}><strong>Send bill</strong>: opens ${esc(data.n || 'the customer')}’s WhatsApp chat with the bill and a link to the PDF, and saves the PDF on this phone. <strong>Send text</strong>: the bill as a message only. Then just press send in WhatsApp.</p>
         <div class="rp-more">
-          <button type="button" class="btn btn-light" data-pdf>⬇ Save PDF bill</button>
-          <button type="button" class="btn btn-light" data-text>💬 Send as text only</button>
+          <button type="button" class="link-btn" data-pdf>⬇ Save PDF on this phone</button>
+          <button type="button" class="link-btn" data-share>Share PDF file…</button>
         </div>
         <details class="sp-preview"><summary>See the message</summary><pre data-preview></pre></details>
         <p class="rp-remind" data-remind hidden>Remember: mark the “No” items as out of stock in the editor later, so customers see it on the website.</p>
@@ -208,29 +218,75 @@
     })
     root.querySelectorAll('[data-info]').forEach((b) => b.addEventListener('click', () => info(b)))
     root.querySelector('[data-unlock]')?.addEventListener('click', () => { rec.sent = 0; saveStore(); drawBill() })
+    const toChat = (text) => {
+      // straight into the customer's WhatsApp chat with the message typed in (no "which app?" question)
+      const url = `https://wa.me/${data.p ? '91' + data.p : ''}?text=${encodeURIComponent(text)}`
+      if (!open(url, '_blank', 'noopener')) location.href = url
+    }
+    const done = () => { rec.sent = Date.now(); saveStore(); drawBill() }
     root.querySelector('[data-pdf]').addEventListener('click', async () => { savePdf(await makePdf()) })
-    root.querySelector('[data-text]').addEventListener('click', () => {
-      open(`https://wa.me/${data.p ? '91' + data.p : ''}?text=${encodeURIComponent(replyText())}`, '_blank', 'noopener')
-      rec.sent = Date.now(); saveStore(); drawBill()
-    })
+    root.querySelector('[data-text]')?.addEventListener('click', () => { toChat(replyText()); done() })
     root.querySelector('[data-send]')?.addEventListener('click', async (e) => {
-      const btn = e.currentTarget
-      btn.disabled = true
-      const file = await makePdf()
+      e.currentTarget.disabled = true
+      if (!rec.sent) rec.sent = Date.now() // the bill date
+      const [link, file] = await Promise.all([billLink(), makePdf()])
+      toChat(`${replyText()}\n\n📄 Your bill (PDF): ${link}`)
       savePdf(file) // a copy stays on this phone (Downloads)
-      try {
-        if (navigator.canShare && navigator.canShare({ files: [file] })) {
-          await navigator.share({ files: [file], title: file.name, text: replyText() })
-        } else {
-          // phone cannot share files from a website: send the text; the PDF is in Downloads to attach if wanted
-          open(`https://wa.me/${data.p ? '91' + data.p : ''}?text=${encodeURIComponent(replyText())}`, '_blank', 'noopener')
-          alert('The PDF bill is saved in Downloads. WhatsApp opens with the bill as text; you can also attach the PDF there.')
-        }
-        rec.sent = Date.now(); saveStore(); drawBill()
-      } catch (err) {
-        btn.disabled = false // share was cancelled: nothing is marked as sent
-      }
+      done()
     })
+    root.querySelector('[data-share]').addEventListener('click', async () => {
+      const file = await makePdf()
+      if (navigator.canShare && navigator.canShare({ files: [file] })) navigator.share({ files: [file], title: file.name }).catch(() => {})
+      else { savePdf(file); alert('This phone cannot share files from a website. The PDF is saved in Downloads.') }
+    })
+  }
+
+  const b64u = (bytes) => { let bin = ''; for (const x of bytes) bin += String.fromCharCode(x); return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '') }
+  async function billLink() {
+    const json = JSON.stringify({ d: data, no: Object.keys(rec.marks).filter((k) => rec.marks[k] === 'no'), pr: rec.prices, at: rec.sent || Date.now() })
+    try {
+      const z = new Uint8Array(await new Response(new Blob([json]).stream().pipeThrough(new CompressionStream('deflate-raw'))).arrayBuffer())
+      return `${location.origin}/bill/#z${b64u(z)}`
+    } catch { return `${location.origin}/bill/#${b64u(new TextEncoder().encode(json))}` }
+  }
+  /** The customer's view of a bill link: checked like a list link (plus marks and prices). */
+  async function decodeBill(code) {
+    try {
+      const z = code.startsWith('z')
+      const b64 = (z ? code.slice(1) : code).replace(/-/g, '+').replace(/_/g, '/')
+      let bytes = Uint8Array.from(atob(b64 + '='.repeat((4 - (b64.length % 4)) % 4)), (c) => c.charCodeAt(0))
+      if (z) bytes = new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).arrayBuffer())
+      const o = JSON.parse(new TextDecoder().decode(bytes))
+      const d = clean(o && o.d)
+      if (!d) return null
+      const KEYRE = /^\d{1,3}(\.\d{1,3})?$/
+      const marks = {}, prices = {}
+      for (const k of Array.isArray(o.no) ? o.no.slice(0, 300) : []) if (typeof k === 'string' && KEYRE.test(k)) marks[k] = 'no'
+      if (o.pr && typeof o.pr === 'object') for (const [k, v] of Object.entries(o.pr).slice(0, 300)) if (KEYRE.test(k) && typeof v === 'string' && /^\d{1,6}$/.test(v)) prices[k] = v
+      return { d, marks, prices, at: Number.isFinite(o.at) && o.at > 0 ? o.at : Date.now() }
+    } catch { return null }
+  }
+  function drawCustomerBill(bad) {
+    if (bad) { root.innerHTML = '<p class="rp-bad">This bill link is not complete. Please ask the shop to send it again.</p>'; return }
+    const ls = lines(data)
+    const cell = (x) => (isNo(x.key) ? '<td class="bp-na">Not available</td>' : `<td class="bp-r">${Number(rec.prices[x.key]) > 0 ? esc(rupees(rec.prices[x.key])) : '—'}</td>`)
+    const name = (id) => `${esc(itemName(id))}${look(id).t ? `<br><small lang="te">${esc(look(id).t)}</small>` : ''}`
+    const rows = ls.map((l, k) => l.kit
+      ? `<tr class="bp-kit"><td>${k + 1}</td><td colspan="3"><strong>${esc(shortName(look(l.id).n))}</strong>${l.amt > 1 ? ` × ${l.amt}` : ''}</td></tr>` +
+        l.kit.map((x) => `<tr class="${isNo(x.key) ? 'bp-no' : ''}"><td></td><td class="bp-sub">${name(x.id)}</td><td>${esc(qtyOf(x.id, x.amt))}</td>${cell(x)}</tr>`).join('')
+      : `<tr class="${isNo(l.key) ? 'bp-no' : ''}"><td>${k + 1}</td><td>${name(l.id)}${l.note ? `<br><small>Note: ${esc(l.note)}</small>` : ''}</td><td>${esc(qtyOf(l.id, l.amt))}</td>${cell(l)}</tr>`).join('')
+    const miss = missing().length
+    root.innerHTML = `<div class="bp bp-screen">
+      <header class="bp-head"><img src="/brand/logo-mark.webp" alt="" width="72" height="72"><h1>${esc(shop.name)}</h1><p>${esc(shop.address)}</p><p>Phone / WhatsApp: ${esc(shop.phone)}</p></header>
+      <h2 class="bp-title">Bill</h2>
+      <table class="bp-info"><tr><td>Customer: <strong>${esc(data.n || '—')}</strong></td><td>Date: <strong>${esc(when(rec.sent))}</strong></td></tr>
+        <tr><td>Phone: <strong>${esc(phoneText(data.p) || '—')}</strong></td><td>${pickupText() ? `Pickup: <strong>${esc(pickupText().replace(/ \(.*\)$/, ''))}</strong>` : ''}</td></tr></table>
+      <table class="bp-items"><thead><tr><th>No.</th><th>Item</th><th>Qty</th><th class="bp-r">Price</th></tr></thead><tbody>${rows}</tbody>
+        <tfoot><tr><td colspan="3">Total${miss ? ` <small>(${miss} item${miss === 1 ? '' : 's'} not available)</small>` : ''}</td><td class="bp-r">${esc(rupees(total()))}</td></tr></tfoot></table>
+      <p class="bp-thanks">Thank you! Please pick up your items at the shop. · ధన్యవాదాలు!</p></div>
+      <div class="rp-actions"><button type="button" class="btn btn-primary" data-pdf>⬇ Download PDF bill</button>
+        <p class="hint">Questions about the bill? Call or WhatsApp the shop: ${esc(shop.phone)}.</p></div>`
+    root.querySelector('[data-pdf]').addEventListener('click', async () => savePdf(await makePdf()))
   }
 
   // ── item details box (no other page opens) ──
@@ -259,93 +315,160 @@
     dlg.showModal()
   }
 
-  // ── PDF bill: drawn on a canvas, saved as a one-page PDF (no library, nothing leaves the phone) ──
+  // ── PDF bill: A5 pages drawn on a canvas (logo, Telugu names, more pages when the list is long) ──
+  const loadImg = (src) => new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src })
   async function makePdf() {
     await document.fonts?.ready
-    const W = 1240, P = 64, S = 2 // 1240 px wide ≈ A5 at 210 dpi
+    const logo = await loadImg('/brand/logo-mark.webp').catch(() => null)
+    const W = 1240, H = 1754, P = 70, S = 1.5 // A5 (148 × 210 mm) at about 210 dpi, drawn 1.5× as sharp
     const body = getComputedStyle(document.body).fontFamily || 'sans-serif'
     const head = getComputedStyle(document.querySelector('h1') || document.body).fontFamily || body
-    const cv = document.createElement('canvas')
-    const ctx = cv.getContext('2d')
-    const font = (w, px, fam = body, italic = '') => (ctx.font = `${italic}${w} ${px}px ${fam}`)
-    const wrap = (text, max) => {
+    const scratch = document.createElement('canvas').getContext('2d')
+    const font = (c, w, px, fam = body, italic = '') => (c.font = `${italic}${w} ${px}px ${fam}`)
+    const wrap = (c, text, max) => {
       const out = []; let line = ''
       for (const word of String(text).split(' ')) {
         const t = line ? `${line} ${word}` : word
-        if (ctx.measureText(t).width > max && line) { out.push(line); line = word } else line = t
+        if (c.measureText(t).width > max && line) { out.push(line); line = word } else line = t
       }
       if (line) out.push(line)
       return out
     }
-    const ls = lines(data)
-    const miss = missing().length
-    const cName = 130, cQty = 820, cPrice = W - P
-    function draw(paint) {
-      let y = P
-      const text = (s, x, yy, align = 'left', color = '#111') => { if (paint) { ctx.fillStyle = color; ctx.textAlign = align; ctx.fillText(s, x, yy) } }
-      const rule = (yy, w = 2, color = '#222') => { if (paint) { ctx.fillStyle = color; ctx.fillRect(P, yy, W - 2 * P, w) } }
-      font(700, 46, head); y += 46; text(shop.name, W / 2, y, 'center')
-      font(400, 26); y += 40; text(shop.address, W / 2, y, 'center', '#333')
-      y += 36; text(`Phone / WhatsApp: ${shop.phone}`, W / 2, y, 'center', '#333')
-      y += 26; rule(y, 4)
-      font(800, 32); y += 58; text('B I L L', W / 2, y, 'center')
-      font(400, 27); y += 54
-      text(`Customer: ${data.n || '—'}`, P, y); text(`Date: ${when(rec.sent || Date.now())}`, W - P, y, 'right')
-      y += 40; text(`Phone: ${phoneText(data.p) || '—'}`, P, y); if (pickupText()) text(`Pickup: ${pickupText().replace(/ \(.*\)$/, '')}`, W - P, y, 'right')
-      y += 30; rule(y, 4)
-      font(800, 23); y += 40; text('NO.', P, y); text('ITEM', cName, y); text('QTY', cQty, y); text('PRICE', cPrice, y, 'right')
-      y += 18; rule(y, 3)
-      const row = (num, name, qty, price, opts = {}) => {
-        font(opts.bold ? 700 : 400, 27)
-        const nameLines = wrap(name, cQty - (opts.indent ? cName + 24 : cName) - 20)
-        y += 42
-        text(num, P, y, 'left', '#444')
-        nameLines.forEach((t, k) => text(t, (opts.indent ? cName + 24 : cName), y + k * 36, 'left', opts.grey ? '#777' : '#111'))
-        font(400, 27); if (qty) text(qty, cQty, y, 'left', opts.grey ? '#777' : '#111')
-        if (price) { font(opts.na ? 400 : 700, opts.na ? 24 : 27, body, opts.na ? 'italic ' : ''); text(price, cPrice, y, 'right', opts.na ? '#777' : '#111') }
-        y += (nameLines.length - 1) * 36 + 16
-        if (!opts.noRule) rule(y, 1, '#bbb')
-      }
-      const priceCell = (x) => (isNo(x.key) ? 'Not available' : Number(rec.prices[x.key]) > 0 ? rupees(rec.prices[x.key]) : '—')
-      ls.forEach((l, k) => {
-        if (l.kit) {
-          row(String(k + 1), shortName(look(l.id).n) + (l.amt > 1 ? ` × ${l.amt}` : ''), '', '', { bold: true, noRule: true })
-          l.kit.forEach((x) => row('', itemName(x.id), qtyOf(x.id, x.amt), priceCell(x), { indent: true, grey: isNo(x.key), na: isNo(x.key) }))
-        } else row(String(k + 1), itemName(l.id) + (l.note ? ` (Note: ${l.note})` : ''), qtyOf(l.id, l.amt), priceCell(l), { grey: isNo(l.key), na: isNo(l.key) })
-      })
-      y += 6; rule(y, 4)
-      font(800, 36); y += 58; text('Total', P, y); text(rupees(total()), cPrice, y, 'right')
-      if (miss) { font(400, 24); y += 38; text(`${miss} item${miss === 1 ? '' : 's'} not available`, P, y, 'left', '#555') }
-      font(400, 25); y += 70; text('Thank you! Please pick up your items at the shop. · ధన్యవాదాలు!', W / 2, y, 'center', '#333')
-      return y + P
+    const cName = P + 66, cQty = 800, cPrice = W - P, FOOT = 90
+    const priceCell = (x) => (isNo(x.key) ? 'Not available' : Number(rec.prices[x.key]) > 0 ? rupees(rec.prices[x.key]) : '—')
+    const date = when(rec.sent || Date.now())
+
+    // every bill line becomes a block with a height; blocks are then laid out on pages
+    const blocks = []
+    const rowBlock = (num, id, amt, key, note, opts = {}) => {
+      const x0 = opts.indent ? cName + 26 : cName
+      font(scratch, opts.bold ? 700 : 600, 27)
+      const name = opts.title || itemName(id)
+      const nameLines = wrap(scratch, name, cQty - x0 - 24)
+      const teText = opts.title ? look(id).t : look(id).t
+      font(scratch, 400, 23)
+      const teLines = teText ? wrap(scratch, teText, cQty - x0 - 24).slice(0, 2) : []
+      const noteLines = note ? wrap(scratch, `Note: ${note}`, cQty - x0 - 24).slice(0, 2) : []
+      const h = 22 + nameLines.length * 34 + teLines.length * 30 + noteLines.length * 28 + 14
+      blocks.push({ h, rule: !opts.noRule, keepNext: !!opts.title, paint: (c, y) => {
+        const grey = !opts.title && isNo(key)
+        let yy = y + 22 + 26
+        font(c, 600, 26); c.fillStyle = '#555'; c.textAlign = 'left'; c.fillText(num, P, yy)
+        font(c, opts.bold ? 700 : 600, 27); c.fillStyle = grey ? '#888' : '#111'
+        nameLines.forEach((t, k) => c.fillText(t, x0, yy + k * 34))
+        if (!opts.title) {
+          font(c, 400, 26); c.fillStyle = grey ? '#888' : '#111'; c.fillText(qtyOf(id, amt), cQty, yy)
+          const pc = priceCell({ key })
+          font(c, isNo(key) ? 400 : 700, isNo(key) ? 23 : 27, body, isNo(key) ? 'italic ' : ''); c.fillStyle = isNo(key) ? '#888' : '#111'; c.textAlign = 'right'; c.fillText(pc, cPrice, yy); c.textAlign = 'left'
+        } else if (amt > 1) { font(c, 400, 26); c.fillStyle = '#111'; c.fillText(`× ${amt}`, cQty, yy) }
+        yy += (nameLines.length - 1) * 34
+        font(c, 400, 23); c.fillStyle = '#666'
+        teLines.forEach((t) => { yy += 30; c.fillText(t, x0, yy) })
+        font(c, 400, 22, body, 'italic '); c.fillStyle = '#7a3b2e'
+        noteLines.forEach((t) => { yy += 28; c.fillText(t, x0, yy) })
+      } })
     }
-    const H = Math.ceil(draw(false))
-    cv.width = W * S; cv.height = H * S
-    ctx.scale(S, S)
-    ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, W, H)
-    ctx.textBaseline = 'alphabetic'
-    draw(true)
-    const jpeg = new Uint8Array(await (await new Promise((r) => cv.toBlob(r, 'image/jpeg', 0.9))).arrayBuffer())
-    const pdf = jpegToPdf(jpeg, cv.width, cv.height, 420, 420 * (H / W))
-    const day = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', timeZone: 'Asia/Kolkata' }).replace(/\s/g, '-')
+    lines(data).forEach((l, k) => {
+      if (l.kit) {
+        rowBlock(String(k + 1), l.id, l.amt, null, l.note, { title: shortName(look(l.id).n), bold: true, noRule: true })
+        l.kit.forEach((x) => rowBlock('', x.id, x.amt, x.key, '', { indent: true }))
+      } else rowBlock(String(k + 1), l.id, l.amt, l.key, l.note)
+    })
+    const miss = missing().length
+    const totalH = 150
+
+    // headers
+    const firstHead = (c, paint) => {
+      let y = P
+      if (logo) { if (paint) c.drawImage(logo, W / 2 - 60, y, 120, 120); y += 132 }
+      font(c, 700, 44, head); y += 44; if (paint) { c.fillStyle = '#111'; c.textAlign = 'center'; c.fillText(shop.name, W / 2, y) }
+      font(c, 400, 25); y += 38; if (paint) { c.fillStyle = '#333'; c.fillText(shop.address, W / 2, y) }
+      y += 34; if (paint) c.fillText(`Phone / WhatsApp: ${shop.phone}`, W / 2, y)
+      y += 24; if (paint) { c.fillStyle = '#222'; c.fillRect(P, y, W - 2 * P, 4) }
+      font(c, 800, 30); y += 54; if (paint) { c.fillStyle = '#111'; c.fillText('B I L L', W / 2, y) }
+      font(c, 400, 26); y += 50
+      if (paint) { c.textAlign = 'left'; c.fillText(`Customer: ${data.n || '—'}`, P, y); c.textAlign = 'right'; c.fillText(`Date: ${date}`, W - P, y) }
+      y += 38
+      if (paint) { c.textAlign = 'left'; c.fillText(`Phone: ${phoneText(data.p) || '—'}`, P, y); c.textAlign = 'right'; if (pickupText()) c.fillText(`Pickup: ${pickupText().replace(/ \(.*\)$/, '')}`, W - P, y); c.textAlign = 'left' }
+      return y + 22
+    }
+    const nextHead = (c, paint, n) => {
+      let y = P
+      font(c, 700, 30, head); y += 30
+      if (paint) { c.fillStyle = '#111'; c.textAlign = 'left'; c.fillText(shop.name, P, y); font(c, 400, 24); c.textAlign = 'right'; c.fillStyle = '#444'; c.fillText(`Bill for ${data.n || 'customer'} · ${date}`, W - P, y); c.textAlign = 'left' }
+      return y + 22
+    }
+    const tableHead = (c, y, paint) => {
+      if (paint) {
+        c.fillStyle = '#222'; c.fillRect(P, y, W - 2 * P, 4)
+        font(c, 800, 22); c.fillStyle = '#111'; c.textAlign = 'left'
+        c.fillText('NO.', P, y + 40); c.fillText('ITEM', cName, y + 40); c.fillText('QTY', cQty, y + 40); c.textAlign = 'right'; c.fillText('PRICE', cPrice, y + 40); c.textAlign = 'left'
+        c.fillRect(P, y + 58, W - 2 * P, 3)
+      }
+      return y + 61
+    }
+
+    // lay out pages
+    const pages = []
+    let page = { blocks: [] }, y = tableHead(scratch, firstHead(scratch, false), false)
+    for (let bi = 0; bi < blocks.length; bi++) {
+      const b = blocks[bi]
+      // a kit heading stays on the same page as its first item
+      const need = b.h + (b.keepNext && blocks[bi + 1] ? blocks[bi + 1].h : 0)
+      if (y + need > H - P - FOOT && page.blocks.length) { pages.push(page); page = { blocks: [] }; y = tableHead(scratch, nextHead(scratch, false), false) }
+      page.blocks.push(b); y += b.h
+    }
+    if (y + totalH > H - P - FOOT) { pages.push(page); page = { blocks: [] } }
+    page.total = true
+    pages.push(page)
+
+    // draw pages
+    const jpegs = []
+    for (let i = 0; i < pages.length; i++) {
+      const cv = document.createElement('canvas')
+      cv.width = W * S; cv.height = H * S
+      const c = cv.getContext('2d')
+      c.scale(S, S)
+      c.fillStyle = '#fff'; c.fillRect(0, 0, W, H)
+      let yy = tableHead(c, i === 0 ? firstHead(c, true) : nextHead(c, true, i + 1), true)
+      for (const b of pages[i].blocks) { b.paint(c, yy); yy += b.h; if (b.rule) { c.fillStyle = '#c4c4c4'; c.fillRect(P, yy - 1, W - 2 * P, 1) } }
+      if (pages[i].total) {
+        c.fillStyle = '#222'; c.fillRect(P, yy + 6, W - 2 * P, 4)
+        font(c, 800, 36); c.fillStyle = '#111'; c.textAlign = 'left'; c.fillText('Total', P, yy + 62); c.textAlign = 'right'; c.fillText(rupees(total()), cPrice, yy + 62); c.textAlign = 'left'
+        if (miss) { font(c, 400, 23); c.fillStyle = '#555'; c.fillText(`${miss} item${miss === 1 ? '' : 's'} not available`, P, yy + 98) }
+        font(c, 400, 24); c.fillStyle = '#333'; c.textAlign = 'center'; c.fillText('Thank you! Please pick up your items at the shop. · ధన్యవాదాలు!', W / 2, yy + 140); c.textAlign = 'left'
+      }
+      font(c, 400, 21); c.fillStyle = '#777'; c.textAlign = 'center'; c.fillText(`Page ${i + 1} of ${pages.length}`, W / 2, H - P + 10); c.textAlign = 'left'
+      jpegs.push(new Uint8Array(await (await new Promise((r) => cv.toBlob(r, 'image/jpeg', 0.85))).arrayBuffer()))
+    }
+    const pdf = jpegsToPdf(jpegs, W * S, H * S, 419.53, 595.28)
+    const day = new Date(rec.sent || Date.now()).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', timeZone: 'Asia/Kolkata' }).replace(/\s/g, '-')
     return new File([pdf], `Bill-${(data.n || 'customer').replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'customer'}-${day}.pdf`, { type: 'application/pdf' })
   }
-  /** A one-page PDF that shows one JPEG image (page size in points). */
-  function jpegToPdf(jpeg, w, h, pw, ph) {
+  /** A PDF with one JPEG image per page (all pages the same size, in points). */
+  function jpegsToPdf(jpegs, w, h, pw, ph) {
     const enc = new TextEncoder()
     const parts = [], offsets = []
     let len = 0
     const add = (x) => { const b = typeof x === 'string' ? enc.encode(x) : x; parts.push(b); len += b.length }
     const obj = (n, body, stream) => { offsets[n] = len; add(`${n} 0 obj\n${body}\n`); if (stream) { add('stream\n'); add(stream); add('\nendstream\n') } add('endobj\n') }
     add('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n')
-    const content = `q ${pw.toFixed(2)} 0 0 ${ph.toFixed(2)} 0 0 cm /Im0 Do Q`
+    const n = jpegs.length
+    const pageId = (i) => 3 + i * 3 // page, image, contents = 3 objects per page
     obj(1, '<< /Type /Catalog /Pages 2 0 R >>')
-    obj(2, '<< /Type /Pages /Kids [3 0 R] /Count 1 >>')
-    obj(3, `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pw.toFixed(2)} ${ph.toFixed(2)}] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>`)
-    obj(4, `<< /Type /XObject /Subtype /Image /Width ${w} /Height ${h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpeg.length} >>`, jpeg)
-    obj(5, `<< /Length ${content.length} >>`, enc.encode(content))
+    obj(2, `<< /Type /Pages /Kids [${jpegs.map((_, i) => `${pageId(i)} 0 R`).join(' ')}] /Count ${n} >>`)
+    const content = enc.encode(`q ${pw} 0 0 ${ph} 0 0 cm /Im0 Do Q`)
+    jpegs.forEach((jpeg, i) => {
+      const p = pageId(i)
+      obj(p, `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pw} ${ph}] /Resources << /XObject << /Im0 ${p + 1} 0 R >> >> /Contents ${p + 2} 0 R >>`)
+      obj(p + 1, `<< /Type /XObject /Subtype /Image /Width ${w} /Height ${h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpeg.length} >>`, jpeg)
+      obj(p + 2, `<< /Length ${content.length} >>`, content)
+    })
+    const total = 3 + n * 3
     const xref = len
-    add(`xref\n0 6\n0000000000 65535 f \n${[1, 2, 3, 4, 5].map((n) => `${String(offsets[n]).padStart(10, '0')} 00000 n \n`).join('')}trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`)
+    let table = `xref\n0 ${total}\n0000000000 65535 f \n`
+    for (let k = 1; k < total; k++) table += `${String(offsets[k]).padStart(10, '0')} 00000 n \n`
+    add(`${table}trailer\n<< /Size ${total} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`)
     return new Blob(parts, { type: 'application/pdf' })
   }
   function savePdf(file) {

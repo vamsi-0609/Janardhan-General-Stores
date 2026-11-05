@@ -1030,6 +1030,19 @@ await page('/reply/', {
 </section>`,
 })
 
+// Customer's bill (link in the shop's WhatsApp reply): the bill on screen + "Download PDF bill".
+await page('/bill/', {
+  title: 'Your bill | Janardhan General Stores',
+  description: 'Your bill from Janardhan General Stores, Rajampet.',
+  current: '',
+  noindex: true,
+  scripts: [REPLY_JS],
+  body: `<section class="container section reply-section" style="padding-top:18px">
+  <div data-reply-page data-view="bill" data-shop-name="${esc(shop.fullName)}" data-shop-address="${esc(shop.address.lines.join(', '))}" data-shop-phone="${esc(shop.phoneDisplay)}"><p class="list-loading">Loading your bill…</p></div>
+  <noscript><p>This page needs JavaScript.</p></noscript>
+</section>`,
+})
+
 // Offline fallback (shown by the app/service worker when a page that was never opened is requested without internet)
 await page('/offline/', {
   title: 'You are offline | Janardhan General Stores',

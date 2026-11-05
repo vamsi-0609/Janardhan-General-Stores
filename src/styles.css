@@ -1446,3 +1446,16 @@ button.bl-item strong { text-decoration: underline; text-decoration-color: #c9cf
 .dlg-in dd { margin: 0; font-weight: 700; }
 .dlg-note { font-style: italic; color: var(--maroon); }
 .dlg-de { color: var(--muted); font-size: .92rem; line-height: 1.5; }
+
+/* ── Reply page buttons side by side; the customer's bill page ── */
+.rp-two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.rp-two[hidden] { display: none; }
+.rp-two .btn { min-height: 58px; font-size: 1.08rem; }
+.btn-wa-light { background: #e7f6ec; color: #1f6b41; border: 2px solid #1f7a4a; }
+.rp-more { gap: 4px 18px; }
+.bp-screen { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 16px 20px; }
+.bp-screen .bp-head img { display: block; margin: 0 auto 6px; border-radius: 50%; }
+.bp-screen .bp-head h1 { font-size: 1.25rem; }
+.bp-screen .bp-items small[lang] { color: #666; font-size: .82rem; }
+@media (max-width: 480px) { .bp-screen { padding: 14px 10px; } .bp-screen .bp-items th, .bp-screen .bp-items td { padding: 5px 3px; font-size: .9rem; } }
+.bp-screen .bp-items td:nth-child(3) { white-space: nowrap; }
