@@ -767,7 +767,6 @@ const askBlock = (name, caution) => '<div class="ask"><h2>Need help?</h2><p>Ask 
   '<a class="btn btn-light" href="' + telHref + '">' + icon('phone') + 'Call ' + esc(shop.phoneDisplay) + '</a>' +
   '<a class="btn btn-light" href="' + shop.mapsUrl + '" target="_blank" rel="noopener">' + icon('directions') + 'Directions</a></div>' + (caution || '') +
   '<p class="note">' + icon('info') + '<span>Photos are representative. Stock and prices are confirmed by the shop on WhatsApp.</span></p></div>'
-const akaHtml = (list) => (list.length ? '<div class="aka"><h2>Also known as</h2><ul>' + list.map((a) => '<li>' + esc(a) + '</li>').join('') + '</ul></div>' : '')
 const festFor = (t) => {
   const fs = festivals.filter((f) => f.items.includes(t.slug) || (t.photo && f.items.includes(t.photo)))
   return fs.length ? '<div class="aka fest-for"><h2>Suggested for</h2><ul>' + fs.map((f) => '<li><a href="' + festivalUrl(f) + '" style="--fa:' + f.colors[0] + '">' + esc(f.name) + ' ' + icon('arrow') + '</a></li>').join('') + '</ul></div>' : ''
@@ -800,7 +799,7 @@ for (const t of products) {
         '<div class="filter"><p class="count" data-filter-count aria-live="polite">' + linesOf(t.slug).length + ' items</p>' + sortBox + '</div>' + brandChips(ps) +
         '<ul class="product-grid">' + linesOf(t.slug).map((l, i) => lineCard(l, { eager: i < 2 })).join('') + '</ul>' +
         '<div class="empty" data-filter-empty hidden><p>No products match.</p></div>' +
-        '<div class="type-extra">' + akaHtml(t.aliases || []) + festFor(t) + cautionHtml(t) + '</div></div>' + moreInCategory(t, c),
+        '<div class="type-extra">' + festFor(t) + cautionHtml(t) + '</div></div>' + moreInCategory(t, c),
     })
   }
   for (const p of ps) {
@@ -836,7 +835,7 @@ for (const t of products) {
         (p.off ? '<button class="btn btn-add-big oos" type="button" data-add disabled><span>Out of stock</span></button>' : '<button class="btn btn-primary btn-add-big" type="button" data-add>' + icon('plus') + '<span>' + (kitItems(p).length ? 'Add kit to my list' : 'Add to my list') + '</span><small lang="te">' + (kitItems(p).length ? 'కిట్ జాబితాలో చేర్చండి' : 'జాబితాలో చేర్చండి') + '</small></button>') +
         '<p class="bb-help">' + (kitItems(p).length ? 'Adds every ticked item below to your list, grouped under this kit. ' : 'Add what you need, then send the list to the shop on WhatsApp. ') + '<span lang="te">జాబితా వాట్సాప్‌లో పంపండి.</span></p></div>' + kitPanel(p) +
         '<p class="desc">' + esc(p.desc || t.desc) + '</p>' +
-        akaHtml([...new Set([...(p.aliases || []), ...(t.aliases || [])])]) + festFor(t) + askBlock(p.name + (p.size ? ' ' + p.size : ''), cautionHtml(t)) +
+        festFor(t) + askBlock(p.name + (p.size ? ' ' + p.size : ''), cautionHtml(t)) +
         '</div></article></div>' +
         // phones: Add bar that stays at the bottom once the main Add button is scrolled away
         '<div class="sticky-buy buy' + (p.off ? ' is-off' : '') + '" ' + buyAttr(line, p.id) + ' data-sticky aria-hidden="true" inert><div class="sb-t"><strong>' + esc(p.name) + '</strong><span>' + esc(size) + (p.price ? ' · ' + esc(p.price) : '') + '</span></div>' + addBtn('Add ' + p.name + ' ' + size + ' to my list', p.off) + '</div>' +
