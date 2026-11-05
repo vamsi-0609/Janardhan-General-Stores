@@ -2,7 +2,13 @@
   "brands": [
     {
       "id": "3-roses",
-      "name": "3 Roses"
+      "name": "3 Roses",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "aahar",
@@ -15,7 +21,13 @@
     },
     {
       "id": "ariel",
-      "name": "Ariel"
+      "name": "Ariel",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "arshiya-black",
@@ -28,35 +40,83 @@
     },
     {
       "id": "bindu",
-      "name": "Bindu"
+      "name": "Bindu",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "bisleri",
-      "name": "Bisleri"
+      "name": "Bisleri",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "bru",
-      "name": "Bru"
+      "name": "Bru",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "chik",
-      "name": "Chik"
+      "name": "Chik",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "cinthol",
-      "name": "Cinthol"
+      "name": "Cinthol",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "clinic-plus",
-      "name": "Clinic Plus"
+      "name": "Clinic Plus",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "close-up",
-      "name": "Close Up"
+      "name": "Close Up",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "colgate",
-      "name": "Colgate"
+      "name": "Colgate",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "continental",
@@ -67,24 +127,85 @@
       "name": "CSR"
     },
     {
+      "id": "cycle-brand",
+      "name": "Cycle Brand",
+      "te": "సైకిల్ బ్రాండ్",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": {
+          "x": 0.08910891089108908,
+          "y": 0.08842134213421343,
+          "w": 0.8432343234323433,
+          "h": 0.8038137147048038
+        },
+        "clean": true
+      }
+    },
+    {
       "id": "dabur-red",
-      "name": "Dabur Red"
+      "name": "Dabur Red",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": {
+          "x": 0.12631578947368427,
+          "y": 0.25,
+          "w": 0.7907894736842105,
+          "h": 0.5518503289473684
+        },
+        "clean": true
+      }
     },
     {
       "id": "dettol",
-      "name": "Dettol"
+      "name": "Dettol",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "dove",
-      "name": "Dove"
+      "name": "Dove",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "freedom",
-      "name": "Freedom"
+      "name": "Freedom",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "gold-drop",
-      "name": "Gold Drop"
+      "name": "Gold Drop",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
+    },
+    {
+      "id": "jet",
+      "name": "Good knight",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "grb",
@@ -93,7 +214,13 @@
     },
     {
       "id": "head-shoulders",
-      "name": "Head & Shoulders"
+      "name": "Head & Shoulders",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "hit",
@@ -104,16 +231,24 @@
       "name": "India Gate"
     },
     {
-      "id": "jet",
-      "name": "Jet"
-    },
-    {
       "id": "karthika",
-      "name": "Karthika"
+      "name": "Karthika",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "kinley",
-      "name": "Kinley"
+      "name": "Kinley",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "lakshmi",
@@ -125,15 +260,33 @@
     },
     {
       "id": "maggi",
-      "name": "Maggi"
+      "name": "Maggi",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "meera",
-      "name": "Meera"
+      "name": "Meera",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "mysore-sandal",
-      "name": "Mysore Sandal"
+      "name": "Mysore Sandal",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "natraj",
@@ -145,7 +298,13 @@
     },
     {
       "id": "nescafe",
-      "name": "Nescafe"
+      "name": "Nescafe",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "ns",
@@ -163,27 +322,68 @@
     },
     {
       "id": "priya-gold",
-      "name": "Priya Gold"
+      "name": "Priya Gold",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "red-label",
-      "name": "Red Label"
+      "name": "Red Label",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "rin",
-      "name": "Rin"
+      "name": "Rin",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": {
+          "x": 0.07105263157894737,
+          "y": 0,
+          "w": 0.9092105263157895,
+          "h": 0.8834292763157895
+        },
+        "clean": true
+      }
     },
     {
       "id": "santoor",
-      "name": "Santoor"
+      "name": "Santoor",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "taj-mahal",
-      "name": "Taj Mahal"
+      "name": "Taj Mahal",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "tide",
-      "name": "Tide"
+      "name": "Tide",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "unity",
@@ -191,11 +391,23 @@
     },
     {
       "id": "vim",
-      "name": "Vim"
+      "name": "Vim",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "yippee",
-      "name": "Yippee"
+      "name": "Yippee",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     }
   ]
 }

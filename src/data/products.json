@@ -2837,6 +2837,31 @@
       ]
     },
     {
+      "id": "cycle-three-in-one-agarbathi-1",
+      "type": "sandal-agarbatti",
+      "brand": "cycle-brand",
+      "name": "Cycle Three in one Agarbathi",
+      "te": "సైకిల్ బ్రాండ్ 3 ఇన్ 1 అగరబత్తి",
+      "size": "1",
+      "quick": [
+        2,
+        3,
+        5,
+        10
+      ],
+      "desc": "Special fragrance of three in one Cycle brand agarabathi",
+      "aliases": [
+        "cycle",
+        "cycle brand",
+        "agarabathi",
+        "kaddilu"
+      ],
+      "photos": [
+        "p--cycle-three-in-one-agarbathi-1--ec9afc"
+      ],
+      "tag": "Most Selling"
+    },
+    {
       "id": "rose-incense-sticks-small-packet",
       "type": "rose-agarbatti",
       "name": "Rose Incense Sticks",
