@@ -45,7 +45,7 @@ Every product card has **Add**, then **− n +**. Loose items open a weight pane
 
 ### Shop reply (bill)
 
-The customer's WhatsApp list ends with a plain **Shop code** (no link, so the shop never has to tap links in customer messages). The shop copies the message and pastes it on `/reply/` (also a shortcut on the installed app's icon). The list opens as a bill: ✓ Have / ✗ No per item, a price box (number keypad) for each available item, an automatic total, **Send reply on WhatsApp** (straight to the customer's number) and **Print / Save as PDF**. Marks and prices are kept on that phone, so a list can be reopened and corrected. The code is checked strictly and everything is shown as plain text.
+The customer's WhatsApp list ends with a plain **Shop code** (no link, so the shop never has to tap links in customer messages). The shop copies the message and opens `/reply/` from its own home-screen icon (the page is not linked anywhere on the site); the copied list opens by itself (clipboard, allowed once). The list opens as a bill: ✓ Have / ✗ No per item, a price box (number keypad) for each available item, an automatic total, **Send reply on WhatsApp** (straight to the customer's number) and **Print / Save as PDF**. Marks and prices are kept on that phone, so a list can be reopened and corrected. The code is checked strictly and everything is shown as plain text.
 
 ### Puja kits
 

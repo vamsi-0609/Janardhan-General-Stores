@@ -352,7 +352,6 @@ function header(current) {
         <hr>
         <a href="${telHref}"><span>Call ${esc(shop.phoneDisplay)}</span>${icon('phone')}</a>
         <a href="${whatsappHref('Hello Janardhan General Stores, I have a question.')}" target="_blank" rel="noopener"><span>WhatsApp</span>${icon('whatsapp')}</a>
-        <a class="menu-shop" href="/reply/"${cur('reply')}><span>For the shop: reply to lists</span>${te('షాప్ కోసం')}</a>
       </nav>
     </details>
   </div>
@@ -1019,7 +1018,7 @@ await page('/list/', {
 await page('/reply/', {
   title: 'Reply to a list | Janardhan General Stores',
   description: 'For the shop: mark which items of a customer list are available and send the reply on WhatsApp.',
-  current: 'reply',
+  current: '',
   noindex: true,
   scripts: [REPLY_JS],
   body: `<section class="page-hero plain"><div class="container">
@@ -1293,7 +1292,6 @@ await writeFile(join(dist, 'site.webmanifest'), JSON.stringify({
     { name: 'Puja Samagri', short_name: 'Puja', url: '/puja-samagri/', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
     { name: 'Search items', short_name: 'Search', url: '/search/', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
     { name: 'Visit & directions', short_name: 'Visit', url: '/visit/', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
-    { name: 'For the shop: reply to a list', short_name: 'Shop reply', url: '/reply/', icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
   ],
 }, null, 2))
 

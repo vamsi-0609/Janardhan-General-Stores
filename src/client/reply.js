@@ -243,8 +243,8 @@
     root.innerHTML = `${bad ? '<p class="rp-bad">This reply link is not complete. Open it again from the customer’s WhatsApp message.</p>' : ''}
       <div class="rp-head rp-paste">
         <h2>Open a customer’s list</h2>
-        <ol class="rp-steps"><li>In WhatsApp, <strong>press and hold</strong> the customer’s list message → tap <strong>Copy</strong>.</li><li>Come back here and tap <strong>Paste</strong>.</li></ol>
-        <button type="button" class="btn btn-primary rp-paste-btn" data-paste>📋 Paste customer’s message</button>
+        <ol class="rp-steps"><li>In WhatsApp, <strong>press and hold</strong> the customer’s list message → tap <strong>Copy</strong>.</li><li>Open this page. The list opens by itself. (First time: tap the green button and choose <strong>Allow</strong>.)</li></ol>
+        <button type="button" class="btn btn-primary rp-paste-btn" data-paste>📋 Open the copied list</button>
         <label class="rp-paste-box"><span>Or press and hold in this box → Paste</span><textarea data-paste-box rows="3" placeholder="Paste the message here"></textarea></label>
         <p class="rp-err" data-paste-err hidden>No shop code found. Copy the whole list message (it ends with “Shop code: …”) and try again.</p>
         <p class="rp-safe">🔒 Never tap links inside customer messages. Open lists only from here.</p>
@@ -263,9 +263,31 @@
   }
   root.addEventListener('click', async (e) => {
     if (!e.target.closest('[data-paste]')) return
-    try { openPasted(await navigator.clipboard.readText()) } catch { root.querySelector('[data-paste-box]')?.focus() }
+    try { const t = await navigator.clipboard.readText(); const m = String(t).match(/Shop code:\s*([A-Za-z0-9_-]{8,})/); if (m) { try { localStorage.setItem(AUTO, m[1]) } catch {} } openPasted(t) } catch { root.querySelector('[data-paste-box]')?.focus() }
   })
   root.addEventListener('input', (e) => { if (e.target.matches('[data-paste-box]') && e.target.value.trim().length > 15) openPasted(e.target.value) })
+  // Opens the list the shop just copied in WhatsApp, without pasting: when the page opens or comes back to the
+  // front, read the clipboard (the phone asks "Allow" once). Each list is opened automatically only once.
+  const AUTO = 'jgs-reply-last-auto'
+  async function autoOpen(fromTap) {
+    if (location.hash || !navigator.clipboard?.readText) return
+    if (!fromTap) {
+      // without a tap, only read when the phone already allowed it (no surprise pop-ups)
+      const st = await navigator.permissions?.query({ name: 'clipboard-read' }).catch(() => null)
+      if (!st || st.state !== 'granted') return
+    }
+    let text = ''
+    try { text = await navigator.clipboard.readText() } catch { return }
+    const m = String(text).match(/Shop code:\s*([A-Za-z0-9_-]{8,})/)
+    if (!m) return
+    let last = ''
+    try { last = localStorage.getItem(AUTO) || '' } catch {}
+    if (!fromTap && last === m[1]) return
+    try { localStorage.setItem(AUTO, m[1]) } catch {}
+    location.hash = m[1]
+  }
+  addEventListener('focus', () => autoOpen(false))
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') autoOpen(false) })
   addEventListener('hashchange', show)
   root.innerHTML = '<p class="list-loading">Loading the list…</p>'
   fetch(document.documentElement.dataset.searchIndex)
@@ -274,6 +296,7 @@
       M = {}
       for (const e of index) if (e.o) for (const v of e.o.v) M[v.id] = { n: e.o.n, t: e.o.t, s: e.o.s, v }
       show()
+      autoOpen(false)
     })
     .catch(() => { M = {}; show() })
 })()
