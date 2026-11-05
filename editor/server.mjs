@@ -20,6 +20,7 @@ import { spawn, execFile } from 'node:child_process'
 import { randomBytes } from 'node:crypto'
 import sharp from 'sharp'
 sharp.cache(false) // never keep photo files open (Windows cannot rename open files)
+import { cleanLogo } from '../scripts/lib/logo-clean.mjs'
 import { root, srcDir, outDir, thumbDir, creditsFile, IMAGE_EXT, processPhoto, ownCredit, readCrops, writeCrops, validCrop, uprightBuffer } from '../scripts/lib/photos.mjs'
 
 const PORT = Number(process.env.EDITOR_PORT || 4300)
@@ -34,6 +35,7 @@ const productsFile = join(dataDir, 'products.json')
 const editorDir = join(root, 'editor')
 const festImgDir = join(root, 'public', 'img', 'festivals')
 const brandImgDir = join(root, 'public', 'img', 'brands')
+const brandSrcDir = join(root, 'brand-source', 'brands')
 const SHOP_NAME = 'Janardhan General Stores and Puja Samagri'
 
 await mkdir(srcDir, { recursive: true })
@@ -475,6 +477,36 @@ async function doPublish(note) {
   }
 }
 
+// ── Brand logos: original (brand-source/brands/<id>.png) → website copy (public/img/brands/<id>.webp) ──
+async function brandSource(id) {
+  const src = join(brandSrcDir, `${id}.png`)
+  if (!existsSync(src)) {
+    // logos uploaded before originals were kept: start from the website copy
+    const web = join(brandImgDir, `${id}.webp`)
+    must(existsSync(web), 'This brand has no logo.')
+    await mkdir(brandSrcDir, { recursive: true })
+    await sharp(await readFile(web)).png().toFile(src)
+  }
+  return src
+}
+async function makeBrandLogo(id, { rotate = 0, crop = null, clean = true } = {}) {
+  let buf = await sharp(await readFile(await brandSource(id))).rotate(rotate).png().toBuffer()
+  if (crop) {
+    const m = await sharp(buf).metadata()
+    const left = Math.round(crop.x * m.width), top = Math.round(crop.y * m.height)
+    const width = Math.max(8, Math.min(m.width - left, Math.round(crop.w * m.width))), height = Math.max(8, Math.min(m.height - top, Math.round(crop.h * m.height)))
+    buf = await sharp(buf).extract({ left, top, width, height }).png().toBuffer()
+  } else {
+    // cut away empty borders so every logo fills its space the same way
+    buf = await sharp(buf).trim({ threshold: 12 }).png().toBuffer().catch(() => buf)
+  }
+  if (clean) buf = await cleanLogo(buf)
+  const file = join(brandImgDir, `${id}.webp`)
+  const tmp = `${file}.${randomBytes(3).toString('hex')}.tmp`
+  await sharp(buf).resize(480, 240, { fit: 'inside', withoutEnlargement: true }).webp({ quality: 92, alphaQuality: 100 }).toFile(tmp)
+  await rename(tmp, file)
+}
+
 // ───────────────────────── HTTP ─────────────────────────
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.webp': 'image/webp', '.png': 'image/png', '.svg': 'image/svg+xml' }
 const send = (res, code, body, type = 'application/json; charset=utf-8') => {
@@ -545,6 +577,8 @@ async function handle(req, res) {
     if (path === '/app.js' || path === '/app.css') return send(res, 200, await readFile(join(editorDir, path.slice(1))), TYPES[extname(path)])
     const fi = path.match(/^\/festimg\/([a-z0-9-]+)\.webp$/)
     if (fi) { const file = join(festImgDir, `${fi[1]}.webp`); return existsSync(file) ? send(res, 200, await readFile(file), TYPES['.webp']) : send(res, 404, 'Not found', 'text/plain') }
+    const bs = path.match(/^\/brandsrc\/([a-z0-9-]+)\.png$/)
+    if (bs) { const rot = [0, 90, 180, 270].includes(Number(url.searchParams.get('rotate'))) ? Number(url.searchParams.get('rotate')) : 0; try { return send(res, 200, await sharp(await readFile(await brandSource(bs[1]))).rotate(rot).png().toBuffer(), TYPES['.png']) } catch { return send(res, 404, 'Not found', 'text/plain') } }
     const bl = path.match(/^\/brandlogo\/([a-z0-9-]+)\.webp$/)
     if (bl) { const file = join(brandImgDir, `${bl[1]}.webp`); return existsSync(file) ? send(res, 200, await readFile(file), TYPES['.webp']) : send(res, 404, 'Not found', 'text/plain') }
     if (path === '/logo.webp') return send(res, 200, await readFile(join(root, 'public', 'brand', 'emblem.webp')), TYPES['.webp'])
@@ -670,7 +704,7 @@ async function handle(req, res) {
       const i = data.brands.findIndex((x) => x.id === originalId)
       must(i >= 0, 'Brand not found.')
       b.id = originalId
-      if (data.brands[i].logo) b.logo = true
+      if (data.brands[i].logo) { b.logo = true; if (data.brands[i].logoEdit) b.logoEdit = data.brands[i].logoEdit }
       must(!data.brands.some((x, j) => j !== i && x.name.toLowerCase() === b.name.toLowerCase()), `The brand "${b.name}" already exists.`)
       data.brands[i] = b
     }
@@ -679,28 +713,40 @@ async function handle(req, res) {
     scheduleBuild()
     return send(res, 200, { ok: true, id: b.id })
   }
-  // Brand logo (optional): POST raw image → public/img/brands/<id>.webp ; DELETE removes it
-  const ml = path.match(/^\/api\/brand\/([a-z0-9-]+)\/logo$/)
+  // Brand logo (optional). The original is kept in brand-source/brands/<id>.png (not deployed) so the logo can be
+  // cropped / rotated again later; the website copy public/img/brands/<id>.webp is made from it.
+  //   POST raw image → upload     DELETE → remove     POST …/logo-edit { rotate, crop: {x,y,w,h} (0–1), clean } → re-make
+  const ml = path.match(/^\/api\/brand\/([a-z0-9-]+)\/logo(-edit)?$/)
   if (ml && (req.method === 'POST' || req.method === 'DELETE')) {
     const data = await readJson(brandsFile)
     const b = data.brands.find((x) => x.id === ml[1])
     must(b, 'Brand not found.')
-    const file = join(brandImgDir, `${b.id}.webp`)
-    if (req.method === 'POST') {
+    if (req.method === 'POST' && !ml[2]) {
       const body = await readBody(req, 20 * 1024 * 1024)
       const meta = await sharp(body).metadata().catch(() => null)
       must(meta && meta.width >= 40 && meta.height >= 20, 'That file is not a usable logo (PNG, JPG, WebP or SVG).')
-      let img = sharp(body, { density: 300 }).rotate()
-      // cut away empty borders (transparent or plain white) so every logo fills its box the same way
-      const trimmed = await img.clone().trim({ threshold: 12 }).toBuffer().catch(() => null)
-      if (trimmed) img = sharp(trimmed)
-      const tmp = `${file}.${randomBytes(3).toString('hex')}.tmp`
-      await img.resize(480, 240, { fit: 'inside', withoutEnlargement: true }).webp({ quality: 92, alphaQuality: 100 }).toFile(tmp)
-      await rename(tmp, file)
+      await mkdir(brandSrcDir, { recursive: true })
+      await sharp(body, { density: 300 }).rotate().resize(2000, 2000, { fit: 'inside', withoutEnlargement: true }).png().toFile(join(brandSrcDir, `${b.id}.png`))
       b.logo = true
+      b.logoEdit = { rotate: 0, crop: null, clean: true }
+      await makeBrandLogo(b.id, b.logoEdit)
+    } else if (req.method === 'POST') {
+      must(b.logo, 'Add a logo first.')
+      const body = await json(req)
+      const rotate = [0, 90, 180, 270].includes(Number(body.rotate)) ? Number(body.rotate) : 0
+      let crop = null
+      if (body.crop) {
+        const c = body.crop, n = (v) => Math.min(1, Math.max(0, Number(v) || 0))
+        crop = { x: n(c.x), y: n(c.y), w: n(c.w), h: n(c.h) }
+        must(crop.w >= 0.02 && crop.h >= 0.02 && crop.x + crop.w <= 1.0001 && crop.y + crop.h <= 1.0001, 'Choose a bigger part of the logo.')
+      }
+      b.logoEdit = { rotate, crop, clean: body.clean !== false }
+      await makeBrandLogo(b.id, b.logoEdit)
     } else {
-      await unlink(file).catch(() => {})
+      await unlink(join(brandImgDir, `${b.id}.webp`)).catch(() => {})
+      await unlink(join(brandSrcDir, `${b.id}.png`)).catch(() => {})
       delete b.logo
+      delete b.logoEdit
     }
     await writeJson(brandsFile, data)
     scheduleBuild()
@@ -713,6 +759,7 @@ async function handle(req, res) {
     const data = await readJson(brandsFile)
     data.brands = data.brands.filter((x) => x.id !== mb[1])
     await unlink(join(brandImgDir, `${mb[1]}.webp`)).catch(() => {})
+    await unlink(join(brandSrcDir, `${mb[1]}.png`)).catch(() => {})
     await writeJson(brandsFile, data)
     scheduleBuild()
     return send(res, 200, { ok: true })

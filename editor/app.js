@@ -755,18 +755,47 @@
   }
 
   // ───────── BRANDS ─────────
+  let bf = { q: '', show: '', sort: 'az' } // brand filters
+  const brandLogoUrl = (b) => `/brandlogo/${b.id}.webp?v=${b.logoV || 0}`
   function renderBrands() {
-    const counts = Object.fromEntries(S.brands.map((b) => [b.id, S.skus.filter((p) => p.brand === b.id).length]))
+    const counts = Object.fromEntries(S.brands.map((b) => [b.id, S.skus.filter((p) => p.brand === b.id)]))
+    const typesOf = (id) => [...new Set(counts[id].map((p) => shortT(typeBySlug(p.type))).filter(Boolean))]
+    const search = h('input', { type: 'search', value: bf.q, placeholder: 'Search brands, e.g. Rin, Priya…', 'aria-label': 'Search brands' })
+    const show = h('select', { 'aria-label': 'Show' }, [['', 'All brands'], ['logo', 'With logo'], ['nologo', 'Without logo'], ['unused', 'Not used by any product']].map(([v, l]) => h('option', { value: v, selected: v === bf.show }, l)))
+    const sort = h('select', { 'aria-label': 'Sort' }, [['az', 'A – Z'], ['most', 'Most products']].map(([v, l]) => h('option', { value: v, selected: v === bf.sort }, l)))
+    const count = h('span', { class: 'count' })
+    const grid = h('div', { class: 'bgrid' })
+    function draw() {
+      const q = norm(bf.q).trim()
+      let list = S.brands.filter((b) => (!q || norm(b.name).includes(q) || norm(b.te).includes(q) || typesOf(b.id).some((t) => norm(t).includes(q))) &&
+        (!bf.show || (bf.show === 'logo' ? b.logo : bf.show === 'nologo' ? !b.logo : !counts[b.id].length)))
+      list = list.sort((a, b) => (bf.sort === 'most' ? counts[b.id].length - counts[a.id].length : 0) || a.name.localeCompare(b.name))
+      const withLogo = S.brands.filter((b) => b.logo).length
+      count.textContent = `${list.length} of ${S.brands.length} brands · ${withLogo} with logo`
+      grid.replaceChildren(...(list.length ? list.map((b) => {
+        const n = counts[b.id].length, types = typesOf(b.id)
+        return h('article', { class: 'bcard' },
+          h('button', { type: 'button', class: 'bcard-logo' + (b.logo ? '' : ' empty'), title: b.logo ? 'Edit logo' : 'Add a logo (optional)', onclick: () => (b.logo ? openLogoEditor(b) : editBrand(b.id)) },
+            b.logo ? h('img', { src: brandLogoUrl(b), alt: `${b.name} logo` }) : h('span', {}, '＋ Add logo')),
+          h('div', { class: 'bcard-t' }, h('strong', {}, b.name), b.te ? h('span', { lang: 'te' }, b.te) : '',
+            h('small', {}, n ? `${n} product${n === 1 ? '' : 's'} · ${types.slice(0, 2).join(', ')}${types.length > 2 ? ' …' : ''}` : 'Not used yet')),
+          h('div', { class: 'bcard-acts' },
+            h('button', { class: 'btn small', type: 'button', onclick: () => editBrand(b.id) }, 'Edit'),
+            b.logo ? h('button', { class: 'btn small', type: 'button', onclick: () => openLogoEditor(b) }, '✂ Logo') : '',
+            n ? h('button', { class: 'btn small', type: 'button', onclick: () => { pf = { q: '', cat: '', type: '', brand: b.id, stock: '', view: 'list' }; switchTab('products') } }, 'Products') : ''))
+      }) : [h('p', { class: 'empty' }, 'No brands match. Try another word, or add the brand.')]))
+    }
+    search.addEventListener('input', () => { bf.q = search.value; draw() })
+    show.addEventListener('change', () => { bf.show = show.value; draw() })
+    sort.addEventListener('change', () => { bf.sort = sort.value; draw() })
+    draw()
     $('#main').replaceChildren(
-      h('div', { class: 'page-head' }, h('div', {}, h('h1', {}, 'Brands'), h('p', {}, 'Add a brand once, then pick it in any product. Renaming a brand here renames it everywhere. A logo is optional: when added, it shows on product cards, product pages, brand filters and the home page.')),
+      h('div', { class: 'page-head' }, h('div', {}, h('h1', {}, 'Brands'), h('p', {}, 'Add a brand once, then pick it in any product. Renaming a brand renames it everywhere. A logo is optional: it shows on product cards, product pages, brand filters and the moving brand row on the home page.')),
         h('button', { class: 'btn primary', type: 'button', onclick: () => editBrand(null) }, '＋ Add brand')),
-      h('div', { class: 'brand-grid' }, S.brands.map((b) => h('div', { class: 'row-card brand-rc' },
-        h('button', { type: 'button', class: 'logo-box' + (b.logo ? '' : ' empty'), title: b.logo ? 'Change logo' : 'Add logo (optional)', onclick: () => editBrand(b.id) }, b.logo ? h('img', { src: `/brandlogo/${b.id}.webp?v=${b.logoV || 0}`, alt: '' }) : '＋ logo'),
-        h('div', { class: 't' }, h('strong', {}, b.name, b.te ? h('span', { lang: 'te', class: 'te-inline' }, ' · ' + b.te) : ''), h('span', {}, `${counts[b.id]} product${counts[b.id] === 1 ? '' : 's'}`)),
-        h('div', { class: 'acts' },
-          h('button', { class: 'btn small', type: 'button', onclick: () => { pf = { q: '', cat: '', type: '', brand: b.id, stock: '' }; switchTab('products') } }, 'Products'),
-          h('button', { class: 'btn small', type: 'button', onclick: () => editBrand(b.id) }, 'Edit'))))),
+      h('div', { class: 'toolbar filters' }, search, show, sort, count),
+      grid,
     )
+    setTimeout(() => search.focus({ preventScroll: true }), 30)
   }
   function editBrand(id) {
     const isNew = !id
@@ -780,9 +809,11 @@
     })
     const removeLogo = async () => { if (confirm('Remove this logo?') && await act(() => api('DELETE', `/api/brand/${b.id}/logo`), 'Logo removed')) { await load(); closeDrawer(true); render(); editBrand(b.id) } }
     const logoBox = isNew ? h('p', { class: 'hint' }, 'Save the brand first, then you can add its logo (optional).') : h('div', { class: 'logo-edit' },
-      b.logo ? h('div', { class: 'logo-prev' }, h('img', { src: `/brandlogo/${b.id}.webp?v=${b.logoV || 0}`, alt: `${b.name} logo` })) : h('div', { class: 'logo-prev empty' }, 'No logo'),
-      h('div', { class: 'vtools' }, h('label', { class: 'btn' }, b.logo ? 'Change logo' : '＋ Add logo', logoFile), b.logo ? h('button', { type: 'button', class: 'btn danger', onclick: removeLogo }, 'Remove logo') : ''),
-      h('p', { class: 'hint' }, 'Optional. Best: a PNG with a transparent or white background (a clear photo of the logo also works). Empty borders are cut off automatically. Without a logo the brand name is shown.'))
+      b.logo ? h('div', { class: 'logo-prev' }, h('img', { src: brandLogoUrl(b), alt: `${b.name} logo` })) : h('div', { class: 'logo-prev empty' }, 'No logo'),
+      h('div', { class: 'vtools' }, h('label', { class: 'btn' }, b.logo ? 'Change logo' : '＋ Add logo', logoFile),
+        b.logo ? h('button', { type: 'button', class: 'btn', onclick: () => { closeDrawer(true); openLogoEditor(b) } }, '✂ Crop / rotate / background') : '',
+        b.logo ? h('button', { type: 'button', class: 'btn danger', onclick: removeLogo }, 'Remove logo') : ''),
+      h('p', { class: 'hint' }, 'Optional. Any picture of the logo works (PNG, JPG, a photo). A plain white or grey background is removed automatically. Use ✂ to choose exactly which part to keep.'))
     const save = async () => { if (await act(() => api('POST', '/api/brand', { brand: { id: b.id, name: f.name.value, te: f.te.value }, originalId: isNew ? null : b.id }), 'Saved ✓')) { await load(); closeDrawer(true); render() } }
     const del = async () => { if (!confirm(`Delete the brand “${b.name}”?`)) return; if (await act(() => api('DELETE', `/api/brand/${b.id}`), 'Brand deleted')) { await load(); closeDrawer(true); render() } }
     openDrawer(isNew ? 'Add a brand' : `Edit brand: ${b.name}`, h('form', { id: 'bform', onsubmit: (e) => { e.preventDefault(); save() } },
@@ -793,6 +824,94 @@
       h('span', { class: 'spacer' }),
       !isNew ? h('button', { class: 'btn danger', type: 'button', onclick: del, disabled: used > 0, title: used ? 'Change or delete its products first' : '' }, 'Delete brand') : '',
     ])
+  }
+
+  // ───────── LOGO EDITOR: choose the part to keep, rotate, remove the plain background ─────────
+  function openLogoEditor(b) {
+    const st = { rot: b.logoEdit?.rotate || 0, sel: b.logoEdit?.crop ? { ...b.logoEdit.crop } : { x: 0, y: 0, w: 1, h: 1 }, clean: b.logoEdit?.clean !== false }
+    const MIN = 0.03
+    const img = h('img', { alt: '', draggable: 'false' })
+    const sel = h('div', { class: 'lg-sel' }, ['nw', 'ne', 'sw', 'se'].map((c) => h('span', { class: `lg-h ${c}`, 'data-h': c })))
+    const wrap = h('div', { class: 'lg-wrap' }, img, sel)
+    const prevLight = h('canvas', { width: 260, height: 130 }), prevDark = h('canvas', { width: 260, height: 130 })
+    const clean = h('input', { type: 'checkbox', checked: st.clean })
+    const info = h('p', { class: 'hint lg-info' })
+    const clamp = () => {
+      const s = st.sel
+      s.w = Math.min(1, Math.max(MIN, s.w)); s.h = Math.min(1, Math.max(MIN, s.h))
+      s.x = Math.min(1 - s.w, Math.max(0, s.x)); s.y = Math.min(1 - s.h, Math.max(0, s.y))
+    }
+    function draw() {
+      clamp()
+      const s = st.sel
+      Object.assign(sel.style, { left: `${s.x * 100}%`, top: `${s.y * 100}%`, width: `${s.w * 100}%`, height: `${s.h * 100}%` })
+      const full = s.x < 0.002 && s.y < 0.002 && s.w > 0.996 && s.h > 0.996
+      info.textContent = full ? 'Whole picture selected: empty borders are cut off automatically.' : `Keeping ${Math.round(s.w * 100)}% × ${Math.round(s.h * 100)}% of the picture.`
+      if (!img.naturalWidth) return
+      for (const [cv, bg] of [[prevLight, '#f6f4ee'], [prevDark, '#3a1210']]) {
+        const c = cv.getContext('2d')
+        c.fillStyle = bg; c.fillRect(0, 0, cv.width, cv.height)
+        const sw = s.w * img.naturalWidth, sh = s.h * img.naturalHeight
+        const k = Math.min((cv.width - 24) / sw, (cv.height - 24) / sh)
+        c.drawImage(img, s.x * img.naturalWidth, s.y * img.naturalHeight, sw, sh, (cv.width - sw * k) / 2, (cv.height - sh * k) / 2, sw * k, sh * k)
+      }
+    }
+    const load = () => { img.src = `/brandsrc/${b.id}.png?rotate=${st.rot}&t=${Date.now()}` }
+    img.addEventListener('load', draw)
+    // pointer: drag on the picture = new box; drag the box = move; drag a corner = resize
+    let drag = null
+    const pt = (e) => { const r = img.getBoundingClientRect(); return { x: Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)), y: Math.min(1, Math.max(0, (e.clientY - r.top) / r.height)) } }
+    wrap.addEventListener('pointerdown', (e) => {
+      e.preventDefault()
+      wrap.setPointerCapture(e.pointerId)
+      const p = pt(e), s = { ...st.sel }
+      const corner = e.target.dataset?.h
+      const whole = s.x < 0.002 && s.y < 0.002 && s.w > 0.996 && s.h > 0.996 // whole picture: a drag draws a new box
+      drag = corner ? { mode: 'size', corner, s } : e.target === sel && !whole ? { mode: 'move', p, s } : { mode: 'new', p }
+      if (drag.mode === 'new') { st.sel = { x: p.x, y: p.y, w: MIN, h: MIN }; draw() }
+    })
+    wrap.addEventListener('pointermove', (e) => {
+      if (!drag) return
+      const p = pt(e)
+      if (drag.mode === 'move') st.sel = { ...drag.s, x: drag.s.x + p.x - drag.p.x, y: drag.s.y + p.y - drag.p.y }
+      else if (drag.mode === 'new') st.sel = { x: Math.min(p.x, drag.p.x), y: Math.min(p.y, drag.p.y), w: Math.abs(p.x - drag.p.x), h: Math.abs(p.y - drag.p.y) }
+      else {
+        const s = drag.s, right = s.x + s.w, bottom = s.y + s.h
+        const x1 = drag.corner.includes('w') ? Math.min(p.x, right - MIN) : s.x, x2 = drag.corner.includes('e') ? Math.max(p.x, s.x + MIN) : right
+        const y1 = drag.corner.includes('n') ? Math.min(p.y, bottom - MIN) : s.y, y2 = drag.corner.includes('s') ? Math.max(p.y, s.y + MIN) : bottom
+        st.sel = { x: x1, y: y1, w: x2 - x1, h: y2 - y1 }
+      }
+      draw()
+    })
+    const end = () => { drag = null }
+    wrap.addEventListener('pointerup', end); wrap.addEventListener('pointercancel', end)
+    const rotate = (d) => { st.rot = (st.rot + d + 360) % 360; st.sel = { x: 0, y: 0, w: 1, h: 1 }; load() }
+    const root = h('div', { class: 'lg-overlay' })
+    const close = () => { root.remove(); document.removeEventListener('keydown', onKey, true) }
+    const onKey = (e) => { if (e.key === 'Escape') { e.stopPropagation(); close() } }
+    document.addEventListener('keydown', onKey, true)
+    async function save() {
+      const s = st.sel, full = s.x < 0.002 && s.y < 0.002 && s.w > 0.996 && s.h > 0.996
+      if (await act(() => api('POST', `/api/brand/${b.id}/logo-edit`, { rotate: st.rot, crop: full ? null : s, clean: clean.checked }), 'Logo saved ✓')) { close(); await load2(); render() }
+    }
+    const load2 = () => api('GET', '/api/state').then((x) => { S = x; renderStatus(S.build, S.changes) })
+    root.append(h('div', { class: 'lg-box', role: 'dialog', 'aria-modal': 'true', 'aria-label': `Edit logo: ${b.name}` },
+      h('div', { class: 'lg-head' }, h('h2', {}, `Edit logo · ${b.name}`), h('button', { type: 'button', class: 'icon-btn', 'aria-label': 'Close', onclick: close }, '✕')),
+      h('div', { class: 'lg-body' },
+        h('div', { class: 'lg-left' },
+          h('div', { class: 'lg-tools' },
+            h('button', { type: 'button', class: 'btn small', onclick: () => rotate(-90) }, '⟲ Rotate left'),
+            h('button', { type: 'button', class: 'btn small', onclick: () => rotate(90) }, '⟳ Rotate right'),
+            h('button', { type: 'button', class: 'btn small', onclick: () => { st.sel = { x: 0, y: 0, w: 1, h: 1 }; draw() } }, '⤢ Whole picture')),
+          h('div', { class: 'lg-stage' }, wrap),
+          h('p', { class: 'hint' }, 'Drag on the picture to choose the part to keep. Drag the box to move it, or a corner to resize it.'), info),
+        h('div', { class: 'lg-right' },
+          h('p', { class: 'sd-h' }, 'Preview'), prevLight, prevDark,
+          h('label', { class: 'check-line' }, clean, h('span', {}, h('strong', {}, 'Remove plain background'), ' — white or grey around the logo becomes see-through (done when you save)')))),
+      h('div', { class: 'lg-foot' }, h('button', { type: 'button', class: 'btn primary', onclick: save }, 'Save logo'), h('button', { type: 'button', class: 'btn', onclick: close }, 'Cancel'))))
+    document.body.append(root)
+    load()
+    draw()
   }
 
   // ───────── PHOTO CROP / ADJUST ─────────
@@ -1277,7 +1396,9 @@
       h('h2', {}, 'Types and brands'),
       h('ul', { class: 'guide' },
         h('li', {}, s('New type:'), ' Types tab → “＋ Add type” → name, Telugu name, category, description, photo. Then add its products in the Products tab.'),
-        h('li', {}, s('Brand logo (optional):'), ' Brands tab → click “＋ logo” (or Edit) → “＋ Add logo”. A PNG with a transparent or white background looks best. The logo then shows on product cards, product pages, the brand buttons, search, and in “Brands at the shop” on the home page. A product without a photo shows its brand logo instead of a plain name tile. No logo? The brand name is shown, as before.'),
+        h('li', {}, s('Find a brand:'), ' Brands tab → type in the search box, or choose “With logo / Without logo / Not used”.'),
+        h('li', {}, s('Edit a logo:'), ' click the logo (or “✂ Logo”). Drag on the picture to choose the part to keep, drag the box to move it, or a corner to resize. ⟲ ⟳ rotate. Tick “Remove plain background” to make white or grey around the logo see-through. The preview shows it on a light and a dark background. Press “Save logo”. You can change it again any time.'),
+h('li', {}, s('Brand logo (optional):'), ' Brands tab → click “＋ logo” (or Edit) → “＋ Add logo”. Any picture of the logo works (PNG, JPG or a photo). The logo then shows on product cards, product pages, the brand buttons, search, and in “Brands at the shop” on the home page. A product without a photo shows its brand logo instead of a plain name tile. No logo? The brand name is shown, as before.'),
         h('li', {}, s('Brands of a type:'), ' when you choose a type in a product, the brand list shows that type’s brands first. Picking another brand adds it to the type.'),
         h('li', {}, s('Price note:'), ' a type can have a general note like “₹30 – ₹45, depending on size”. Exact prices go on each size.')),
       h('h2', {}, 'Putting changes on the website'),
