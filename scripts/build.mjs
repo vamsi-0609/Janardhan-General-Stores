@@ -673,8 +673,15 @@ ${rowHtml('star-h', 'Popular at the shop', 'ఎక్కువగా కొన�
 ${kitsRow()}
 ${(() => {
   const withLogo = [...new Map(skus.filter((p) => p.brand && brandLogo(p.brand) && products.some((t) => t.slug === p.type)).map((p) => [p.brand, p.brandName])).entries()]
-  return withLogo.length ? '<section class="container section brand-row" aria-labelledby="brands-h"><div class="section-head"><h2 id="brands-h">Brands at the shop ' + te('బ్రాండ్లు') + '</h2></div><ul class="logo-strip">' +
-    withLogo.map(([id, name]) => '<li><a href="/search/?q=' + encodeURIComponent(name) + '" title="' + esc(name) + '"><img src="' + brandLogo(id) + '" alt="' + esc(name) + '" loading="lazy" decoding="async"></a></li>').join('') + '</ul></section>' : ''
+  if (!withLogo.length) return ''
+  // One row of logos that moves slowly by itself (CSS). The set is repeated so the row is always full, then the whole
+  // row is doubled so the loop is seamless; only the first set is read out / reachable by keyboard.
+  const item = ([id, name], hidden) => '<li' + (hidden ? ' aria-hidden="true"' : '') + '><a href="/search/?q=' + encodeURIComponent(name) + '" title="' + esc(name) + '"' + (hidden ? ' tabindex="-1"' : '') + '><img src="' + brandLogo(id) + '" alt="' + (hidden ? '' : esc(name)) + '" loading="lazy" decoding="async"></a></li>'
+  const reps = Math.max(1, Math.ceil(10 / withLogo.length))
+  const set = Array.from({ length: reps }, (_, k) => withLogo.map((b) => item(b, k > 0))).flat().join('')
+  const copy = Array.from({ length: reps }, () => withLogo.map((b) => item(b, true))).flat().join('')
+  return '<section class="container section brand-row" aria-labelledby="brands-h"><div class="section-head"><h2 id="brands-h">Brands at the shop ' + te('బ్రాండ్లు') + '</h2></div>' +
+    '<div class="logo-marquee" style="--n:' + withLogo.length * reps + '"><ul class="logo-track">' + set + copy + '</ul></div></section>'
 })()}
 <section class="container section" aria-labelledby="how-h" style="padding-top:0">
   <div class="section-head"><div><p class="kicker">How it works</p><h2 id="how-h">Browse here. Buy at the shop.</h2></div></div>
