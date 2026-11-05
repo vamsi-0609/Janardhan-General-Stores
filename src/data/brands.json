@@ -120,7 +120,13 @@
     },
     {
       "id": "continental",
-      "name": "Continental"
+      "name": "Continental",
+      "logo": true,
+      "logoEdit": {
+        "rotate": 0,
+        "crop": null,
+        "clean": true
+      }
     },
     {
       "id": "csr",
