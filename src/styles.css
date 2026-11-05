@@ -1550,3 +1550,5 @@ button.fest-pill:disabled { opacity: 1; }
 }
 .logo-track img { mix-blend-mode: multiply; } /* white logo backgrounds blend into the page */
 .logo-marquee, .logo-track { background: var(--bg); } /* the logos blend with this colour */
+/* Home page rows (festival items, ready kits, popular): no size pill on the cards; sizes are on the product page */
+.fest-rail .card .size, section[aria-labelledby='kits-h'] .card .size, section[aria-labelledby='star-h'] .card .size { display: none; }
