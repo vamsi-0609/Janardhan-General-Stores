@@ -541,7 +541,7 @@
     }
     return `<li class="pc"><a class="card" data-theme="${p.sec === 'puja-samagri' ? 'puja' : 'kirana'}" href="${esc(linkFor(p, pic))}">
       <div class="ph">${ph}${pic.brand ? `<span class="brand-pill">${esc(pic.brand)}</span>` : ''}</div>
-      <div class="body"><span class="cat">${esc(p.c)}</span>${p.b && p.b[0] ? `<span class="brand-k">${esc(p.b[0])}</span>` : ''}<span class="en">${highlight(p.n, q)}</span><span class="te" lang="te">${esc(p.t)}</span>${mv ? `<span class="size match">${esc(mv.w ? 'Loose' : mv.l)}</span>` : p.z ? `<span class="size">${highlight(p.z, q)}</span>` : ''}</div>
+      <div class="body"><span class="cat">${esc(p.c)}</span>${p.b && p.b[0] ? `<span class="brand-k${p.bl ? ' has-logo' : ''}">${p.bl ? `<img class="bk-logo" src="${esc(p.bl)}" alt="">` : ''}<span>${esc(p.b[0])}</span></span>` : ''}<span class="en">${highlight(p.n, q)}</span><span class="te" lang="te">${esc(p.t)}</span>${mv ? `<span class="size match">${esc(mv.w ? 'Loose' : mv.l)}</span>` : p.z ? `<span class="size">${highlight(p.z, q)}</span>` : ''}</div>
     </a>${buy}</li>`
   }
   let cardSeq = 0

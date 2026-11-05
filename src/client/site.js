@@ -168,6 +168,33 @@
     chipGroup(brandBox, 'data-brand-chip', (v) => (brand = v))
   }
 
+  // 5a. Sort on category and type pages: shop order (default), name, price. Items without a price go last.
+  const sortSel = document.querySelector('[data-sort]')
+  const grid = document.querySelector('.product-grid')
+  if (sortSel && grid) {
+    sortSel.closest('[data-sort-wrap]').hidden = false
+    const items = [...grid.children]
+    const priceOf = (li) => {
+      const m = (li.querySelector('[data-price]')?.textContent || '').replace(/,/g, '').match(/₹\s*(\d+(?:\.\d+)?)/)
+      return m ? Number(m[1]) : null
+    }
+    const nameOf = (li) => (li.querySelector('.en')?.textContent || '').trim().toLowerCase()
+    sortSel.addEventListener('change', () => {
+      const how = sortSel.value
+      const list = [...items]
+      if (how === 'name') list.sort((a, b) => nameOf(a).localeCompare(nameOf(b)))
+      else if (how) {
+        const dir = how === 'price-d' ? -1 : 1
+        list.sort((a, b) => {
+          const pa = priceOf(a), pb = priceOf(b)
+          if (pa == null || pb == null) return pa == null ? (pb == null ? 0 : 1) : -1
+          return (pa - pb) * dir
+        })
+      }
+      grid.append(...list)
+    })
+  }
+
   // 5b. Product page on phones: show the sticky Add bar once the main Add box has scrolled out of view.
   const stickyBuy = document.querySelector('[data-sticky]')
   const mainBuy = document.querySelector('.buy-box[data-big]')

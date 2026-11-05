@@ -13,7 +13,9 @@
  * products.json    products:   [{ id, type, brand?, name, te?, size, loose?, unit?, quick?[], price?, desc?, aliases?[], photos?[], off? }]
  *                    size  – "½ kg packet", "₹10 sachet", "Small" …    loose – bought loose by weight (from 250 g)
  *                    unit  – count word when there is no size ("bar", "piece")    quick – quick-pick amounts (grams if loose)
- *                    photos – names of files in public/img/products/<name>.webp (first = main)    off – out of stock (hidden)
+ *                    photos – names of files in public/img/products/<name>.webp (first = main)    off – out of stock (shown, Add disabled)
+ *                    hide – not on the website at all    tag – small label on the card ("New", "Popular" …)    star – shown on the home page
+ *                    kit – a puja kit: [{ id: <product id>, a: amount (count, or grams when that product is loose) }]
  *   Products with the same type + brand + name are the SIZES of one product line (shown together on the product page).
  */
 import { readFileSync } from 'node:fs'
@@ -27,13 +29,14 @@ const allSkus = read('./products.json').products
 export const sections = data.sections
 export const allTypeSlugs = new Set(data.categories.flatMap((c) => c.products.map((p) => p.slug)))
 
-/** Products on the website (out-of-stock ones too: they are shown greyed out), with their brand name. */
+/** Products on the website (out-of-stock ones too: their Add button is disabled), with their brand name. Hidden ones are left out. */
 export const skus = allSkus
-  .filter((p) => allTypeSlugs.has(p.type))
+  .filter((p) => allTypeSlugs.has(p.type) && !p.hide)
   .map((p) => ({ ...p, brandName: p.brand ? brandById.get(p.brand)?.name || '' : '' }))
 const byType = new Map()
 for (const p of skus) { if (!byType.has(p.type)) byType.set(p.type, []); byType.get(p.type).push(p) }
-/** In-stock products of a type. */
+export const skuById = new Map(skus.map((p) => [p.id, p]))
+/** Products of a type. */
 export const skusOf = (typeSlug) => byType.get(typeSlug) || []
 
 // Types without any in-stock product are left out of the website; so are empty categories.

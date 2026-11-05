@@ -10,7 +10,7 @@ import { createHash } from 'node:crypto'
 import { join, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { shop, telHref, mailHref, whatsappHref } from '../src/data/shop.mjs'
-import { sections, categories, products, categoriesOf, sectionOf, categoryOf, skus, skusOf, allTypeSlugs } from '../src/data/catalogue.mjs'
+import { sections, categories, products, categoriesOf, sectionOf, categoryOf, skus, skusOf, skuById, brandById, allTypeSlugs } from '../src/data/catalogue.mjs'
 import { festivals } from '../src/data/festivals.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
@@ -134,7 +134,9 @@ const multi = (t) => skusOf(t.slug).length > 1
 const skuUrl = (p) => { const t = typeOf(p); const ls = linesOf(t.slug); return ls.length === 1 && firstIn(ls[0]) === p ? productUrl(t) : productUrl(t) + p.id + '/' }
 const skuPhotos = (p) => (p.photos || []).filter(hasPhoto)
 const skuMain = (p) => skuPhotos(p)[0] || null
-const sizeText = (p) => (p.loose ? `Loose · from ${p.min || 250} g` : p.size || (p.unit ? `Per ${p.unit}` : ''))
+/** Contents of a puja kit: [{ id, a: amount, p: product }] (only products that are on the website, never another kit). */
+const kitItems = (p) => (p.kit || []).map((k) => ({ ...k, p: skuById.get(k.id) })).filter((k) => k.p && !(k.p.kit || []).length && k.a > 0)
+const sizeText = (p) => (p.loose ? `Loose · from ${p.min || 250} g` : p.size || (kitItems(p).length ? `Kit · ${kitItems(p).length} items` : p.unit ? `Per ${p.unit}` : ''))
 const slugish = (s) => String(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 const lineKey = (p) => `${p.type}:${p.brand || '-'}:${slugish(p.name)}`
 /** Product lines of a type, in order: [[size, size …], …] */
@@ -142,11 +144,16 @@ const linesOf = (typeSlug) => { const m = new Map(); for (const p of skusOf(type
 const lineOf = (p) => linesOf(p.type).find((l) => l.includes(p))
 const firstIn = (line) => line.find((x) => !x.off) || line[0]
 const lineMain = (line) => { for (const x of [firstIn(line), ...line]) { const m = skuMain(x); if (m) return m } return null }
-const tileHtml = (p, big = false) => '<span class="brand-tile' + (big ? ' big' : '') + '" style="--mc:' + monoColor(p.brandName || p.name) + '"><strong>' + esc(p.brandName || p.name.replace(/\s*\(.*\)\s*$/, '')) + '</strong><small>Photo coming soon</small></span>'
+/** Brand logo (optional, added in the editor's Brands tab): public/img/brands/<brand id>.webp */
+const brandLogo = (id) => { const b = id && brandById.get(id); return b && b.logo && existsSync(join(root, 'public', 'img', 'brands', id + '.webp')) ? versioned('/img/brands/' + id + '.webp') : '' }
+const brandK = (p, cls = 'brand-k') => (p.brandName ? '<span class="' + cls + (brandLogo(p.brand) ? ' has-logo' : '') + '">' + (brandLogo(p.brand) ? '<img class="bk-logo" src="' + brandLogo(p.brand) + '" alt="" loading="lazy" decoding="async">' : '') + '<span>' + esc(p.brandName) + '</span></span>' : '')
+const tileHtml = (p, big = false) => brandLogo(p.brand)
+  ? '<span class="brand-tile logo-tile' + (big ? ' big' : '') + '"><img src="' + brandLogo(p.brand) + '" alt="' + esc(p.brandName) + '" loading="lazy" decoding="async"><small>Photo coming soon</small></span>'
+  : '<span class="brand-tile' + (big ? ' big' : '') + '" style="--mc:' + monoColor(p.brandName || p.name) + '"><strong>' + esc(p.brandName || p.name.replace(/\s*\(.*\)\s*$/, '')) + '</strong><small>Photo coming soon</small></span>'
 /** What "My list" needs: the product line with all its sizes. */
-function lineCfg(line) {
+function lineCfg(line, inner = false) {
   const p0 = firstIn(line), t = typeOf(p0), main = lineMain(line)
-  return { k: lineKey(p0), n: p0.name, t: p0.te || t.te, u: skuUrl(p0), i: main ? thumb(main) : '', ...(p0.brandName ? { b: p0.brandName } : {}),
+  return { k: lineKey(p0), n: p0.name, t: p0.te || t.te, u: skuUrl(p0), i: main ? thumb(main) : '', s: t.section === 'puja-samagri' ? 'p' : 'k', ...(p0.brandName ? { b: p0.brandName } : {}),
     v: line.map((p) => {
       const v = { id: p.id, l: p.loose ? '' : p.size || '', u: skuUrl(p) }
       if (p.price) v.p = p.price
@@ -155,8 +162,34 @@ function lineCfg(line) {
       if (!p.loose && p.quick && p.quick.length) v.q = p.quick
       const m = skuMain(p); if (m) v.i = thumb(m)
       if (p.off) v.off = 1
+      if (!inner && kitItems(p).length) v.kit = kitItems(p).map((k) => ({ c: lineCfg(lineOf(k.p), true), v: k.id, a: k.a }))
       return v
     }) }
+}
+/** Owner's label for a product line ("New", "Popular" …), shown on the card photo. */
+const lineTag = (line) => (line.find((x) => x.tag) || {}).tag || ''
+const tagPill = (line) => (lineTag(line) ? '<span class="tag-pill">' + esc(lineTag(line)) + '</span>' : '')
+/** Amount as shown in a kit row: "250 g", "2", "3 pieces". */
+const kitAmt = (p, a) => (p.loose ? (a < 1000 ? a + ' g' : +(a / 1000).toFixed(2) + ' kg') : p.size ? String(a) : a + ' ' + (a === 1 ? p.unit || 'item' : (p.unit || 'item') === 'leaf' ? 'leaves' : /(x|ch|sh|s)$/.test(p.unit || 'item') ? (p.unit || 'item') + 'es' : (p.unit || 'item') + 's'))
+/** Product page of a puja kit: "What's inside" list. Customers untick items, change sizes and amounts (list.js). */
+function kitPanel(p) {
+  const items = kitItems(p)
+  if (!items.length) return ''
+  return '<section class="kit-box" data-kit-panel="' + esc(p.id) + '" aria-labelledby="kit-h">' +
+    '<div class="kit-head"><h2 id="kit-h">What’s inside <span lang="te">కిట్‌లో ఉన్నవి</span></h2>' +
+    '<p class="kit-sub"><span data-kit-count>' + items.length + ' items</span><span class="kit-tip"> · Untick what you already have. Change sizes and amounts.</span></p></div>' +
+    '<ul class="kit-list">' + items.map((k, i) => {
+      const x = k.p, line = lineOf(x), m = skuMain(x) || lineMain(line), tp = typeOf(x)
+      const sizes = line.length > 1
+        ? '<select class="kit-size" data-kit-size aria-label="Size of ' + esc(x.name) + '">' + line.map((y) => '<option value="' + esc(y.id) + '"' + (y === x ? ' selected' : '') + (y.off ? ' disabled' : '') + '>' + esc(sizeText(y)) + (y.price ? ' · ' + esc(y.price) : '') + (y.off ? ' (out of stock)' : '') + '</option>').join('') + '</select>'
+        : '<span class="kit-sz">' + esc([sizeText(x), x.price].filter(Boolean).join(' · ')) + '</span>'
+      return '<li class="kit-row' + (x.off ? ' is-off' : '') + '" data-i="' + i + '">' +
+        '<label class="kit-chk"><input type="checkbox" data-kit-on' + (x.off ? ' disabled' : ' checked') + ' aria-label="Include ' + esc(x.name) + '"></label>' +
+        '<a class="kit-ph" href="' + skuUrl(x) + '" tabindex="-1" aria-hidden="true">' + (m ? '<img src="' + thumb(m) + '" alt="" width="48" height="48" loading="lazy" decoding="async">' : '<span class="li-noph">' + esc(x.name.slice(0, 2).toUpperCase()) + '</span>') + '</a>' +
+        '<div class="kit-t"><a href="' + skuUrl(x) + '">' + esc(x.name) + '</a>' + te(x.te || tp.te, 'span', 'te') + (x.off ? '<span class="li-oos">Out of stock</span>' : '') + sizes + '</div>' +
+        '<div class="stepper small" role="group" aria-label="Amount of ' + esc(x.name) + '"><button type="button" data-kit-step="-1" aria-label="Less">−</button><output>' + esc(kitAmt(x, k.a)) + '</output><button type="button" data-kit-step="1" aria-label="More">+</button></div></li>'
+    }).join('') + '</ul>' +
+    '<div class="kit-foot"><button type="button" class="link-btn" data-kit-reset>Reset to the full kit</button><span class="kit-state" data-kit-state aria-live="polite"></span></div></section>'
 }
 const buyAttr = (line, fixed) => 'data-buy="' + esc(JSON.stringify(lineCfg(line))) + '"' + (fixed ? ' data-fixed="' + esc(fixed) + '"' : '')
 const addBtn = (label, off) => '<button class="add-btn" type="button" data-add aria-label="' + esc(label) + '"' + (off ? ' disabled' : '') + '>' + (off ? '<span>Out of stock</span>' : icon('plus') + '<span>Add</span>') + '</button>'
@@ -177,8 +210,8 @@ function lineCard(line, { eager = false, showCat = false } = {}) {
     : ''
   return '<li class="pc' + (allOff ? ' is-off' : '') + '" data-filter-item="' + esc(words) + '" data-type="' + t.slug + '" data-brand="' + esc(p.brand || '') + '">' +
     '<a class="card" data-theme="' + theme(t.section) + '" href="' + skuUrl(p) + '">' +
-    '<div class="ph">' + ph + (allOff ? '<span class="oos-pill">Out of stock</span>' : '') + '</div>' +
-    '<div class="body">' + (showCat ? '<span class="cat">' + esc(c.name) + '</span>' : '') + (p.brandName ? '<span class="brand-k">' + esc(p.brandName) + '</span>' : '') +
+    '<div class="ph">' + ph + tagPill(line) + (allOff ? '<span class="oos-pill">Out of stock</span>' : '') + '</div>' +
+    '<div class="body">' + (showCat ? '<span class="cat">' + esc(c.name) + '</span>' : '') + brandK(p) +
     '<span class="en">' + esc(p.name) + '</span>' + te(p.te || t.te, 'span', 'te') + (line.length === 1 && sizeText(p) ? '<span class="size">' + esc(sizeText(p)) + '</span>' : '') + '</div></a>' +
     '<div class="buy" ' + buyAttr(line) + '>' + sizes + '<p class="b-price" data-price>' + esc(p.price || '') + '</p>' + addBtn('Add ' + p.name + ' to my list', p.off) + '</div></li>'
 }
@@ -186,7 +219,7 @@ function lineCard(line, { eager = false, showCat = false } = {}) {
 function sizeCard(line, p) {
   const main = skuMain(p) || lineMain(line)
   return '<li class="pc vc' + (p.off ? ' is-off' : '') + '"><a class="card" href="' + skuUrl(p) + '"><div class="ph">' + (main ? '<img src="' + thumb(main) + '" alt="' + esc(p.name + ' ' + sizeText(p)) + '" width="320" height="320" loading="lazy" decoding="async">' : tileHtml(p)) + (p.off ? '<span class="oos-pill">Out of stock</span>' : '') + '</div>' +
-    '<div class="body">' + (p.brandName ? '<span class="brand-k">' + esc(p.brandName) + '</span>' : '') + '<span class="vc-l">' + esc(sizeText(p)) + '</span><span class="te">' + esc(p.name) + '</span></div></a>' +
+    '<div class="body">' + brandK(p) + '<span class="vc-l">' + esc(sizeText(p)) + '</span><span class="te">' + esc(p.name) + '</span></div></a>' +
     '<div class="buy" ' + buyAttr(line, p.id) + '><p class="b-price">' + esc(p.price || '') + '</p>' + addBtn('Add ' + p.name + ' ' + sizeText(p) + ' to my list', p.off) + '</div></li>'
 }
 /** A type on a card: its single product line, or a "choose" card when it has several. */
@@ -207,7 +240,7 @@ const brandChips = (ps) => {
   const bs = [...new Map(ps.filter((p) => p.brand).map((p) => [p.brand, p.brandName])).entries()]
   return bs.length > 1 ? '<div class="type-chips" data-brand-chips hidden role="group" aria-label="Brand">' +
     '<button type="button" class="tchip" data-brand-chip="" aria-pressed="true">All brands</button>' +
-    bs.map(([id, name]) => '<button type="button" class="tchip" data-brand-chip="' + esc(id) + '" aria-pressed="false">' + esc(name) + '</button>').join('') + '</div>' : ''
+    bs.map(([id, name]) => '<button type="button" class="tchip' + (brandLogo(id) ? ' has-logo' : '') + '" data-brand-chip="' + esc(id) + '" aria-pressed="false">' + (brandLogo(id) ? '<img src="' + brandLogo(id) + '" alt="">' : '') + esc(name) + '</button>').join('') + '</div>' : ''
 }
 
 const sectionLabelShort = (slug) => (slug === 'puja-samagri' ? 'Puja Samagri' : 'Kirana')
@@ -219,7 +252,7 @@ for (const t of products) {
   if (ls.length > 1) searchIndex.push({ k: 't', n: t.name, t: t.te, a: [...(t.aliases || [])], b: [...new Set(skusOf(t.slug).map((x) => x.brandName).filter(Boolean))], ...common, u: productUrl(t), i: thumb(t.photo || t.slug), cnt: ls.length })
   for (const line of ls) {
     const p = firstIn(line), main = lineMain(line)
-    searchIndex.push({ n: p.name, z: line.length === 1 ? sizeText(p) : `${line.length} sizes`, t: p.te || t.te, a: [...new Set([...line.flatMap((x) => x.aliases || []), ...(t.aliases || []), ...(ls.length > 1 ? [typeShort(t)] : [])])], b: p.brandName ? [p.brandName] : [], ...common, u: skuUrl(p), i: main ? thumb(main) : '', o: lineCfg(line) })
+    searchIndex.push({ n: p.name, z: line.length === 1 ? sizeText(p) : `${line.length} sizes`, t: p.te || t.te, a: [...new Set([...line.flatMap((x) => x.aliases || []), ...(t.aliases || []), ...(ls.length > 1 ? [typeShort(t)] : [])])], b: p.brandName ? [p.brandName] : [], ...(brandLogo(p.brand) ? { bl: brandLogo(p.brand) } : {}), ...common, u: skuUrl(p), i: main ? thumb(main) : '', o: lineCfg(line) })
   }
 }
 
@@ -582,6 +615,16 @@ function festivalSections() {
 }
 
 // ───────────────────────── pages ─────────────────────────
+function rowHtml(id, title, teTitle, cards, more = '') {
+  return cards.length ? '<section class="container section rail-sec" aria-labelledby="' + id + '"><div class="section-head"><h2 id="' + id + '">' + title + (teTitle ? ' ' + te(teTitle) : '') + '</h2>' + more + '</div><ul class="rail">' + cards.join('') + '</ul></section>' : ''
+}
+const allLines = () => products.flatMap((t) => linesOf(t.slug))
+const starLines = allLines().filter((l) => l.some((x) => x.star))
+const kitLines = allLines().filter((l) => kitItems(firstIn(l)).length)
+const kitsRow = (more = true) => rowHtml('kits-h', 'Ready puja kits', 'పూజా కిట్లు', kitLines.map((l) => lineCard(l)),
+  more ? '<a class="link-arrow" href="' + categoryUrl(categoryOf(typeOf(firstIn(kitLines[0] || [skus[0]])).category)) + '">All kits ' + icon('arrow') + '</a>' : '')
+const sortBox = '<label class="sort-box" data-sort-wrap hidden><span>Sort</span><select data-sort aria-label="Sort items"><option value="">Shop order</option><option value="name">Name A–Z</option><option value="price">Price: low to high</option><option value="price-d">Price: high to low</option></select></label>'
+
 // Home
 {
   const collage = ['clay-diyas', 'toor-dal', 'kumkum', 'bath-soap', 'cashew-nuts', 'neyyi-deepam']
@@ -620,7 +663,14 @@ function festivalSections() {
     <div class="hero-collage" aria-hidden="true">${collage.map((s) => `<img src="${thumb(s)}" alt="" width="320" height="320">`).join('')}</div>
   </div>
 </section>
+${rowHtml('star-h', 'Popular at the shop', 'ఎక్కువగా కొనేవి', starLines.map((l) => lineCard(l)))}
 <section class="container section" aria-label="Shop by category" style="padding-top:18px">${panels}</section>
+${kitsRow()}
+${(() => {
+  const withLogo = [...new Map(skus.filter((p) => p.brand && brandLogo(p.brand) && products.some((t) => t.slug === p.type)).map((p) => [p.brand, p.brandName])).entries()]
+  return withLogo.length ? '<section class="container section brand-row" aria-labelledby="brands-h"><div class="section-head"><h2 id="brands-h">Brands at the shop ' + te('బ్రాండ్లు') + '</h2></div><ul class="logo-strip">' +
+    withLogo.map(([id, name]) => '<li><a href="/search/?q=' + encodeURIComponent(name) + '" title="' + esc(name) + '"><img src="' + brandLogo(id) + '" alt="' + esc(name) + '" loading="lazy" decoding="async"></a></li>').join('') + '</ul></section>' : ''
+})()}
 <section class="container section" aria-labelledby="how-h" style="padding-top:0">
   <div class="section-head"><div><p class="kicker">How it works</p><h2 id="how-h">Browse here. Buy at the shop.</h2></div></div>
   <ol class="how">
@@ -657,6 +707,7 @@ for (const s of sections) {
     <div class="thumbs" aria-hidden="true">${c.products.slice(0, 4).map((p) => `<img src="${thumb(p.photo || p.slug)}" alt="" width="160" height="160" loading="lazy" decoding="async">`).join('')}</div>
     <div><h2>${esc(c.name)}</h2>${te(c.te, 'p', 'te')}<p class="meta">${c.products.length} items · ${esc(c.products.slice(0, 3).map((p) => p.name.replace(/ \(.*\)/, '')).join(', '))}…</p><span class="go">View items ${icon('arrow')}</span></div>
   </a></li>`).join('')}</ul>
+  ${s.slug === 'puja-samagri' && kitLines.length ? '</section>' + kitsRow() + '<section class="container section" style="padding-top:0">' : ''}
   <p style="margin-top:24px"><a class="link-arrow" href="${sectionUrl(other.slug)}" style="color:${other.slug === 'kirana' ? 'var(--forest)' : 'var(--maroon)'}">Also browse ${esc(other.title)} · ${te(other.te)} ${icon('arrow')}</a></p>
 </section>
 ${askStrip(`Hello Janardhan General Stores, I am looking for a ${s.name} item.`)}`,
@@ -696,6 +747,7 @@ for (const c of categories) {
       <input id="filter" type="search" data-filter placeholder="Filter in ${esc(c.name)}…" autocomplete="off" style="padding-right:18px">
     </form>
     <p class="count" data-filter-count aria-live="polite">${c.products.reduce((a, p) => a + linesOf(p.slug).length, 0)} items</p>
+    ${sortBox}
   </div>
   ${c.products.length > 1 ? `<div class="type-chips" data-type-chips hidden role="group" aria-label="Type">
     <button type="button" class="tchip" data-type-chip="" aria-pressed="true">All</button>${c.products.map((p) => `<button type="button" class="tchip" data-type-chip="${p.slug}" aria-pressed="false">${esc(typeShort(p))}${linesOf(p.slug).length > 1 ? ` <span class="n">${linesOf(p.slug).length}</span>` : ''}</button>`).join('')}
@@ -745,7 +797,7 @@ for (const t of products) {
         '<p class="desc">' + esc(t.desc) + '</p>' + (t.price ? '<p class="price-tag"><span class="lbl">Price at the shop</span><strong>' + esc(t.price) + '</strong>' + te(t.priceTe || '', 'span', 'te') + '</p>' : '') +
         '<p class="th-meta">' + ps.length + ' products' + (brandNames.length ? ' · ' + brandNames.length + ' brand' + (brandNames.length > 1 ? 's' : '') : '') + '</p></div></header>' +
         '' +
-        brandChips(ps) +
+        '<div class="filter"><p class="count" data-filter-count aria-live="polite">' + linesOf(t.slug).length + ' items</p>' + sortBox + '</div>' + brandChips(ps) +
         '<ul class="product-grid">' + linesOf(t.slug).map((l, i) => lineCard(l, { eager: i < 2 })).join('') + '</ul>' +
         '<div class="empty" data-filter-empty hidden><p>No products match.</p></div>' +
         '<div class="type-extra">' + akaHtml(t.aliases || []) + festFor(t) + cautionHtml(t) + '</div></div>' + moreInCategory(t, c),
@@ -771,7 +823,7 @@ for (const t of products) {
       body: '<div class="container"><div style="padding-top:14px">' + crumbs(trail, true) + '</div>' +
         '<article class="pdp"><div class="pdp-media">' + gallery(p.name, photos, p) + '</div><div class="pdp-info">' +
         '<a class="chip" href="' + (many ? productUrl(t) : categoryUrl(c)) + '">' + esc(many ? typeShort(t) : c.name) + ' · ' + te(many ? t.te : c.te) + '</a>' +
-        (p.brandName ? '<p class="brand-k big">' + esc(p.brandName) + '</p>' : '') +
+        (p.brandName || lineTag(line) ? '<p class="brand-k big' + (brandLogo(p.brand) ? ' has-logo' : '') + '">' + (brandLogo(p.brand) ? '<img class="bk-logo" src="' + brandLogo(p.brand) + '" alt="">' : '') + '<span>' + esc(p.brandName) + '</span>' + (lineTag(line) ? ' <span class="tag-pill inline">' + esc(lineTag(line)) + '</span>' : '') + '</p>' : '') +
         '<h1>' + esc(p.name) + '</h1>' + te(p.te || t.te, 'p', 'te-name') +
         '<div class="buy-box buy' + (p.off ? ' is-off' : '') + '" ' + buyAttr(line, p.id) + ' data-big>' +
         (line.length > 1
@@ -781,8 +833,8 @@ for (const t of products) {
           : size ? '<p class="bb-h">Size <span lang="te">సైజు</span></p><p class="bb-size">' + esc(size) + '</p>' : '') +
         '<p class="bb-price" data-price>' + esc(p.price || '') + '</p>' +
         (!p.price && t.price ? '<p class="price-tag"><span class="lbl">Price at the shop</span><strong>' + esc(t.price) + '</strong></p>' : '') +
-        (p.off ? '<button class="btn btn-add-big oos" type="button" data-add disabled><span>Out of stock</span></button>' : '<button class="btn btn-primary btn-add-big" type="button" data-add>' + icon('plus') + '<span>Add to my list</span></button>') +
-        '<p class="bb-help">Add what you need, then send the list to the shop on WhatsApp. <span lang="te">జాబితా వాట్సాప్‌లో పంపండి.</span></p></div>' +
+        (p.off ? '<button class="btn btn-add-big oos" type="button" data-add disabled><span>Out of stock</span></button>' : '<button class="btn btn-primary btn-add-big" type="button" data-add>' + icon('plus') + '<span>' + (kitItems(p).length ? 'Add kit to my list' : 'Add to my list') + '</span><small lang="te">' + (kitItems(p).length ? 'కిట్ జాబితాలో చేర్చండి' : 'జాబితాలో చేర్చండి') + '</small></button>') +
+        '<p class="bb-help">' + (kitItems(p).length ? 'Adds every ticked item below to your list, grouped under this kit. ' : 'Add what you need, then send the list to the shop on WhatsApp. ') + '<span lang="te">జాబితా వాట్సాప్‌లో పంపండి.</span></p></div>' + kitPanel(p) +
         '<p class="desc">' + esc(p.desc || t.desc) + '</p>' +
         akaHtml([...new Set([...(p.aliases || []), ...(t.aliases || [])])]) + festFor(t) + askBlock(p.name + (p.size ? ' ' + p.size : ''), cautionHtml(t)) +
         '</div></article></div>' +
@@ -1073,7 +1125,7 @@ await page('/contact/', {
     for (const it of skusOf(p.slug)) {
       if (!it.brandName) continue
       const b = it.brandName
-      const e = brandMap.get(b) || { name: b, items: [], photo: null }
+      const e = brandMap.get(b) || { name: b, items: [], photo: null, logo: brandLogo(it.brand) }
       if (!e.items.includes(shortName(p.name))) e.items.push(shortName(p.name))
       const own = skuMain(it)
       if (!e.photo && own) e.photo = thumb(own)
@@ -1083,7 +1135,7 @@ await page('/contact/', {
   const brandsSorted = [...brandMap.values()].sort((a, b) => a.name.localeCompare(b.name))
   const initials = (s) => s.split(/[\s&]+/).filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join('')
   const brandCard = (b) => `<li><a class="brand-card" href="/search/?q=${encodeURIComponent(b.name)}">
-      ${b.photo ? `<img src="${b.photo}" alt="" width="56" height="56" loading="lazy" decoding="async">` : `<span class="mono" style="--mc:${monoColor(b.name)}" aria-hidden="true">${esc(initials(b.name))}</span>`}
+      ${b.logo ? `<img class="bc-logo" src="${b.logo}" alt="" width="56" height="56" loading="lazy" decoding="async">` : b.photo ? `<img src="${b.photo}" alt="" width="56" height="56" loading="lazy" decoding="async">` : `<span class="mono" style="--mc:${monoColor(b.name)}" aria-hidden="true">${esc(initials(b.name))}</span>`}
       <span class="bc-t"><strong>${esc(b.name)}</strong><span>${esc(b.items.slice(0, 2).join(' · '))}${b.items.length > 2 ? ` +${b.items.length - 2}` : ''}</span></span></a></li>`
   const POPULAR = [['Rice', 'బియ్యం'], ['Kandi pappu', 'కంది పప్పు'], ['Oil', 'నూనె'], ['Agarbatti', 'అగరబత్తి'], ['Karpuram', 'కర్పూరం'], ['Coconut', 'కొబ్బరికాయ'], ['Ghee', 'నెయ్యి'], ['Soap', 'సబ్బు'], ['Tea powder', 'టీ పొడి'], ['Pramidalu', 'ప్రమిదలు']]
   const catTile = (c) => {

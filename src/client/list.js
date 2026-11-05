@@ -3,11 +3,12 @@
 //
 //  • [data-buy] blocks (product cards, the product page, the "All sizes" row, search results) carry the product as JSON:
 //      { k: key, n: name, t: Telugu name, u: url, i: photo, b: brand,
-//        v: [{ id, l: label, p: price, d: description, i: photo, g: gallery index, w: loose by weight, un: count word, q: quick picks }] }
+//        s: "k" kirana / "p" puja, v: [{ id, l: label, p: price, d: description, i: photo, g: gallery index, w: loose by weight, un: count word, q: quick picks, kit: contents }] }
 //    Inside: optional size picker (select[data-vsel] or [data-v] chips), [data-price], [data-vdesc], and the [data-add] button,
 //    which turns into a − n + stepper once that size is in the list. data-fixed="<size id>" = one size only.
 //  • [data-list-count] shows the number of lines; a floating "My list" bar appears on phones once the list has items.
-//  • [data-list-page] (/list/) shows the list, the customer's name + pickup time, and the WhatsApp button.
+//  • [data-list-page] (/list/) shows the list (grouped: Kirana, Puja Samagri, Puja kits), the customer's name + pickup time, and the WhatsApp button.
+//  • [data-kit-panel] (puja kit pages): "What's inside" — tick / untick, size and amount of each item.
 ;(() => {
   const KEY = 'jgs-list-v2'
   const MAX = 80
@@ -23,6 +24,7 @@
     return blank()
   }
   let state = load()
+  const kitPanels = new Map() // "What's inside" lists on kit pages, by "<line key>|<kit size id>"
   const page = document.querySelector('[data-list-page]')
   function save() {
     try { localStorage.setItem(KEY, JSON.stringify(state)) } catch {}
@@ -55,6 +57,12 @@
     if (v.l) return `${v.l} × ${e.amt}`
     return `${e.amt} ${plural(v.un || 'item', e.amt)}`
   }
+  // ───────── puja kits: one list line that holds several products ─────────
+  // A kit size has v.kit = [{ c: product line, v: size id, a: amount }]. In the list a kit is one entry with
+  // kit: [{ i: index in v.kit, c, v, amt }] (only the items the customer kept) and amt = how many kits.
+  const isKit = (v) => !!(v && v.kit && v.kit.length)
+  const kitDefault = (v) => v.kit.map((k, i) => ({ i, c: k.c, v: k.v, amt: k.a })).filter((x) => !vOf(x.c, x.v).off)
+  const kitItemText = (x) => qtyText({ c: x.c, v: x.v, amt: x.amt })
   const idOf = (c, vid) => `${c.k}|${vid}`
   const entryOf = (c, vid) => state.items.find((e) => e.id === idOf(c, vid))
   /** Set the amount of one size (0 = remove). Returns the entry. */
@@ -68,6 +76,16 @@
     state.items.push(e)
     save()
     return e
+  }
+  function addKit(c, vid, items) {
+    if (!items.length) { toast('Tick at least one item of the kit.'); return null }
+    const e = entryOf(c, vid)
+    if (e) { e.kit = items; save(); return e }
+    if (state.items.length >= MAX) { toast(`Your list is full (${MAX} lines). Send it first.`); return null }
+    const ne = { id: idOf(c, vid), c, v: vid, amt: 1, note: '', kit: items }
+    state.items.push(ne)
+    save()
+    return ne
   }
   const step = (v, amt, up) => (v.w ? (up ? Math.min(100000, amt + stepOf(v)) : amt - stepOf(v)) : Math.min(999, amt + (up ? 1 : -1)))
   const belowMin = (v, amt) => (v.w ? amt < minOf(v) : amt < 1)
@@ -144,6 +162,7 @@
     const n = state.items.length
     document.querySelectorAll('[data-list-count]').forEach((el) => { el.textContent = n; el.hidden = !n })
     document.querySelectorAll('[data-buy]').forEach(drawBlock)
+    kitPanels.forEach((p) => p.draw())
     if (!page) drawBar(n)
   }
 
@@ -168,6 +187,13 @@
     if (t.closest('[data-add]')) {
       ev.preventDefault()
       if (v.w) return sheet(c, { v: v.id, g: Number(block.dataset.wantG) || 0 }) // loose: choose the weight first (search may have said how much)
+      if (isKit(v)) {
+        // On the kit's own page: what the customer ticked in "What's inside"; elsewhere: the full kit.
+        const panel = kitPanels.get(`${c.k}|${v.id}`)
+        const ke = addKit(c, v.id, panel ? panel.selected() : kitDefault(v))
+        if (ke) toast(`✓ Added kit: <strong>${esc(shortName(c.n))}</strong> · ${ke.kit.length} items`)
+        return
+      }
       const e = setAmt(c, v.id, defaultAmt(v))
       if (e) toast(`✓ Added: <strong>${esc(shortName(c.n))}</strong> · ${esc(qtyText(e))}`)
       block.querySelector('[data-inc]')?.focus({ preventScroll: true })
@@ -188,6 +214,87 @@
     const want = new URLSearchParams(location.search).get('v')
     const chip = want && block.querySelector(`[data-v="${CSS.escape(want)}"]`)
     if (chip) { block.querySelectorAll('[data-v]').forEach((b) => b.setAttribute('aria-pressed', String(b === chip))); onVariantChange(block) }
+  })
+
+  // ───────── kit page: "What's inside" (tick / untick, size, amount) ─────────
+  // Before the kit is in the list, changes are kept here and used by "Add kit to my list".
+  // Once it is in the list, every change is saved to the list straight away.
+  document.querySelectorAll('[data-kit-panel]').forEach((panel) => {
+    const block = document.querySelector('.buy-box[data-big]')
+    const c = block && cfgOf(block)
+    const kv = c && c.v.find((v) => v.id === panel.dataset.kitPanel)
+    if (!isKit(kv)) return
+    const rows = [...panel.querySelectorAll('.kit-row')]
+    const fresh = () => kv.kit.map((k, i) => ({ i, c: k.c, v: k.v, amt: k.a, on: !vOf(k.c, k.v).off }))
+    let local = fresh()
+    const cur = () => {
+      const e = entryOf(c, kv.id)
+      if (!e) return local
+      return kv.kit.map((k, i) => {
+        const x = (e.kit || []).find((y) => y.i === i)
+        return x ? { ...x, on: true } : { ...local[i], on: false }
+      })
+    }
+    const pick = (list) => list.filter((x) => x.on && !vOf(x.c, x.v).off).map(({ on, ...x }) => x)
+    const selected = () => pick(cur())
+    const commit = (list) => {
+      local = list.map((x) => ({ ...x }))
+      const e = entryOf(c, kv.id)
+      if (e) {
+        const sel = pick(list)
+        if (sel.length) { e.kit = sel; save() } else { setAmt(c, kv.id, 0); toast('Kit removed from your list.') }
+      } else draw()
+    }
+    function draw() {
+      const list = cur()
+      const e = entryOf(c, kv.id)
+      list.forEach((x, i) => {
+        const row = rows[i]
+        if (!row) return
+        const v = vOf(x.c, x.v)
+        const on = x.on && !v.off
+        row.querySelector('[data-kit-on]').checked = on
+        row.classList.toggle('is-out', !on)
+        row.querySelector('output').textContent = amtText(v, x.amt)
+        row.querySelectorAll('[data-kit-step]').forEach((b) => (b.disabled = !on))
+        const sel = row.querySelector('[data-kit-size]')
+        if (sel) sel.value = x.v
+      })
+      const n = list.filter((x) => x.on).length
+      panel.querySelector('[data-kit-count]').textContent = n === list.length ? `${n} items` : `${n} of ${list.length} items ticked`
+      panel.querySelector('[data-kit-state]').textContent = e ? '✓ In your list. Changes here are saved to it.' : ''
+    }
+    panel.addEventListener('change', (ev) => {
+      const row = ev.target.closest('.kit-row')
+      if (!row) return
+      const i = Number(row.dataset.i), list = cur()
+      if (ev.target.matches('[data-kit-on]')) {
+        list[i].on = ev.target.checked
+        const v = vOf(list[i].c, list[i].v)
+        if (list[i].on && belowMin(v, list[i].amt)) list[i].amt = defaultAmt(v)
+      } else if (ev.target.matches('[data-kit-size]')) {
+        const was = vOf(list[i].c, list[i].v)
+        list[i].v = ev.target.value
+        const v = vOf(list[i].c, list[i].v)
+        if (!!v.w !== !!was.w || belowMin(v, list[i].amt)) list[i].amt = defaultAmt(v)
+        list[i].on = true
+      } else return
+      commit(list)
+    })
+    panel.addEventListener('click', (ev) => {
+      const b = ev.target.closest('[data-kit-step]')
+      if (b) {
+        const i = Number(b.closest('.kit-row').dataset.i), list = cur(), x = list[i], v = vOf(x.c, x.v)
+        const amt = step(v, x.amt, b.dataset.kitStep === '1')
+        if (belowMin(v, amt)) x.on = false
+        else x.amt = amt
+        commit(list)
+        b.focus({ preventScroll: true })
+      }
+      if (ev.target.closest('[data-kit-reset]')) commit(fresh())
+    })
+    kitPanels.set(`${c.k}|${kv.id}`, { draw, selected })
+    draw()
   })
 
   // ───────── floating bar + toast ─────────
@@ -339,15 +446,91 @@
     const s = SLOTS.find((x) => x[0] === state.slot)
     return s && state.day ? `${state.day === 'today' ? 'Today' : 'Tomorrow'} ${s[1].toLowerCase()} (${s[2]})` : ''
   }
+  // The list is shown (and sent) in groups: Kirana, Puja Samagri, Puja kits.
+  const GROUPS = [['kirana', 'Kirana', 'కిరాణా'], ['puja', 'Puja Samagri', 'పూజా సామగ్రి'], ['kit', 'Puja kits', 'పూజా కిట్లు'], ['other', 'Other items', '']]
+  const groupOf = (e) => (e.kit ? 'kit' : e.c.s === 'p' ? 'puja' : e.c.s === 'k' ? 'kirana' : 'other')
+  /** [[group, [[entry, index in state.items], …]], …] in the order above, only groups that have items. */
+  const grouped = () => GROUPS.map((g) => [g, state.items.map((e, i) => [e, i]).filter(([e]) => groupOf(e) === g[0])]).filter(([, l]) => l.length)
   function message() {
     const n = state.items.length
-    const lines = ['Namaste Janardhan General Stores 🙏', `My list (${n} item${n === 1 ? '' : 's'}):`, '']
-    state.items.forEach((e, i) => lines.push(`${i + 1}. ${e.c.n}${e.c.t ? ` / ${e.c.t}` : ''} – ${qtyText(e)}${e.note ? ` – Note: ${e.note}` : ''}`))
+    const lines = ['Namaste Janardhan General Stores 🙏', `My list (${n} item${n === 1 ? '' : 's'}):`]
+    const groups = grouped()
+    let k = 0
+    for (const [[, en], list] of groups) {
+      lines.push('')
+      if (groups.length > 1) lines.push(`*${en}*`)
+      for (const [e] of list) {
+        k++
+        if (e.kit) {
+          lines.push(`${k}. ${e.c.n}${e.c.t ? ` / ${e.c.t}` : ''}${e.amt > 1 ? ` × ${e.amt}` : ''} (${e.kit.length} items${e.amt > 1 ? ' in each kit' : ''}):`)
+          e.kit.forEach((x) => lines.push(`    - ${x.c.n} – ${kitItemText(x)}`))
+          if (e.note) lines.push(`    Note: ${e.note}`)
+        } else lines.push(`${k}. ${e.c.n}${e.c.t ? ` / ${e.c.t}` : ''} – ${qtyText(e)}${e.note ? ` – Note: ${e.note}` : ''}`)
+      }
+    }
     lines.push('', `Name: ${state.name.trim()}`, `Pickup at the shop: ${pickupText()}`, '', 'Please confirm which items are available.')
     if (state.askPrice) lines.push('Please also tell me the estimated total price for these items.')
     return lines.join('\n')
   }
+  // "Repeat my last list": the list is remembered when it is sent on WhatsApp.
+  const LAST = 'jgs-last-v1'
+  function loadLast() {
+    try {
+      const d = JSON.parse(localStorage.getItem(LAST))
+      if (d && Array.isArray(d.items) && d.items.length) return { at: Number(d.at) || 0, items: d.items.filter((e) => e && e.c && e.c.k && Array.isArray(e.c.v)) }
+    } catch {}
+    return null
+  }
+  function lastCard() {
+    const last = loadLast()
+    if (!last || !last.items.length) return ''
+    const when = last.at ? new Date(last.at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', timeZone: 'Asia/Kolkata' }) : ''
+    const names = last.items.map((e) => shortName(e.c.n))
+    return `<div class="last-list">
+      <h3>Your last list${when ? ` <small>· sent ${esc(when)}</small>` : ''}</h3>
+      <p>${last.items.length} item${last.items.length === 1 ? '' : 's'}: ${esc(names.slice(0, 6).join(', '))}${names.length > 6 ? ' …' : ''}</p>
+      <button type="button" class="btn btn-primary" data-repeat>Add the same items again <span lang="te">మళ్ళీ అదే జాబితా</span></button>
+    </div>`
+  }
   let sentNotice = false
+  function itemRow(e, i) {
+    const v = vOf(e.c, e.v)
+    const pic = v.i || e.c.i
+    const href = e.c.u + (v.id !== e.c.v[0].id ? `?v=${encodeURIComponent(v.id)}` : '')
+    const ph = `<a class="li-ph" href="${esc(href)}" tabindex="-1" aria-hidden="true">${pic ? `<img src="${esc(pic)}" alt="" width="64" height="64" loading="lazy">` : `<span class="li-noph">${esc((e.c.b || e.c.n).slice(0, 2).toUpperCase())}</span>`}</a>`
+    const stepper = `<div class="stepper small" role="group" aria-label="${e.kit ? 'Number of kits' : 'Quantity'} of ${esc(e.c.n)}">
+        <button type="button" data-row-step="-1" data-i="${i}" aria-label="Less">−</button>
+        <output>${esc(amtText(v, e.amt))}</output>
+        <button type="button" data-row-step="1" data-i="${i}" aria-label="More">+</button>
+      </div>`
+    if (e.kit) {
+      return `<li class="li-row li-kit">${ph}
+        <div class="li-t">
+          <a class="li-n" href="${esc(href)}">${esc(e.c.n)}</a>${e.c.t ? `<span lang="te">${esc(e.c.t)}</span>` : ''}
+          <span class="li-q">Puja kit · ${e.kit.length} item${e.kit.length === 1 ? '' : 's'}${e.amt > 1 ? ` · ${e.amt} kits` : ''}</span>
+        </div>
+        <div class="li-ctl">${stepper}
+          <div class="li-acts"><a class="link-btn" href="${esc(href)}">Change items</a><button type="button" class="link-btn danger" data-del="${i}" aria-label="Remove ${esc(e.c.n)}">Remove</button></div>
+        </div>
+        <ul class="li-kit-items" aria-label="Items in ${esc(e.c.n)}">${e.kit.map((x, j) => {
+          const xv = vOf(x.c, x.v)
+          return `<li${xv.off ? ' class="is-off"' : ''}><span class="lk-n">${esc(shortName(x.c.n))} <small>${esc(kitItemText(x))}</small>${xv.off ? ' <em class="li-oos">Out of stock now</em>' : ''}</span>
+            <div class="stepper mini" role="group" aria-label="Amount of ${esc(x.c.n)}"><button type="button" data-kit-row="-1" data-i="${i}" data-j="${j}" aria-label="Less">−</button><output>${esc(amtText(xv, x.amt))}</output><button type="button" data-kit-row="1" data-i="${i}" data-j="${j}" aria-label="More">+</button></div>
+            <button type="button" class="lk-x" data-kit-del="${j}" data-i="${i}" aria-label="Remove ${esc(x.c.n)} from the kit">✕</button></li>`
+        }).join('')}</ul>
+      </li>`
+    }
+    return `<li class="li-row">${ph}
+      <div class="li-t">
+        <a class="li-n" href="${esc(href)}">${esc(e.c.n)}</a>${e.c.t ? `<span lang="te">${esc(e.c.t)}</span>` : ''}
+        ${v.off ? '<span class="li-oos">Out of stock now — remove it or ask the shop</span>' : ''}<span class="li-q">${esc(qtyText(e))}${v.p ? ` <span class="li-p">· ${esc(v.p)}</span>` : ''}</span>
+        ${e.note ? `<span class="li-note">Note: ${esc(e.note)}</span>` : ''}
+      </div>
+      <div class="li-ctl">${stepper}
+        <div class="li-acts"><button type="button" class="link-btn" data-edit="${i}">Change</button><button type="button" class="link-btn danger" data-del="${i}" aria-label="Remove ${esc(e.c.n)}">Remove</button></div>
+      </div>
+    </li>`
+  }
   function drawPage() {
     const n = state.items.length
     if (!n) {
@@ -360,7 +543,15 @@
           <li><strong>Send</strong> the list to the shop on WhatsApp</li>
         </ol>
         <div class="actions"><a class="btn btn-primary" href="/kirana/">Browse Kirana</a><a class="btn btn-light" href="/puja-samagri/">Browse Puja Samagri</a></div>
+        ${lastCard()}
       </div>`
+      page.querySelector('[data-repeat]')?.addEventListener('click', () => {
+        const last = loadLast()
+        if (!last) return
+        state.items = last.items.slice(0, MAX)
+        save(); drawPage()
+        page.querySelector('#li-h')?.focus()
+      })
       return
     }
     const today = SLOTS.some((s) => slotOk('today', s[0]))
@@ -370,27 +561,11 @@
       <section class="list-items" aria-labelledby="li-h">
         <div class="li-head"><h2 id="li-h">${n} item${n === 1 ? '' : 's'} <span lang="te">వస్తువులు</span></h2>
           <button type="button" class="link-btn" data-clear>Clear list</button></div>
-        <ul class="li-list">${state.items.map((e, i) => {
-          const v = vOf(e.c, e.v)
-          const pic = v.i || e.c.i
-          const href = e.c.u + (v.id !== e.c.v[0].id ? `?v=${encodeURIComponent(v.id)}` : '')
-          return `<li class="li-row">
-            <a class="li-ph" href="${esc(href)}" tabindex="-1" aria-hidden="true">${pic ? `<img src="${esc(pic)}" alt="" width="64" height="64" loading="lazy">` : `<span class="li-noph">${esc((e.c.b || e.c.n).slice(0, 2).toUpperCase())}</span>`}</a>
-            <div class="li-t">
-              <a class="li-n" href="${esc(href)}">${esc(e.c.n)}</a>${e.c.t ? `<span lang="te">${esc(e.c.t)}</span>` : ''}
-              ${v.off ? '<span class="li-oos">Out of stock now — remove it or ask the shop</span>' : ''}<span class="li-q">${esc(qtyText(e))}${v.p ? ` <span class="li-p">· ${esc(v.p)}</span>` : ''}</span>
-              ${e.note ? `<span class="li-note">Note: ${esc(e.note)}</span>` : ''}
-            </div>
-            <div class="li-ctl">
-              <div class="stepper small" role="group" aria-label="Quantity of ${esc(e.c.n)}">
-                <button type="button" data-row-step="-1" data-i="${i}" aria-label="Less">−</button>
-                <output>${esc(amtText(v, e.amt))}</output>
-                <button type="button" data-row-step="1" data-i="${i}" aria-label="More">+</button>
-              </div>
-              <div class="li-acts"><button type="button" class="link-btn" data-edit="${i}">Change</button><button type="button" class="link-btn danger" data-del="${i}" aria-label="Remove ${esc(e.c.n)}">Remove</button></div>
-            </div>
-          </li>`
-        }).join('')}</ul>
+        ${(() => {
+          const groups = grouped()
+          return groups.map(([[g, en, tel], list]) => `${groups.length > 1 ? `<h3 class="li-grp">${esc(en)}${tel ? ` <span lang="te">${esc(tel)}</span>` : ''} <small>${list.length}</small></h3>` : ''}
+        <ul class="li-list" data-group="${g}">${list.map(([e, i]) => itemRow(e, i)).join('')}</ul>`).join('')
+        })()}
         <a class="li-more" href="/search/">+ Add more items</a>
       </section>
       <section class="send-panel" aria-labelledby="sp-h">
@@ -435,6 +610,25 @@
       save(); drawPage()
       page.querySelector(`[data-row-step="${b.dataset.rowStep}"][data-i="${b.dataset.i}"]`)?.focus()
     }))
+    // items inside a kit: − / + and ✕
+    const kitChange = (i, j, fn) => {
+      const e = state.items[i]
+      if (!e || !e.kit || !e.kit[j]) return
+      fn(e)
+      if (!e.kit.length) state.items.splice(i, 1)
+      save(); drawPage()
+    }
+    page.querySelectorAll('[data-kit-row]').forEach((b) => b.addEventListener('click', () => {
+      const i = Number(b.dataset.i), j = Number(b.dataset.j)
+      kitChange(i, j, (e) => {
+        const x = e.kit[j], v = vOf(x.c, x.v)
+        const amt = step(v, x.amt, b.dataset.kitRow === '1')
+        if (belowMin(v, amt)) e.kit.splice(j, 1)
+        else x.amt = amt
+      })
+      page.querySelector(`[data-kit-row="${b.dataset.kitRow}"][data-i="${i}"][data-j="${j}"]`)?.focus()
+    }))
+    page.querySelectorAll('[data-kit-del]').forEach((b) => b.addEventListener('click', () => kitChange(Number(b.dataset.i), Number(b.dataset.kitDel), (e) => e.kit.splice(Number(b.dataset.kitDel), 1))))
     page.querySelector('[data-send]').addEventListener('click', () => {
       const nameOk = state.name.trim().length > 0
       const pickOk = !!(state.day && state.slot && slotOk(state.day, state.slot))
@@ -443,6 +637,7 @@
       if (!nameOk) return page.querySelector('[data-name]').focus()
       if (!pickOk) return page.querySelector('input[name="sp-day"]:not(:disabled)').focus()
       open(`https://wa.me/${page.dataset.wa}?text=${encodeURIComponent(message())}`, '_blank', 'noopener')
+      try { localStorage.setItem(LAST, JSON.stringify({ at: Date.now(), items: state.items })) } catch {}
       sentNotice = true
       drawPage()
     })

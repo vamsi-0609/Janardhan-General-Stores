@@ -33,11 +33,13 @@ const brandsFile = join(dataDir, 'brands.json')
 const productsFile = join(dataDir, 'products.json')
 const editorDir = join(root, 'editor')
 const festImgDir = join(root, 'public', 'img', 'festivals')
+const brandImgDir = join(root, 'public', 'img', 'brands')
 const SHOP_NAME = 'Janardhan General Stores and Puja Samagri'
 
 await mkdir(srcDir, { recursive: true })
 await mkdir(thumbDir, { recursive: true })
 await mkdir(festImgDir, { recursive: true })
+await mkdir(brandImgDir, { recursive: true })
 // Remove leftovers of uploads that did not finish (temporary names start with __new).
 for (const dir of [srcDir, outDir, thumbDir]) for (const f of await readdir(dir)) if (f.startsWith('__new')) await unlink(join(dir, f)).catch(() => {})
 
@@ -108,6 +110,16 @@ function cleanSku(input, prev, types, brandIds) {
   if (aliases.length) p.aliases = aliases
   if (prev?.photos?.length) p.photos = prev.photos
   if (input.off) p.off = true
+  if (input.hide) p.hide = true
+  if (input.star) p.star = true
+  if (str(input.tag)) p.tag = str(input.tag, 20)
+  // puja kit: [{ id, a }] — products of the shop with an amount (count, or grams for loose ones)
+  if (Array.isArray(input.kit)) {
+    const seen = new Set()
+    const kit = input.kit.map((k) => ({ id: str(k?.id, 70), a: Math.round(Number(k?.a)) }))
+      .filter((k) => k.id && k.id !== p.id && Number.isFinite(k.a) && k.a > 0 && k.a <= 100000 && !seen.has(k.id) && seen.add(k.id)).slice(0, 60)
+    if (kit.length) p.kit = kit
+  }
   if (!prev && !p.id) delete p.id
   return p
 }
@@ -506,6 +518,7 @@ async function state() {
     if (st) festImages[f.id] = `/festimg/${f.id}.webp?v=${Math.round(st.mtimeMs)}`
   }
   const brands = (await readJson(brandsFile)).brands
+  for (const b of brands) if (b.logo) { const st = await stat(join(brandImgDir, `${b.id}.webp`)).catch(() => null); b.logoV = st ? Math.round(st.mtimeMs) : 0 }
   const skus = (await readJson(productsFile)).products
   // photo details of product photos (for the crop tool)
   const srcFiles = new Map((await readdir(srcDir)).filter((x) => IMAGE_EXT.test(x)).map((x) => [x.slice(0, -extname(x).length).toLowerCase(), x]))
@@ -530,6 +543,8 @@ async function handle(req, res) {
     if (path === '/app.js' || path === '/app.css') return send(res, 200, await readFile(join(editorDir, path.slice(1))), TYPES[extname(path)])
     const fi = path.match(/^\/festimg\/([a-z0-9-]+)\.webp$/)
     if (fi) { const file = join(festImgDir, `${fi[1]}.webp`); return existsSync(file) ? send(res, 200, await readFile(file), TYPES['.webp']) : send(res, 404, 'Not found', 'text/plain') }
+    const bl = path.match(/^\/brandlogo\/([a-z0-9-]+)\.webp$/)
+    if (bl) { const file = join(brandImgDir, `${bl[1]}.webp`); return existsSync(file) ? send(res, 200, await readFile(file), TYPES['.webp']) : send(res, 404, 'Not found', 'text/plain') }
     if (path === '/logo.webp') return send(res, 200, await readFile(join(root, 'public', 'brand', 'logo-mark.webp')), TYPES['.webp'])
     // Original photo for the crop window (upright, optionally rotated, max 1400 px).
     const ms = path.match(/^\/photo\/source\/([a-z0-9_-]+)$/)
@@ -652,6 +667,7 @@ async function handle(req, res) {
       const i = data.brands.findIndex((x) => x.id === originalId)
       must(i >= 0, 'Brand not found.')
       b.id = originalId
+      if (data.brands[i].logo) b.logo = true
       must(!data.brands.some((x, j) => j !== i && x.name.toLowerCase() === b.name.toLowerCase()), `The brand "${b.name}" already exists.`)
       data.brands[i] = b
     }
@@ -660,12 +676,40 @@ async function handle(req, res) {
     scheduleBuild()
     return send(res, 200, { ok: true, id: b.id })
   }
+  // Brand logo (optional): POST raw image → public/img/brands/<id>.webp ; DELETE removes it
+  const ml = path.match(/^\/api\/brand\/([a-z0-9-]+)\/logo$/)
+  if (ml && (req.method === 'POST' || req.method === 'DELETE')) {
+    const data = await readJson(brandsFile)
+    const b = data.brands.find((x) => x.id === ml[1])
+    must(b, 'Brand not found.')
+    const file = join(brandImgDir, `${b.id}.webp`)
+    if (req.method === 'POST') {
+      const body = await readBody(req, 20 * 1024 * 1024)
+      const meta = await sharp(body).metadata().catch(() => null)
+      must(meta && meta.width >= 40 && meta.height >= 20, 'That file is not a usable logo (PNG, JPG, WebP or SVG).')
+      let img = sharp(body, { density: 300 }).rotate()
+      // cut away empty borders (transparent or plain white) so every logo fills its box the same way
+      const trimmed = await img.clone().trim({ threshold: 12 }).toBuffer().catch(() => null)
+      if (trimmed) img = sharp(trimmed)
+      const tmp = `${file}.${randomBytes(3).toString('hex')}.tmp`
+      await img.resize(480, 240, { fit: 'inside', withoutEnlargement: true }).webp({ quality: 92, alphaQuality: 100 }).toFile(tmp)
+      await rename(tmp, file)
+      b.logo = true
+    } else {
+      await unlink(file).catch(() => {})
+      delete b.logo
+    }
+    await writeJson(brandsFile, data)
+    scheduleBuild()
+    return send(res, 200, { ok: true })
+  }
   let mb = path.match(/^\/api\/brand\/([a-z0-9-]+)$/)
   if (req.method === 'DELETE' && mb) {
     const used = (await readJson(productsFile)).products.filter((p) => p.brand === mb[1])
     must(!used.length, `${used.length} product(s) use this brand (${used.slice(0, 3).map((p) => p.name).join(', ')}${used.length > 3 ? ' …' : ''}). Change or delete them first.`)
     const data = await readJson(brandsFile)
     data.brands = data.brands.filter((x) => x.id !== mb[1])
+    await unlink(join(brandImgDir, `${mb[1]}.webp`)).catch(() => {})
     await writeJson(brandsFile, data)
     scheduleBuild()
     return send(res, 200, { ok: true })
@@ -774,6 +818,72 @@ async function handle(req, res) {
       return send(res, 200, { ok: true })
     }
     throw new Bad('Unknown request.')
+  }
+
+  // ── One product with ALL its sizes (the product screen of the editor) ──
+  //   { orig: { type, brand, name } | null, sizes: [{ id?, …product fields }] } — sizes not in the list are deleted.
+  if (req.method === 'POST' && path === '/api/line') {
+    const { orig, sizes } = await json(req)
+    must(Array.isArray(sizes) && sizes.length, 'Add at least one size.')
+    must(sizes.length <= 40, 'Too many sizes.')
+    const data = await readJson(productsFile)
+    const types = new Set((await readJson(catalogueFile)).categories.flatMap((c) => c.products.map((p) => p.slug)))
+    const brandIds = new Set((await readJson(brandsFile)).brands.map((b) => b.id))
+    const sameLine = (x, o) => x.type === o.type && (x.brand || '') === (o.brand || '') && x.name === o.name
+    const old = orig ? data.products.filter((x) => sameLine(x, orig)) : []
+    const allIds = new Set(data.products.map((x) => x.id))
+    const out = []
+    for (const input of sizes) {
+      const prev = input.id ? old.find((x) => x.id === input.id) : null
+      if (input.id) must(prev, 'One of the sizes was not found. Reload the editor and try again.')
+      const p = cleanSku(input || {}, prev, types, brandIds)
+      if (!prev) {
+        let id = slugOf(`${p.name.replace(/\s*\(.*\)\s*$/, '')} ${p.size || ''}`) || 'product', n = 2
+        const base = id
+        while (allIds.has(id) || out.some((x) => x.id === id)) id = `${base}-${n++}`
+        p.id = id
+      }
+      out.push(p)
+    }
+    const names = new Set(out.map((x) => `${x.type}|${x.brand || ''}|${x.name}`))
+    must(names.size === 1, 'All sizes must have the same type, brand and name.')
+    const labels = out.map((x) => (x.loose ? 'loose' : (x.size || x.unit || '').toLowerCase()))
+    must(new Set(labels).size === labels.length, 'Two sizes are the same. Give each size a different size, e.g. “½ kg” and “1 kg”.')
+    // kits may only hold existing products (not kits, not itself)
+    const known = new Map(data.products.map((x) => [x.id, x]))
+    for (const p of out) if (p.kit) {
+      p.kit = p.kit.filter((k) => known.has(k.id) && !(known.get(k.id).kit || []).length && !out.some((x) => x.id === k.id))
+      if (!p.kit.length) delete p.kit
+    }
+    // the product stays where it was (or goes after its type); its sizes stay together, in the order given
+    const removed = old.filter((x) => !out.some((y) => y.id === x.id))
+    const rest = data.products.filter((x) => !old.includes(x))
+    let at = -1
+    if (old.length && old[0].type === out[0].type) at = data.products.slice(0, data.products.indexOf(old[0])).filter((x) => !old.includes(x)).length
+    if (at < 0) { const lastType = rest.map((x, i) => [x, i]).filter(([x]) => x.type === out[0].type).pop(); at = lastType ? lastType[1] + 1 : rest.length }
+    rest.splice(at, 0, ...out)
+    // kits that held a removed size lose that item
+    const gone = new Set(removed.map((x) => x.id))
+    for (const x of rest) if (x.kit) { x.kit = x.kit.filter((k) => !gone.has(k.id)); if (!x.kit.length) delete x.kit }
+    data.products = rest
+    await writeJson(productsFile, data)
+    for (const p of removed) for (const name of p.photos || []) if (name.startsWith('p--') && !rest.some((x) => (x.photos || []).includes(name))) await deleteSet(name)
+    scheduleBuild()
+    return send(res, 200, { ok: true, ids: out.map((x) => x.id) })
+  }
+  // quick edit from the "Prices & stock" list: { price?, off?, size? }
+  const mq = path.match(/^\/api\/sku\/([a-z0-9-]+)\/quick$/)
+  if (req.method === 'POST' && mq) {
+    const body = await json(req)
+    const data = await readJson(productsFile)
+    const p = data.products.find((x) => x.id === mq[1])
+    must(p, 'Product not found.')
+    if ('price' in body) { const v = str(body.price, 40); if (v) p.price = v; else delete p.price }
+    if ('off' in body) { if (body.off) p.off = true; else delete p.off }
+    if ('size' in body && !p.loose) { const v = str(body.size, 60); if (v) { p.size = v; delete p.unit } }
+    await writeJson(productsFile, data)
+    scheduleBuild()
+    return send(res, 200, { ok: true })
   }
 
   // Categories

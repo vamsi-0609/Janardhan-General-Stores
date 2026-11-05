@@ -137,7 +137,7 @@ for (const w of WIDTHS) {
       const broken = [...document.images].filter((i) => !i.naturalWidth).map((i) => i.currentSrc || i.src)
       const overflowX = document.documentElement.scrollWidth - window.innerWidth
       const clipped = [...document.querySelectorAll('.cat-tile .en, .cat-tile .te, .chip, .card .en, .card .te, .btn, .nav-bar a, .brand-name, h1, h2')]
-        .filter((el) => el.offsetParent && (el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 2))
+        .filter((el) => el.offsetParent && getComputedStyle(el).webkitLineClamp === 'none' && getComputedStyle(el).textOverflow !== 'ellipsis' && (el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 2)) // names cut short on purpose (3 lines, or one line with …) are fine
         .map((el) => el.textContent.trim().slice(0, 40))
       const offscreen = [...document.querySelectorAll('main *, header *')].filter((el) => {
         if (!el.offsetParent) return false
@@ -215,6 +215,28 @@ const listState = await page.evaluate(() => [document.querySelector('[data-list-
 if (listState[0] !== '1' || listState[1] !== '2') fail('my list', `counter/qty after Add + "+": ${listState.join(' / ')}`)
 else console.log('  my list: Add → 1 line, + → 2 OK')
 await page.evaluate(() => localStorage.removeItem('jgs-list-v2'))
+// Puja kit: untick one item, add the kit → one list line holding the other items; the list page groups it under "Puja kits"
+{
+  const kitLink = await page.goto(`${BASE}/puja-samagri/pooja-kits/`).then(() => page.$$eval('.product-grid a.card', (as) => as.map((a) => a.getAttribute('href'))))
+  let checked = false
+  for (const href of kitLink) {
+    await page.goto(BASE + href)
+    if (!(await page.$('[data-kit-panel]'))) continue
+    const total = await page.$$eval('.kit-row [data-kit-on]:not(:disabled)', (x) => x.length)
+    await page.uncheck('.kit-row [data-kit-on]:not(:disabled) >> nth=0')
+    await page.click('.buy-box [data-add]')
+    const kit = await page.evaluate(() => JSON.parse(localStorage.getItem('jgs-list-v2')).items[0]?.kit?.length)
+    if (kit !== total - 1) fail('puja kit', `${href}: ${kit} items added, expected ${total - 1}`)
+    await page.goto(`${BASE}/list/`)
+    const grp = await page.$eval('[data-preview]', (x) => x.textContent).catch(() => '')
+    if (!/Kit/.test(grp) || !(await page.$('.li-kit .li-kit-items li'))) fail('puja kit', 'kit not shown on the list page')
+    else console.log(`  puja kit: ${href} → ${kit} items in the list OK`)
+    checked = true
+    break
+  }
+  if (!checked) console.log('  puja kit: no kit with contents (skipped)')
+  await page.evaluate(() => localStorage.removeItem('jgs-list-v2'))
+}
 // Header search submits to /search/
 await page.goto(`${BASE}/`)
 await page.fill('#q-mobile', 'ghee')

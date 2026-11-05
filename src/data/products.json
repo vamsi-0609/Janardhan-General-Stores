@@ -3218,6 +3218,36 @@
       "unit": "set",
       "photos": [
         "daily-pooja-kit"
+      ],
+      "kit": [
+        {
+          "id": "pasupu-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "red-kumkuma-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "sandalwood-powder-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "camphor-tablets-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "sandalwood-incense-sticks-small-packet",
+          "a": 1
+        },
+        {
+          "id": "round-cotton-wicks",
+          "a": 1
+        },
+        {
+          "id": "deepam-oil-200-ml",
+          "a": 1
+        }
       ]
     },
     {
@@ -3228,6 +3258,92 @@
       "unit": "set",
       "photos": [
         "satyanarayana-kit"
+      ],
+      "kit": [
+        {
+          "id": "pasupu-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "red-kumkuma-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "sandalwood-powder-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "camphor-tablets-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "sandalwood-incense-sticks-small-packet",
+          "a": 1
+        },
+        {
+          "id": "round-cotton-wicks",
+          "a": 1
+        },
+        {
+          "id": "deepam-oil-200-ml",
+          "a": 1
+        },
+        {
+          "id": "coconut-medium",
+          "a": 2
+        },
+        {
+          "id": "kalasam-kayalu",
+          "a": 1
+        },
+        {
+          "id": "tamalapaku-set-of-leaves",
+          "a": 2
+        },
+        {
+          "id": "betel-nuts-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "turmeric-sticks-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "kalasam-samanlu",
+          "a": 1
+        },
+        {
+          "id": "small-matti-pramidalu",
+          "a": 2
+        },
+        {
+          "id": "prasadam-cups",
+          "a": 1
+        },
+        {
+          "id": "bombay-rava-loose",
+          "a": 500
+        },
+        {
+          "id": "sugar-loose",
+          "a": 500
+        },
+        {
+          "id": "ghee-100-ml",
+          "a": 1
+        },
+        {
+          "id": "cashew-nuts-loose",
+          "a": 50
+        },
+        {
+          "id": "raisins-loose",
+          "a": 25
+        },
+        {
+          "id": "cardamom-loose",
+          "a": 25
+        }
       ]
     },
     {
@@ -3238,6 +3354,72 @@
       "unit": "set",
       "photos": [
         "varalakshmi-kit"
+      ],
+      "kit": [
+        {
+          "id": "pasupu-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "red-kumkuma-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "sandalwood-powder-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "camphor-tablets-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "sandalwood-incense-sticks-small-packet",
+          "a": 1
+        },
+        {
+          "id": "round-cotton-wicks",
+          "a": 1
+        },
+        {
+          "id": "deepam-oil-200-ml",
+          "a": 1
+        },
+        {
+          "id": "coconut-medium",
+          "a": 2
+        },
+        {
+          "id": "kalasam-kayalu",
+          "a": 1
+        },
+        {
+          "id": "tamalapaku-set-of-leaves",
+          "a": 2
+        },
+        {
+          "id": "betel-nuts-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "turmeric-sticks-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "kalasam-samanlu",
+          "a": 1
+        },
+        {
+          "id": "pasupu-kumkum-set",
+          "a": 1
+        },
+        {
+          "id": "small-matti-pramidalu",
+          "a": 2
+        },
+        {
+          "id": "muggu-powder-loose",
+          "a": 250
+        }
       ]
     },
     {
@@ -3248,6 +3430,76 @@
       "unit": "set",
       "photos": [
         "gruhapravesam-kit"
+      ],
+      "kit": [
+        {
+          "id": "pasupu-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "red-kumkuma-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "sandalwood-powder-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "camphor-tablets-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "sandalwood-incense-sticks-small-packet",
+          "a": 1
+        },
+        {
+          "id": "round-cotton-wicks",
+          "a": 1
+        },
+        {
+          "id": "deepam-oil-500-ml",
+          "a": 1
+        },
+        {
+          "id": "coconut-medium",
+          "a": 3
+        },
+        {
+          "id": "kalasam-kayalu",
+          "a": 1
+        },
+        {
+          "id": "tamalapaku-set-of-leaves",
+          "a": 2
+        },
+        {
+          "id": "betel-nuts-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "turmeric-sticks-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "kalasam-samanlu",
+          "a": 1
+        },
+        {
+          "id": "navadhanyalu",
+          "a": 1
+        },
+        {
+          "id": "ganga-jalam-small-bottle",
+          "a": 1
+        },
+        {
+          "id": "small-matti-pramidalu",
+          "a": 5
+        },
+        {
+          "id": "muggu-powder-loose",
+          "a": 500
+        }
       ]
     },
     {
@@ -3258,6 +3510,60 @@
       "unit": "set",
       "photos": [
         "vinayaka-chavithi-kit"
+      ],
+      "kit": [
+        {
+          "id": "pasupu-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "red-kumkuma-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "sandalwood-powder-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "camphor-tablets-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "sandalwood-incense-sticks-small-packet",
+          "a": 1
+        },
+        {
+          "id": "round-cotton-wicks",
+          "a": 1
+        },
+        {
+          "id": "deepam-oil-200-ml",
+          "a": 1
+        },
+        {
+          "id": "coconut-medium",
+          "a": 2
+        },
+        {
+          "id": "tamalapaku-set-of-leaves",
+          "a": 2
+        },
+        {
+          "id": "betel-nuts-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "small-matti-pramidalu",
+          "a": 2
+        },
+        {
+          "id": "rice-flour-loose",
+          "a": 500
+        },
+        {
+          "id": "jaggery-loose",
+          "a": 250
+        }
       ]
     },
     {
@@ -3268,6 +3574,56 @@
       "unit": "set",
       "photos": [
         "homam-kit"
+      ],
+      "kit": [
+        {
+          "id": "homam-pullalu",
+          "a": 2
+        },
+        {
+          "id": "darbha-grass",
+          "a": 1
+        },
+        {
+          "id": "ghee-500-ml",
+          "a": 1
+        },
+        {
+          "id": "navadhanyalu",
+          "a": 1
+        },
+        {
+          "id": "camphor-tablets-rs-20-packet",
+          "a": 1
+        },
+        {
+          "id": "sambrani-small-packet",
+          "a": 1
+        },
+        {
+          "id": "guggilam-small-packet",
+          "a": 1
+        },
+        {
+          "id": "pasupu-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "red-kumkuma-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "coconut-medium",
+          "a": 2
+        },
+        {
+          "id": "tamalapaku-set-of-leaves",
+          "a": 1
+        },
+        {
+          "id": "betel-nuts-rs-10-packet",
+          "a": 1
+        }
       ]
     },
     {
@@ -3298,6 +3654,60 @@
       "unit": "set",
       "photos": [
         "deepavali-kit"
+      ],
+      "kit": [
+        {
+          "id": "pasupu-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "red-kumkuma-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "sandalwood-powder-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "camphor-tablets-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "sandalwood-incense-sticks-small-packet",
+          "a": 1
+        },
+        {
+          "id": "round-cotton-wicks",
+          "a": 1
+        },
+        {
+          "id": "deepam-oil-500-ml",
+          "a": 1
+        },
+        {
+          "id": "small-matti-pramidalu",
+          "a": 25
+        },
+        {
+          "id": "coconut-medium",
+          "a": 2
+        },
+        {
+          "id": "tamalapaku-set-of-leaves",
+          "a": 2
+        },
+        {
+          "id": "betel-nuts-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "rangoli-colours-rs-10-packet",
+          "a": 1
+        },
+        {
+          "id": "muggu-powder-loose",
+          "a": 500
+        }
       ]
     },
     {

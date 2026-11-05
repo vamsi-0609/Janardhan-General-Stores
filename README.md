@@ -22,8 +22,8 @@ The build uses only Node's standard library. It needs no network access and no e
 | --- | --- |
 | `src/data/shop.mjs` | Name, address (EN/TE), phone, WhatsApp, email, hours, Maps link — edit contact details here |
 | `src/data/catalogue.json` | Sections, categories and **types** of products (e.g. Detergent Powder): name, Telugu name, other names, description, photo |
-| `src/data/brands.json` | **Brands** (Tide, Rin, Colgate …) |
-| `src/data/products.json` | **Products**: one product = one item in one size, e.g. “Rin Detergent Powder · ½ kg”. Type, brand, name, size, price, photos, other names, in stock. Loose items have `loose`, `min` (starts from, grams) and `step` (each + adds, grams). |
+| `src/data/brands.json` | **Brands** (Tide, Rin, Colgate …). `logo: true` = has an optional logo in `public/img/brands/<id>.webp` (added in the editor) |
+| `src/data/products.json` | **Products**: one product = one item in one size, e.g. “Rin Detergent Powder · ½ kg”. Type, brand, name, size, price, photos, other names, in stock. Loose items have `loose`, `min` (starts from, grams) and `step` (each + adds, grams). Optional: `tag` (label on the card), `star` (home page “Popular at the shop”), `hide` (not on the website), `kit` (puja kit contents: `[{ id, a }]`, amount = count or grams). |
 | `src/data/catalogue.mjs` | Reads the three files above for the build |
 | `src/data/image-credits.json` | Internal record of where each product photo came from (not shown on the site) |
 | `src/styles.css`, `src/client/*.js` | Styling, small progressive enhancements, client-side search |
@@ -41,7 +41,11 @@ The top of the home page shows the next festival automatically, using today's da
 
 ### My list (WhatsApp list)
 
-Every product card has **Add**, then **− n +**. Loose items open a weight panel (from the product's “starts from”, in fixed steps). The list (`/list/`) asks for the customer's name and pickup time (pickup only, no delivery), can ask for an estimated total, and opens WhatsApp with the whole list typed in. The list is stored only in the customer's browser. Search understands sizes: “rin 1 kg”, “tide ₹10”, “అర కిలో కంది పప్పు”.
+Every product card has **Add**, then **− n +**. Loose items open a weight panel (from the product's “starts from”, in fixed steps). The list (`/list/`) asks for the customer's name and pickup time (pickup only, no delivery), can ask for an estimated total, and opens WhatsApp with the whole list typed in. The list is stored only in the customer's browser, grouped as Kirana, Puja Samagri and Puja kits. When it is sent, a copy is kept so the customer can repeat the last list. Search understands sizes: “rin 1 kg”, “tide ₹10”, “అర కిలో కంది పప్పు”.
+
+### Puja kits
+
+A kit is a product with a `kit` list of other products and amounts (edit it in the editor: product → More ▾ → Contents of this kit). Its page shows **What's inside**: customers untick items, change sizes and amounts, then add the kit in one tap. In My list and on WhatsApp the items are listed under the kit's name. The home page and the Puja Samagri page show a “Ready puja kits” row.
 
 ### Shop QR poster and app (PWA)
 
