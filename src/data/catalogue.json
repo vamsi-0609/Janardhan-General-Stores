@@ -396,7 +396,10 @@
             "gingelly oil"
           ],
           "desc": "Sesame oil used for pickles, podis and traditional cooking.",
-          "q": "sesame oil"
+          "q": "sesame oil",
+          "alsoIn": [
+            "wicks-deepam-oil"
+          ]
         },
         {
           "slug": "coconut-oil",
@@ -442,8 +445,11 @@
             "neyyi",
             "clarified butter"
           ],
-          "desc": "Clarified butter for rice, sweets, tempering and puja.",
-          "q": "ghee clarified butter"
+          "desc": "Clarified ghee for rice, sweets, tempering and puja.",
+          "q": "ghee clarified butter",
+          "alsoIn": [
+            "wicks-deepam-oil"
+          ]
         }
       ]
     },
@@ -487,10 +493,15 @@
             "pasupu",
             "haldi",
             "tumeric",
-            "turmeric"
+            "turmeric",
+            "puja pasupu",
+            "pooja pasupu"
           ],
           "desc": "Ground turmeric used daily in cooking.",
-          "q": "turmeric powder"
+          "q": "turmeric powder",
+          "alsoIn": [
+            "kumkum-turmeric"
+          ]
         },
         {
           "slug": "coriander-powder",
@@ -2002,7 +2013,8 @@
           "te": "ఆముదం",
           "aliases": [
             "amudam",
-            "castor"
+            "castor",
+            "amudala nune"
           ],
           "desc": "Traditional lamp oil.",
           "q": "castor oil"

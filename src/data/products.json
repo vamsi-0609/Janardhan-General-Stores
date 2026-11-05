@@ -31,7 +31,8 @@
       "loose": true,
       "photos": [
         "sona-masoori-rice"
-      ]
+      ],
+      "off": true
     },
     {
       "id": "lakshmi-masoori-rice-loose",
@@ -42,7 +43,8 @@
       "loose": true,
       "photos": [
         "sona-masoori-rice"
-      ]
+      ],
+      "off": true
     },
     {
       "id": "arshiya-black-masoori-rice-loose",
@@ -53,7 +55,8 @@
       "loose": true,
       "photos": [
         "sona-masoori-rice"
-      ]
+      ],
+      "off": true
     },
     {
       "id": "unity-basmati-rice-loose",
@@ -64,7 +67,8 @@
       "loose": true,
       "photos": [
         "basmati-rice"
-      ]
+      ],
+      "off": true
     },
     {
       "id": "india-gate-basmati-rice-loose",
@@ -75,7 +79,8 @@
       "loose": true,
       "photos": [
         "basmati-rice"
-      ]
+      ],
+      "off": true
     },
     {
       "id": "uppudu-biyyam-loose",
@@ -243,9 +248,19 @@
       "brand": "aashirvaad",
       "name": "Aashirvaad Wheat Flour",
       "size": "1 kg packet",
+      "desc": "This packet contains 1 kilogram of wheat flour.",
+      "aliases": [
+        "ashirvad",
+        "godhuma pindi",
+        "godhuma",
+        "ashirvad kg packet",
+        "ashirvad godhuma pindi"
+      ],
       "photos": [
+        "p--aashirvaad-wheat-flour-1-kg-packet--f43e6a",
         "wheat-atta"
-      ]
+      ],
+      "tag": "Popular"
     },
     {
       "id": "aashirvaad-wheat-flour-5-kg-packet",
@@ -253,19 +268,19 @@
       "brand": "aashirvaad",
       "name": "Aashirvaad Wheat Flour",
       "size": "5 kg packet",
+      "desc": "This pack contains 5 kilograms of wheat flour.",
+      "aliases": [
+        "ashirvad",
+        "godhuma pindi",
+        "godhuma",
+        "5kg godhuma pindi",
+        "5kg ashivarvad"
+      ],
       "photos": [
+        "p--aashirvaad-wheat-flour-5-kg-packet--99e751",
         "wheat-atta"
-      ]
-    },
-    {
-      "id": "aashirvaad-wheat-flour-10-kg-packet",
-      "type": "wheat-atta",
-      "brand": "aashirvaad",
-      "name": "Aashirvaad Wheat Flour",
-      "size": "10 kg packet",
-      "photos": [
-        "wheat-atta"
-      ]
+      ],
+      "tag": "Popular"
     },
     {
       "id": "maida-loose",
@@ -301,8 +316,7 @@
       "id": "ragi-flour-loose",
       "type": "ragi-flour",
       "name": "Ragi Flour",
-      "size": "Loose",
-      "loose": true,
+      "size": "250 g",
       "photos": [
         "ragi-flour"
       ]
@@ -321,25 +335,19 @@
       "id": "corn-flour-loose",
       "type": "corn-flour",
       "name": "Corn Flour",
-      "size": "Loose",
-      "loose": true,
+      "size": "250 g",
       "photos": [
         "corn-flour"
       ]
     },
     {
-      "id": "freedom-groundnut-oil-1-l-packet",
-      "type": "groundnut-oil",
-      "brand": "freedom",
-      "name": "Freedom Groundnut Oil",
-      "size": "1 L packet"
-    },
-    {
-      "id": "freedom-groundnut-oil-15-l-can",
-      "type": "groundnut-oil",
-      "brand": "freedom",
-      "name": "Freedom Groundnut Oil",
-      "size": "15 L can"
+      "id": "corn-flour-500-g",
+      "type": "corn-flour",
+      "name": "Corn Flour",
+      "size": "500 g",
+      "photos": [
+        "corn-flour"
+      ]
     },
     {
       "id": "priya-groundnut-oil-1-l-packet",
@@ -356,24 +364,7 @@
       "type": "groundnut-oil",
       "brand": "priya",
       "name": "Priya Groundnut Oil",
-      "size": "15 L can",
-      "photos": [
-        "groundnut-oil"
-      ]
-    },
-    {
-      "id": "gold-drop-groundnut-oil-1-l-packet",
-      "type": "groundnut-oil",
-      "brand": "gold-drop",
-      "name": "Gold Drop Groundnut Oil",
-      "size": "1 L packet"
-    },
-    {
-      "id": "gold-drop-groundnut-oil-15-l-can",
-      "type": "groundnut-oil",
-      "brand": "gold-drop",
-      "name": "Gold Drop Groundnut Oil",
-      "size": "15 L can"
+      "size": "15 L Can"
     },
     {
       "id": "natraj-groundnut-oil-1-l-packet",
@@ -390,7 +381,7 @@
       "type": "groundnut-oil",
       "brand": "natraj",
       "name": "Natraj Groundnut Oil",
-      "size": "15 L can",
+      "size": "15 L Can",
       "photos": [
         "groundnut-oil-2"
       ]
@@ -406,6 +397,13 @@
       ]
     },
     {
+      "type": "sunflower-oil",
+      "brand": "freedom",
+      "name": "Freedom Sunflower Oil",
+      "size": "5 L Can",
+      "id": "freedom-sunflower-oil-5-l-can"
+    },
+    {
       "id": "priya-sunflower-oil-1-l-packet",
       "type": "sunflower-oil",
       "brand": "priya",
@@ -416,6 +414,20 @@
       ]
     },
     {
+      "id": "priya-sunflower-oil-5-l-can",
+      "type": "sunflower-oil",
+      "brand": "priya",
+      "name": "Priya Sunflower Oil",
+      "size": "5 L Can"
+    },
+    {
+      "type": "sunflower-oil",
+      "brand": "priya",
+      "name": "Priya Sunflower Oil",
+      "size": "15 L Can",
+      "id": "priya-sunflower-oil-15-l-can"
+    },
+    {
       "id": "gold-drop-sunflower-oil-1-l-packet",
       "type": "sunflower-oil",
       "brand": "gold-drop",
@@ -423,42 +435,6 @@
       "size": "1 L packet",
       "photos": [
         "sunflower-oil-3"
-      ]
-    },
-    {
-      "id": "rice-bran-oil-100-ml",
-      "type": "rice-bran-oil",
-      "name": "Rice Bran Oil",
-      "size": "100 ml",
-      "photos": [
-        "rice-bran-oil"
-      ]
-    },
-    {
-      "id": "rice-bran-oil-200-ml",
-      "type": "rice-bran-oil",
-      "name": "Rice Bran Oil",
-      "size": "200 ml",
-      "photos": [
-        "rice-bran-oil"
-      ]
-    },
-    {
-      "id": "rice-bran-oil-500-ml",
-      "type": "rice-bran-oil",
-      "name": "Rice Bran Oil",
-      "size": "500 ml",
-      "photos": [
-        "rice-bran-oil"
-      ]
-    },
-    {
-      "id": "rice-bran-oil-1-l",
-      "type": "rice-bran-oil",
-      "name": "Rice Bran Oil",
-      "size": "1 L",
-      "photos": [
-        "rice-bran-oil"
       ]
     },
     {
@@ -498,54 +474,94 @@
       ]
     },
     {
-      "id": "coconut-oil-100-ml",
+      "id": "coconut-oil-20-ml",
       "type": "coconut-oil",
+      "brand": "parachute",
       "name": "Coconut Oil",
-      "size": "100 ml",
+      "te": "కొబ్బెర నూనె",
+      "size": "20 ml",
+      "aliases": [
+        "parachute",
+        "coconut oil",
+        "kobbera nune",
+        "thala nune"
+      ],
       "photos": [
         "coconut-oil"
-      ]
+      ],
+      "tag": "New"
+    },
+    {
+      "id": "coconut-oil-38-ml",
+      "type": "coconut-oil",
+      "brand": "parachute",
+      "name": "Coconut Oil",
+      "te": "కొబ్బెర నూనె",
+      "size": "38 ml",
+      "aliases": [
+        "parachute",
+        "coconut oil",
+        "kobbera nune",
+        "thala nune"
+      ],
+      "photos": [
+        "coconut-oil"
+      ],
+      "tag": "New"
+    },
+    {
+      "id": "coconut-oil-100-ml",
+      "type": "coconut-oil",
+      "brand": "parachute",
+      "name": "Coconut Oil",
+      "te": "కొబ్బెర నూనె",
+      "size": "175 ml",
+      "aliases": [
+        "parachute",
+        "coconut oil",
+        "kobbera nune",
+        "thala nune"
+      ],
+      "photos": [
+        "coconut-oil"
+      ],
+      "tag": "New"
     },
     {
       "id": "coconut-oil-200-ml",
       "type": "coconut-oil",
+      "brand": "parachute",
       "name": "Coconut Oil",
-      "size": "200 ml",
+      "te": "కొబ్బెర నూనె",
+      "size": "250 ml",
+      "aliases": [
+        "parachute",
+        "coconut oil",
+        "kobbera nune",
+        "thala nune"
+      ],
       "photos": [
         "coconut-oil"
-      ]
+      ],
+      "tag": "New"
     },
     {
       "id": "coconut-oil-500-ml",
       "type": "coconut-oil",
+      "brand": "parachute",
       "name": "Coconut Oil",
+      "te": "కొబ్బెర నూనె",
       "size": "500 ml",
+      "aliases": [
+        "parachute",
+        "coconut oil",
+        "kobbera nune",
+        "thala nune"
+      ],
       "photos": [
         "coconut-oil"
-      ]
-    },
-    {
-      "id": "coconut-oil-1-l",
-      "type": "coconut-oil",
-      "name": "Coconut Oil",
-      "size": "1 L",
-      "photos": [
-        "coconut-oil"
-      ]
-    },
-    {
-      "id": "freedom-palm-oil-1-l-packet",
-      "type": "palmolein-oil",
-      "brand": "freedom",
-      "name": "Freedom Palm Oil",
-      "size": "1 L packet"
-    },
-    {
-      "id": "freedom-palm-oil-15-l-can",
-      "type": "palmolein-oil",
-      "brand": "freedom",
-      "name": "Freedom Palm Oil",
-      "size": "15 L can"
+      ],
+      "tag": "New"
     },
     {
       "id": "priya-palm-oil-1-l-packet",
@@ -566,20 +582,6 @@
       "photos": [
         "palmolein-oil-2"
       ]
-    },
-    {
-      "id": "gold-drop-palm-oil-1-l-packet",
-      "type": "palmolein-oil",
-      "brand": "gold-drop",
-      "name": "Gold Drop Palm Oil",
-      "size": "1 L packet"
-    },
-    {
-      "id": "gold-drop-palm-oil-15-l-can",
-      "type": "palmolein-oil",
-      "brand": "gold-drop",
-      "name": "Gold Drop Palm Oil",
-      "size": "15 L can"
     },
     {
       "id": "priya-gold-palm-oil-1-l-packet",
@@ -638,70 +640,76 @@
       ]
     },
     {
-      "id": "ghee-50-ml",
-      "type": "ghee",
-      "name": "Ghee",
-      "size": "50 ml",
-      "photos": [
-        "ghee"
-      ]
-    },
-    {
       "id": "ghee-100-ml",
       "type": "ghee",
-      "name": "Ghee",
+      "brand": "grb",
+      "name": "GRB Cow Ghee",
       "size": "100 ml",
       "photos": [
         "ghee"
-      ]
+      ],
+      "tag": "Popular"
     },
     {
       "id": "ghee-200-ml",
       "type": "ghee",
-      "name": "Ghee",
+      "brand": "grb",
+      "name": "GRB Cow Ghee",
       "size": "200 ml",
       "photos": [
         "ghee"
-      ]
+      ],
+      "tag": "Popular"
     },
     {
       "id": "ghee-500-ml",
       "type": "ghee",
-      "name": "Ghee",
+      "brand": "grb",
+      "name": "GRB Cow Ghee",
       "size": "500 ml",
       "photos": [
         "ghee"
-      ]
+      ],
+      "tag": "Popular"
     },
     {
-      "id": "ghee-1-l",
+      "id": "grb-buffalo-ghee-100-ml",
       "type": "ghee",
-      "name": "Ghee",
-      "size": "1 L",
+      "brand": "grb",
+      "name": "GRB buffalo Ghee",
+      "te": "యనుము నెయ్యి",
+      "size": "100 ml",
       "photos": [
-        "ghee"
-      ]
+        "p--grb-buffalo-ghee-100-ml--9369ab"
+      ],
+      "tag": "Popular"
+    },
+    {
+      "id": "grb-buffalo-ghee-200-ml",
+      "type": "ghee",
+      "brand": "grb",
+      "name": "GRB buffalo Ghee",
+      "te": "యనుము నెయ్యి",
+      "size": "200 ml",
+      "photos": [
+        "p--grb-buffalo-ghee-100-ml--9369ab"
+      ],
+      "tag": "Popular"
+    },
+    {
+      "id": "grb-buffalo-ghee-500-ml",
+      "type": "ghee",
+      "brand": "grb",
+      "name": "GRB buffalo Ghee",
+      "te": "యనుము నెయ్యి",
+      "size": "500 ml",
+      "photos": [
+        "p--grb-buffalo-ghee-100-ml--9369ab"
+      ],
+      "tag": "Popular"
     },
     {
       "id": "red-chilli-powder-rs-10-packet",
-      "type": "red-chilli-powder",
-      "name": "Red Chilli Powder",
-      "size": "₹10 packet",
-      "photos": [
-        "red-chilli-powder"
-      ]
-    },
-    {
-      "id": "red-chilli-powder-rs-20-packet",
-      "type": "red-chilli-powder",
-      "name": "Red Chilli Powder",
-      "size": "₹20 packet",
-      "photos": [
-        "red-chilli-powder"
-      ]
-    },
-    {
-      "id": "red-chilli-powder-50-g",
       "type": "red-chilli-powder",
       "name": "Red Chilli Powder",
       "size": "50 g",
@@ -714,6 +722,24 @@
       "type": "red-chilli-powder",
       "name": "Red Chilli Powder",
       "size": "100 g",
+      "photos": [
+        "red-chilli-powder"
+      ]
+    },
+    {
+      "id": "red-chilli-powder-200-g",
+      "type": "red-chilli-powder",
+      "name": "Red Chilli Powder",
+      "size": "200 g",
+      "photos": [
+        "red-chilli-powder"
+      ]
+    },
+    {
+      "id": "red-chilli-powder-500-g",
+      "type": "red-chilli-powder",
+      "name": "Red Chilli Powder",
+      "size": "500 g",
       "photos": [
         "red-chilli-powder"
       ]
@@ -732,7 +758,7 @@
       "id": "turmeric-powder-rs-10-packet",
       "type": "turmeric-powder",
       "name": "Turmeric Powder",
-      "size": "₹10 packet",
+      "size": "30 g",
       "photos": [
         "turmeric-powder"
       ]
@@ -741,7 +767,7 @@
       "id": "turmeric-powder-rs-20-packet",
       "type": "turmeric-powder",
       "name": "Turmeric Powder",
-      "size": "₹20 packet",
+      "size": "50 g",
       "photos": [
         "turmeric-powder"
       ]
@@ -750,7 +776,7 @@
       "id": "turmeric-powder-50-g",
       "type": "turmeric-powder",
       "name": "Turmeric Powder",
-      "size": "50 g",
+      "size": "100 g",
       "photos": [
         "turmeric-powder"
       ]
@@ -759,27 +785,18 @@
       "id": "turmeric-powder-100-g",
       "type": "turmeric-powder",
       "name": "Turmeric Powder",
-      "size": "100 g",
+      "size": "200 g",
       "photos": [
         "turmeric-powder"
       ]
     },
     {
-      "id": "coriander-powder-rs-10-packet",
-      "type": "coriander-powder",
-      "name": "Coriander Powder",
-      "size": "₹10 packet",
+      "id": "turmeric-powder-500-g",
+      "type": "turmeric-powder",
+      "name": "Turmeric Powder",
+      "size": "500 g",
       "photos": [
-        "coriander-powder"
-      ]
-    },
-    {
-      "id": "coriander-powder-rs-20-packet",
-      "type": "coriander-powder",
-      "name": "Coriander Powder",
-      "size": "₹20 packet",
-      "photos": [
-        "coriander-powder"
+        "turmeric-powder"
       ]
     },
     {
@@ -787,6 +804,12 @@
       "type": "coriander-powder",
       "name": "Coriander Powder",
       "size": "50 g",
+      "aliases": [
+        "dhaniyala podi",
+        "daniyala podi",
+        "danial podi",
+        "masala podi"
+      ],
       "photos": [
         "coriander-powder"
       ]
@@ -796,6 +819,42 @@
       "type": "coriander-powder",
       "name": "Coriander Powder",
       "size": "100 g",
+      "aliases": [
+        "dhaniyala podi",
+        "daniyala podi",
+        "danial podi",
+        "masala podi"
+      ],
+      "photos": [
+        "coriander-powder"
+      ]
+    },
+    {
+      "id": "coriander-powder-200-g",
+      "type": "coriander-powder",
+      "name": "Coriander Powder",
+      "size": "200 g",
+      "aliases": [
+        "dhaniyala podi",
+        "daniyala podi",
+        "danial podi",
+        "masala podi"
+      ],
+      "photos": [
+        "coriander-powder"
+      ]
+    },
+    {
+      "id": "coriander-powder-500-g",
+      "type": "coriander-powder",
+      "name": "Coriander Powder",
+      "size": "500 g",
+      "aliases": [
+        "dhaniyala podi",
+        "daniyala podi",
+        "danial podi",
+        "masala podi"
+      ],
       "photos": [
         "coriander-powder"
       ]
@@ -1211,96 +1270,6 @@
       "step": 25
     },
     {
-      "id": "red-label-tea-powder-rs-10-packet",
-      "type": "tea-powder",
-      "brand": "red-label",
-      "name": "Red Label Tea Powder",
-      "size": "₹10 packet",
-      "photos": [
-        "tea-powder-2"
-      ]
-    },
-    {
-      "id": "red-label-tea-powder-100-g",
-      "type": "tea-powder",
-      "brand": "red-label",
-      "name": "Red Label Tea Powder",
-      "size": "100 g",
-      "photos": [
-        "tea-powder-2"
-      ]
-    },
-    {
-      "id": "red-label-tea-powder-250-g",
-      "type": "tea-powder",
-      "brand": "red-label",
-      "name": "Red Label Tea Powder",
-      "size": "250 g",
-      "photos": [
-        "tea-powder-2"
-      ]
-    },
-    {
-      "id": "taj-mahal-tea-powder-rs-10-packet",
-      "type": "tea-powder",
-      "brand": "taj-mahal",
-      "name": "Taj Mahal Tea Powder",
-      "size": "₹10 packet",
-      "photos": [
-        "tea-powder-3"
-      ]
-    },
-    {
-      "id": "taj-mahal-tea-powder-100-g",
-      "type": "tea-powder",
-      "brand": "taj-mahal",
-      "name": "Taj Mahal Tea Powder",
-      "size": "100 g",
-      "photos": [
-        "tea-powder-3"
-      ]
-    },
-    {
-      "id": "taj-mahal-tea-powder-250-g",
-      "type": "tea-powder",
-      "brand": "taj-mahal",
-      "name": "Taj Mahal Tea Powder",
-      "size": "250 g",
-      "photos": [
-        "tea-powder-3"
-      ]
-    },
-    {
-      "id": "3-roses-tea-powder-rs-10-packet",
-      "type": "tea-powder",
-      "brand": "3-roses",
-      "name": "3 Roses Tea Powder",
-      "size": "₹10 packet",
-      "photos": [
-        "tea-powder"
-      ]
-    },
-    {
-      "id": "3-roses-tea-powder-100-g",
-      "type": "tea-powder",
-      "brand": "3-roses",
-      "name": "3 Roses Tea Powder",
-      "size": "100 g",
-      "photos": [
-        "tea-powder"
-      ]
-    },
-    {
-      "id": "3-roses-tea-powder-250-g",
-      "type": "tea-powder",
-      "brand": "3-roses",
-      "name": "3 Roses Tea Powder",
-      "size": "250 g",
-      "photos": [
-        "tea-powder"
-      ]
-    },
-    {
       "id": "bru-instant-coffee-powder-rs-2-sachet",
       "type": "instant-coffee",
       "brand": "bru",
@@ -1338,7 +1307,8 @@
       "size": "½ kg packet",
       "photos": [
         "instant-coffee"
-      ]
+      ],
+      "off": true
     },
     {
       "id": "continental-instant-coffee-powder-rs-2-sachet",
@@ -1531,7 +1501,7 @@
       "type": "vermicelli",
       "brand": "bambino",
       "name": "Bambino Vermicelli",
-      "size": "Small packet",
+      "size": "250 g",
       "photos": [
         "vermicelli"
       ]
@@ -1541,7 +1511,17 @@
       "type": "vermicelli",
       "brand": "bambino",
       "name": "Bambino Vermicelli",
-      "size": "Big packet",
+      "size": "500 g",
+      "photos": [
+        "vermicelli"
+      ]
+    },
+    {
+      "id": "bambino-vermicelli-1000-g",
+      "type": "vermicelli",
+      "brand": "bambino",
+      "name": "Bambino Vermicelli",
+      "size": "1000 g",
       "photos": [
         "vermicelli"
       ]
@@ -3124,19 +3104,17 @@
       ]
     },
     {
-      "id": "castor-oil-100-ml",
-      "type": "castor-oil",
-      "name": "Castor Oil (Amudam)",
-      "size": "100 ml",
-      "photos": [
-        "castor-oil"
-      ]
-    },
-    {
       "id": "castor-oil-200-ml",
       "type": "castor-oil",
       "name": "Castor Oil (Amudam)",
+      "te": "ఆముదం",
       "size": "200 ml",
+      "aliases": [
+        "amudham",
+        "amudala nune",
+        "castor oil",
+        "puja nune"
+      ],
       "photos": [
         "castor-oil"
       ]
@@ -3145,7 +3123,14 @@
       "id": "castor-oil-500-ml",
       "type": "castor-oil",
       "name": "Castor Oil (Amudam)",
+      "te": "ఆముదం",
       "size": "500 ml",
+      "aliases": [
+        "amudham",
+        "amudala nune",
+        "castor oil",
+        "puja nune"
+      ],
       "photos": [
         "castor-oil"
       ]
@@ -3154,7 +3139,14 @@
       "id": "castor-oil-1-l",
       "type": "castor-oil",
       "name": "Castor Oil (Amudam)",
+      "te": "ఆముదం",
       "size": "1 L",
+      "aliases": [
+        "amudham",
+        "amudala nune",
+        "castor oil",
+        "puja nune"
+      ],
       "photos": [
         "castor-oil"
       ]
@@ -3221,7 +3213,7 @@
       ],
       "kit": [
         {
-          "id": "pasupu-rs-10-packet",
+          "id": "turmeric-powder-rs-10-packet",
           "a": 1
         },
         {
@@ -3261,7 +3253,7 @@
       ],
       "kit": [
         {
-          "id": "pasupu-rs-10-packet",
+          "id": "turmeric-powder-rs-10-packet",
           "a": 1
         },
         {
@@ -3357,7 +3349,7 @@
       ],
       "kit": [
         {
-          "id": "pasupu-rs-10-packet",
+          "id": "turmeric-powder-rs-10-packet",
           "a": 1
         },
         {
@@ -3433,7 +3425,7 @@
       ],
       "kit": [
         {
-          "id": "pasupu-rs-10-packet",
+          "id": "turmeric-powder-rs-10-packet",
           "a": 1
         },
         {
@@ -3513,7 +3505,7 @@
       ],
       "kit": [
         {
-          "id": "pasupu-rs-10-packet",
+          "id": "turmeric-powder-rs-10-packet",
           "a": 1
         },
         {
@@ -3605,7 +3597,7 @@
           "a": 1
         },
         {
-          "id": "pasupu-rs-10-packet",
+          "id": "turmeric-powder-rs-10-packet",
           "a": 1
         },
         {
@@ -3657,7 +3649,7 @@
       ],
       "kit": [
         {
-          "id": "pasupu-rs-10-packet",
+          "id": "turmeric-powder-rs-10-packet",
           "a": 1
         },
         {
@@ -4069,6 +4061,48 @@
       "photos": [
         "honey"
       ]
+    },
+    {
+      "id": "3-roses-tea-powder-100-g",
+      "type": "tea-powder",
+      "brand": "3-roses",
+      "name": "3 Roses Tea Powder",
+      "te": "3 రొసెస్ టీ  పొడి",
+      "size": "100 g",
+      "desc": "This pack contains 100 grams of tea powder.",
+      "aliases": [
+        "tea",
+        "teeaaku",
+        "tea powder",
+        "3 roses",
+        "3 roses small tea powder",
+        "chinna tea podi"
+      ],
+      "photos": [
+        "p--3-roses-tea-powder-100-g--48217b"
+      ],
+      "tag": "Fresh stock"
+    },
+    {
+      "id": "3-roses-tea-powder-250-g",
+      "type": "tea-powder",
+      "brand": "3-roses",
+      "name": "3 Roses Tea Powder",
+      "te": "3 రొసెస్ టీ  పొడి",
+      "size": "250 g",
+      "desc": "This pack contains 250 grams of tea powder",
+      "aliases": [
+        "tea",
+        "teeaaku",
+        "tea powder",
+        "3 roses",
+        "3 roses big tea powder",
+        "pedha tea podi"
+      ],
+      "photos": [
+        "p--3-roses-tea-powder-250-g--2a18df"
+      ],
+      "tag": "Fresh stock"
     }
   ]
 }

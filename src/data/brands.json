@@ -10,7 +10,8 @@
     },
     {
       "id": "aashirvaad",
-      "name": "Aashirvaad"
+      "name": "Aashirvaad",
+      "logo": true
     },
     {
       "id": "ariel",
@@ -22,7 +23,8 @@
     },
     {
       "id": "bambino",
-      "name": "Bambino"
+      "name": "Bambino",
+      "logo": true
     },
     {
       "id": "bindu",
@@ -85,6 +87,11 @@
       "name": "Gold Drop"
     },
     {
+      "id": "grb",
+      "name": "GRB",
+      "logo": true
+    },
+    {
       "id": "head-shoulders",
       "name": "Head & Shoulders"
     },
@@ -143,6 +150,11 @@
     {
       "id": "ns",
       "name": "NS"
+    },
+    {
+      "id": "parachute",
+      "name": "Parachute",
+      "logo": true
     },
     {
       "id": "priya",
