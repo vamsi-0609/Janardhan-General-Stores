@@ -244,7 +244,7 @@
       ${shopPhone() ? '' : `<div class="rp-pin"><p><strong>Shop’s own phone?</strong> Add <strong>🧾 Shop reply</strong> to this phone’s ☰ menu, so you can open this page from the app. Customers’ phones never show it.</p><button type="button" class="btn btn-primary" data-pin="on">📌 Show Shop reply in this phone’s menu</button></div>`}
       <div class="rp-head rp-paste">
         <h2>Open a customer’s list</h2>
-        <ol class="rp-steps"><li>In the customer’s WhatsApp message, <strong>tap the link</strong> under “For the shop”. The bill opens here in the Janardhan app.</li><li>If a link opens somewhere else, or asks for a password, OTP, payment or a download: <strong>close it</strong>, it is not ours.</li></ol>
+        <ol class="rp-steps"><li>In the customer’s WhatsApp message, <strong>tap the link</strong> under “For the shop”. The bill opens here. The address at the top must show <strong>shop.myconnect.sbs</strong>.</li><li>If a link shows any other address, or asks for a password, OTP, payment or a download: <strong>close it</strong>, it is not ours.</li></ol>
         <p class="hint">Other ways: copy the customer’s message and tap the button below.</p>
         <button type="button" class="btn btn-primary rp-paste-btn" data-paste>📋 Open the copied list</button>
         <label class="rp-paste-box"><span>Or press and hold in this box → Paste</span><textarea data-paste-box rows="3" placeholder="Paste the message here"></textarea></label>

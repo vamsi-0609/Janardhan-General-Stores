@@ -472,7 +472,7 @@
     }
     lines.push('', `Name: ${state.name.trim()}`, `Phone: ${mobile(state.phone) || state.phone.trim()}`, `Pickup at the shop: ${pickupText()}`, '', 'Please confirm which items are available.')
     if (state.askPrice) lines.push('Please also tell me the estimated total price for these items.')
-    // The shop taps this link: on its phone it opens inside the installed Janardhan app (a changed link would not).
+    // The shop taps this link. The reply page is only ever on shop.myconnect.sbs (the shop checks the address).
     lines.push('', '— For the shop (tap to reply) —', `${location.origin}/reply/#${replyCode()}`)
     return lines.join('\n')
   }
