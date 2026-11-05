@@ -126,7 +126,7 @@
   }
 
   // 4. Product photo gallery: swipe (native scroll-snap) + arrows, dots/thumbnails and keyboard.
-  document.querySelectorAll('[data-gallery]').forEach((g) => {
+  const initGalleries = () => document.querySelectorAll('[data-gallery]').forEach((g) => {
     const track = g.querySelector('.g-track')
     const slides = [...track.children]
     const thumbs = [...g.querySelectorAll('[data-g-thumb]')]
@@ -170,6 +170,7 @@
       if (g.getBoundingClientRect().top < 0) g.scrollIntoView({ block: 'start', behavior: 'smooth' })
     }))
   })
+  initGalleries()
 
   // 5. Filters on category and type pages: typed text + Type chips + Brand chips, all together.
   const filter = document.querySelector('[data-filter]')
@@ -216,11 +217,41 @@
 
   // 4b. Switching between sizes of the same product (size buttons, "Other sizes" row) replaces the page instead of
   //     adding a new one, so Back always returns to where the customer came from in one step.
+  //     The new size's page is fetched and swapped into place: photos, price, details and Add update smoothly and
+  //     the page stays where it was (size buttons). From the "Other sizes" row it glides up to the product.
+  let swapping = false
+  async function swapTo(a) {
+    const main = document.querySelector('main')
+    if (!main || !window.fetch || !window.DOMParser) return location.replace(a.href)
+    if (swapping) return
+    swapping = true
+    const stay = !!a.closest('.v-chips')
+    main.classList.add('is-swapping')
+    try {
+      const res = await fetch(a.href, { credentials: 'same-origin' })
+      if (!res.ok) throw new Error('page')
+      const doc = new DOMParser().parseFromString(await res.text(), 'text/html')
+      const next = doc.querySelector('main')
+      if (!next) throw new Error('page')
+      const y = scrollY
+      main.replaceChildren(...[...next.childNodes].map((n) => document.importNode(n, true)))
+      document.title = doc.title
+      history.replaceState(null, '', a.href)
+      document.dispatchEvent(new CustomEvent('jgs:swap'))
+      if (stay) { scrollTo(0, y); main.querySelector('.v-chip[aria-current]')?.focus({ preventScroll: true }) }
+      else main.querySelector('.pdp')?.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
+    } catch {
+      location.replace(a.href) // offline or something unexpected: open the page normally
+    } finally {
+      main.classList.remove('is-swapping')
+      swapping = false
+    }
+  }
   document.addEventListener('click', (e) => {
     const a = e.target.closest('a[data-replace]')
     if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
     e.preventDefault()
-    location.replace(a.href)
+    swapTo(a)
   })
 
   // 5a. Sort on category and type pages: shop order (default), name, price. Items without a price go last.
@@ -251,17 +282,23 @@
   }
 
   // 5b. Product page on phones: show the sticky Add bar once the main Add box has scrolled out of view.
-  const stickyBuy = document.querySelector('[data-sticky]')
-  const mainBuy = document.querySelector('.buy-box[data-big]')
-  if (stickyBuy && mainBuy && 'IntersectionObserver' in window) {
-    new IntersectionObserver(([e]) => {
+  let stickyObs = null
+  function initSticky() {
+    stickyObs?.disconnect()
+    const stickyBuy = document.querySelector('[data-sticky]')
+    const mainBuy = document.querySelector('.buy-box[data-big]')
+    if (!stickyBuy || !mainBuy || !('IntersectionObserver' in window)) return document.documentElement.classList.remove('sticky-buy-on')
+    stickyObs = new IntersectionObserver(([e]) => {
       const show = !e.isIntersecting && e.boundingClientRect.top < 0
       stickyBuy.classList.toggle('show', show)
       stickyBuy.setAttribute('aria-hidden', String(!show))
       stickyBuy.inert = !show
       document.documentElement.classList.toggle('sticky-buy-on', show)
-    }).observe(mainBuy)
+    })
+    stickyObs.observe(mainBuy)
   }
+  initSticky()
+  document.addEventListener('jgs:swap', () => { initGalleries(); initSticky() })
 
   // 6. App (PWA): offline support + "Install the app" button.
   if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {

@@ -223,7 +223,7 @@
   // ───────── kit page: "What's inside" (tick / untick, size, amount) ─────────
   // Before the kit is in the list, changes are kept here and used by "Add kit to my list".
   // Once it is in the list, every change is saved to the list straight away.
-  document.querySelectorAll('[data-kit-panel]').forEach((panel) => {
+  const initKitPanels = () => { kitPanels.clear(); document.querySelectorAll('[data-kit-panel]').forEach((panel) => {
     const block = document.querySelector('.buy-box[data-big]')
     const c = block && cfgOf(block)
     const kv = c && c.v.find((v) => v.id === panel.dataset.kitPanel)
@@ -299,7 +299,8 @@
     })
     kitPanels.set(`${c.k}|${kv.id}`, { draw, selected })
     draw()
-  })
+  }) }
+  initKitPanels()
 
   // ───────── floating bar + toast ─────────
   let bar, toastEl, toastTimer
@@ -714,6 +715,7 @@
   }
 
   document.addEventListener('jgs:cards', refresh) // search results were (re)drawn
+  document.addEventListener('jgs:swap', () => { initKitPanels(); refresh() }) // product page content was swapped (size switch)
   refresh()
   if (page) drawPage()
 })()
