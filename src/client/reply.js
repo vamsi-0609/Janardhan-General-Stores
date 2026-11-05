@@ -368,13 +368,14 @@
       blocks.push({ h, rule: !opts.noRule, keepNext: !!opts.title, paint: (c, y) => {
         const grey = !opts.title && isNo(key)
         let yy = y + 22 + 26
-        font(c, 600, 26); c.fillStyle = '#555'; c.textAlign = 'left'; c.fillText(num, P, yy)
+        if (opts.title) { c.fillStyle = '#fff8ea'; rr(c, P, y + 6, W - 2 * P, h - 6, 12); c.fill() }
+        font(c, 600, 26); c.fillStyle = '#555'; c.textAlign = 'left'; c.fillText(num, P + 14, yy)
         font(c, opts.bold ? 700 : 600, 27); c.fillStyle = grey ? '#888' : '#111'
         nameLines.forEach((t, k) => c.fillText(t, x0, yy + k * 34))
         if (!opts.title) {
           font(c, 400, 26); c.fillStyle = grey ? '#888' : '#111'; c.fillText(qtyOf(id, amt), cQty, yy)
           const pc = priceCell({ key })
-          font(c, isNo(key) ? 400 : 700, isNo(key) ? 23 : 27, body, isNo(key) ? 'italic ' : ''); c.fillStyle = isNo(key) ? '#888' : '#111'; c.textAlign = 'right'; c.fillText(pc, cPrice, yy); c.textAlign = 'left'
+          font(c, isNo(key) ? 400 : 700, isNo(key) ? 23 : 27, body, isNo(key) ? 'italic ' : ''); c.fillStyle = isNo(key) ? '#888' : '#111'; c.textAlign = 'right'; c.fillText(pc, cPrice - 14, yy); c.textAlign = 'left'
         } else if (amt > 1) { font(c, 400, 26); c.fillStyle = '#111'; c.fillText(`× ${amt}`, cQty, yy) }
         yy += (nameLines.length - 1) * 34
         font(c, 400, 23); c.fillStyle = '#666'
@@ -394,37 +395,61 @@
     font(scratch, 400, 25)
     const notes = noteLines().map(([k, t]) => ({ k, rows: wrap(scratch, t, W - 2 * P - 48) }))
     const noteH = 40 + notes.reduce((a, n) => a + n.rows.length * 34 + 8, 0)
-    const totalH = 120 + noteH + 70
+    const totalH = 144 + noteH + 80
 
     // headers
+    // colours of the website's bill page
+    const INK = '#1d211e', MUTED = '#5f655f', MAROON = '#70413b', GOLD = '#c8962e', FOREST = '#1f6b41', LINE = '#e3ddd0'
+    const rr = (c, x, y, w, h, r) => { c.beginPath(); if (c.roundRect) c.roundRect(x, y, w, h, r); else c.rect(x, y, w, h) }
+    /** "Customer: Ravi" with the label in grey and the value in bold. */
+    const kv = (c, label, value, x, y, align) => {
+      font(c, 400, 25); const lw = c.measureText(label + ' ').width
+      font(c, 700, 25); const vw = c.measureText(value).width
+      const x0 = align === 'right' ? x - lw - vw : x
+      c.textAlign = 'left'
+      font(c, 400, 25); c.fillStyle = MUTED; c.fillText(label + ' ', x0, y)
+      font(c, 700, 25); c.fillStyle = INK; c.fillText(value, x0 + lw, y)
+    }
     const firstHead = (c, paint) => {
       let y = P
-      if (logo) { if (paint) c.drawImage(logo, W / 2 - 60, y, 120, 120); y += 132 }
-      font(c, 700, 44, head); y += 44; if (paint) { c.fillStyle = '#111'; c.textAlign = 'center'; c.fillText(shop.name, W / 2, y) }
-      font(c, 400, 25); y += 38; if (paint) { c.fillStyle = '#333'; c.fillText(shop.address, W / 2, y) }
-      y += 34; if (paint) c.fillText(`Phone / WhatsApp: ${shop.phone}`, W / 2, y)
-      y += 24; if (paint) { c.fillStyle = '#222'; c.fillRect(P, y, W - 2 * P, 4) }
-      font(c, 800, 30); y += 54; if (paint) { c.fillStyle = '#111'; c.fillText('B I L L', W / 2, y) }
-      font(c, 400, 26); y += 50
-      if (paint) { c.textAlign = 'left'; c.fillText(`Customer: ${data.n || '—'}`, P, y); c.textAlign = 'right'; c.fillText(`Date: ${date}`, W - P, y) }
-      y += 38
-      if (paint) { c.textAlign = 'left'; c.fillText(`Phone: ${phoneText(data.p) || '—'}`, P, y); c.textAlign = 'right'; if (pickupText()) c.fillText(`Pickup: ${pickupText().replace(/ \(.*\)$/, '')}`, W - P, y); c.textAlign = 'left' }
-      return y + 22
+      if (logo) {
+        if (paint) {
+          // round logo with a thin gold ring
+          c.save(); c.beginPath(); c.arc(W / 2, y + 68, 68, 0, Math.PI * 2); c.fillStyle = GOLD; c.fill()
+          c.beginPath(); c.arc(W / 2, y + 68, 63, 0, Math.PI * 2); c.clip(); c.drawImage(logo, W / 2 - 63, y + 5, 126, 126); c.restore()
+        }
+        y += 150
+      }
+      font(c, 700, 44, head); y += 44; if (paint) { c.fillStyle = MAROON; c.textAlign = 'center'; c.fillText(shop.name, W / 2, y) }
+      font(c, 400, 24); y += 38; if (paint) { c.fillStyle = MUTED; c.fillText(shop.address, W / 2, y) }
+      y += 32; if (paint) c.fillText(`Phone / WhatsApp: ${shop.phone}`, W / 2, y)
+      y += 30; if (paint) { c.fillStyle = INK; c.fillRect(P, y, W - 2 * P, 3) }
+      y += 26
+      if (paint) {
+        // "BILL" in a small pill
+        font(c, 800, 24); const t = 'B I L L', tw = c.measureText(t).width
+        rr(c, W / 2 - tw / 2 - 26, y, tw + 52, 44, 22); c.fillStyle = '#f4efe4'; c.fill()
+        c.fillStyle = MAROON; c.textAlign = 'center'; c.fillText(t, W / 2, y + 31)
+      }
+      y += 44 + 50
+      if (paint) { kv(c, 'Customer:', data.n || '—', P, y); kv(c, 'Date:', date, W - P, y, 'right') }
+      y += 40
+      if (paint) { kv(c, 'Phone:', phoneText(data.p) || '—', P, y); if (pickupText()) kv(c, 'Pickup:', pickupText().replace(/ \(.*\)$/, ''), W - P, y, 'right') }
+      return y + 26
     }
-    const nextHead = (c, paint, n) => {
+    const nextHead = (c, paint) => {
       let y = P
       font(c, 700, 30, head); y += 30
-      if (paint) { c.fillStyle = '#111'; c.textAlign = 'left'; c.fillText(shop.name, P, y); font(c, 400, 24); c.textAlign = 'right'; c.fillStyle = '#444'; c.fillText(`Bill for ${data.n || 'customer'} · ${date}`, W - P, y); c.textAlign = 'left' }
-      return y + 22
+      if (paint) { c.fillStyle = MAROON; c.textAlign = 'left'; c.fillText(shop.name, P, y); font(c, 400, 23); c.textAlign = 'right'; c.fillStyle = MUTED; c.fillText(`Bill for ${data.n || 'customer'} · ${date}`, W - P, y); c.textAlign = 'left' }
+      return y + 24
     }
     const tableHead = (c, y, paint) => {
       if (paint) {
-        c.fillStyle = '#222'; c.fillRect(P, y, W - 2 * P, 4)
-        font(c, 800, 22); c.fillStyle = '#111'; c.textAlign = 'left'
-        c.fillText('NO.', P, y + 40); c.fillText('ITEM', cName, y + 40); c.fillText('QTY', cQty, y + 40); c.textAlign = 'right'; c.fillText('PRICE', cPrice, y + 40); c.textAlign = 'left'
-        c.fillRect(P, y + 58, W - 2 * P, 3)
+        rr(c, P, y, W - 2 * P, 56, 12); c.fillStyle = '#f4efe4'; c.fill()
+        font(c, 800, 21); c.fillStyle = '#5a4a32'; c.textAlign = 'left'
+        c.fillText('NO.', P + 14, y + 36); c.fillText('ITEM', cName, y + 36); c.fillText('QTY', cQty, y + 36); c.textAlign = 'right'; c.fillText('PRICE', cPrice - 14, y + 36); c.textAlign = 'left'
       }
-      return y + 61
+      return y + 60
     }
 
     // lay out pages
@@ -449,16 +474,19 @@
       const c = cv.getContext('2d')
       c.scale(S, S)
       c.fillStyle = '#fff'; c.fillRect(0, 0, W, H)
-      let yy = tableHead(c, i === 0 ? firstHead(c, true) : nextHead(c, true, i + 1), true)
-      for (const b of pages[i].blocks) { b.paint(c, yy); yy += b.h; if (b.rule) { c.fillStyle = '#c4c4c4'; c.fillRect(P, yy - 1, W - 2 * P, 1) } }
+      // slim maroon band with a gold line at the top of every page
+      c.fillStyle = MAROON; c.fillRect(0, 0, W, 16); c.fillStyle = GOLD; c.fillRect(0, 16, W, 4)
+      let yy = tableHead(c, i === 0 ? firstHead(c, true) : nextHead(c, true), true)
+      for (const b of pages[i].blocks) { b.paint(c, yy); yy += b.h; if (b.rule) { c.fillStyle = LINE; c.fillRect(P, yy - 1, W - 2 * P, 2) } }
       if (pages[i].total) {
-        c.fillStyle = '#222'; c.fillRect(P, yy + 6, W - 2 * P, 4)
-        font(c, 800, 36); c.fillStyle = '#111'; c.textAlign = 'left'; c.fillText('Total', P, yy + 62); c.textAlign = 'right'; c.fillText(rupees(total()), cPrice, yy + 62); c.textAlign = 'left'
-        if (miss) { font(c, 400, 23); c.fillStyle = '#555'; c.fillText(`${miss} item${miss === 1 ? '' : 's'} not available`, P, yy + 98) }
+        // total in a green rounded box
+        rr(c, P, yy + 14, W - 2 * P, 84, 18); c.fillStyle = '#e7f6ec'; c.fill(); c.lineWidth = 3; c.strokeStyle = FOREST; c.stroke()
+        font(c, 800, 34); c.fillStyle = FOREST; c.textAlign = 'left'; c.fillText('Total', P + 28, yy + 68); c.textAlign = 'right'; c.fillText(rupees(total()), cPrice - 28, yy + 68); c.textAlign = 'left'
+        if (miss) { font(c, 400, 22); c.fillStyle = MUTED; c.fillText(`${miss} item${miss === 1 ? '' : 's'} not available`, P + 4, yy + 128) }
         // note box
-        let ny = yy + 120
-        c.fillStyle = '#f6f3ea'; c.fillRect(P, ny, W - 2 * P, noteH)
-        c.fillStyle = '#c8962e'; c.fillRect(P, ny, 6, noteH)
+        let ny = yy + 144
+        rr(c, P, ny, W - 2 * P, noteH, 16); c.fillStyle = '#f7f2e6'; c.fill()
+        c.save(); rr(c, P, ny, W - 2 * P, noteH, 16); c.clip(); c.fillStyle = GOLD; c.fillRect(P, ny, 8, noteH); c.restore()
         ny += 20
         for (const n of notes) {
           font(c, n.k === 'ok' || n.k === 'no' ? 700 : 400, 25)
@@ -466,9 +494,13 @@
           for (const r of n.rows) { ny += 34; c.fillText(r, P + 30, ny - 8) }
           ny += 8
         }
-        font(c, 400, 24); c.fillStyle = '#333'; c.textAlign = 'center'; c.fillText('Thank you! · ధన్యవాదాలు!', W / 2, yy + 120 + noteH + 50); c.textAlign = 'left'
+        font(c, 400, 24); c.fillStyle = '#333'; c.textAlign = 'center'; c.fillText('Thank you! · ధన్యవాదాలు!', W / 2, yy + 144 + noteH + 52); c.textAlign = 'left'
       }
-      font(c, 400, 21); c.fillStyle = '#777'; c.textAlign = 'center'; c.fillText(`Page ${i + 1} of ${pages.length}`, W / 2, H - P + 10); c.textAlign = 'left'
+      // footer
+      c.fillStyle = LINE; c.fillRect(P, H - P - 24, W - 2 * P, 2)
+      font(c, 400, 21); c.fillStyle = MUTED; c.textAlign = 'left'; c.fillText(location.host || 'shop.myconnect.sbs', P, H - P + 10)
+      c.textAlign = 'center'; c.fillText(`Page ${i + 1} of ${pages.length}`, W / 2, H - P + 10)
+      c.textAlign = 'right'; c.fillText(shop.phone, W - P, H - P + 10); c.textAlign = 'left'
       jpegs.push(new Uint8Array(await (await new Promise((r) => cv.toBlob(r, 'image/jpeg', 0.85))).arrayBuffer()))
     }
     const pdf = jpegsToPdf(jpegs, W * S, H * S, 419.53, 595.28)
