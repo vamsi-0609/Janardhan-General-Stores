@@ -1620,6 +1620,41 @@ h('li', {}, s('Brand logo (optional):'), ' Brands tab → click “＋ logo” (
   document.querySelectorAll('[data-tab]').forEach((b) => b.addEventListener('click', () => switchTab(b.dataset.tab)))
   $('#view-site').addEventListener('click', () => { api('POST', '/api/preview', {}).catch(() => {}) })
 
+  // ───────── SYNC with GitHub (work from more than one computer) ─────────
+  const syncBtn = $('#sync')
+  const ago = (t) => { const m = Math.round((Date.now() - t) / 60000); return m < 1 ? 'just now' : m < 60 ? `${m} min ago` : `${Math.round(m / 60)} h ago` }
+  function paintSync(s) {
+    if (!s || !syncBtn) return
+    syncBtn.className = 'sync-btn ' + ({ ok: 'ok', updated: 'ok', offline: 'warn', conflict: 'err', syncing: 'busy' }[s.state] || '')
+    syncBtn.textContent = s.state === 'syncing' ? '⟳ Syncing…' : s.state === 'conflict' ? '⚠ Sync problem' : s.state === 'offline' ? '⟳ Offline' : s.at ? `⟳ Synced ${ago(s.at)}` : '⟳ Sync'
+    syncBtn.title = s.message || 'Get the latest version from GitHub'
+  }
+  let syncBusy = false
+  async function runSync(quiet) {
+    if (syncBusy) return
+    if (!$('#drawer').hidden) { if (!quiet) toast('Save or close the open window first, then press Sync.', true); return }
+    syncBusy = true
+    paintSync({ state: 'syncing' })
+    try {
+      const s = await api('POST', '/api/sync', {})
+      paintSync(s)
+      if (s.state === 'updated') { await load(); render(); toast(s.message) }
+      else if (s.state === 'conflict' || s.state === 'offline') toast(s.message, s.state === 'conflict')
+      else if (!quiet) toast('Up to date with GitHub ✓')
+    } catch (e) { toast(e.message, true); paintSync({ state: 'offline', message: e.message }) }
+    finally { syncBusy = false }
+  }
+  syncBtn?.addEventListener('click', () => runSync(false))
+  // auto sync: when you come back to the editor after 5 minutes or more
+  let lastSync = Date.now()
+  addEventListener('focus', () => { if (Date.now() - lastSync > 5 * 60000) { lastSync = Date.now(); runSync(true) } })
+  setInterval(() => api('GET', '/api/sync').then(paintSync).catch(() => {}), 60000)
+
+  load().then(async () => {
+    const s = await api('GET', '/api/sync').catch(() => null)
+    paintSync(s)
+    if (s && (s.state === 'updated' || s.state === 'conflict' || s.state === 'offline')) toast(s.message, s.state === 'conflict')
+  }).catch(() => {})
   load().then(() => { render(); pollBuild() }).catch((e) => {
     $('#main').replaceChildren(h('div', { class: 'empty' }, `Could not load the editor data: ${e.message}. Is the editor window still open?`))
   })

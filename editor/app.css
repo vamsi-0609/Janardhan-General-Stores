@@ -427,3 +427,11 @@ legend { font-weight: 700; color: var(--forest-d); padding: 0 6px; }
 .logo-side .btn { justify-content: flex-start; width: 100%; }
 .logo-hint { grid-column: 1 / -1; margin: 0; }
 @media (max-width: 640px) { .logo-row { grid-template-columns: 1fr; } .logo-frame { width: 100%; } }
+
+/* ── Sync button ── */
+.sync-btn { min-height: 34px; padding: 4px 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,.35); background: rgba(255,255,255,.12); color: #fff; font: 700 .85rem inherit; cursor: pointer; white-space: nowrap; }
+.sync-btn:hover { background: rgba(255,255,255,.22); }
+.sync-btn.ok { background: #d7f0df; color: var(--ok); border-color: #d7f0df; }
+.sync-btn.warn { background: #fff1c2; color: #7a5200; border-color: #fff1c2; }
+.sync-btn.err { background: #fde2df; color: var(--red); border-color: #fde2df; }
+.sync-btn.busy { opacity: .8; cursor: progress; }

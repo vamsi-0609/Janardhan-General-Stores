@@ -35,6 +35,10 @@ The build uses only Node's standard library. It needs no network access and no e
 
 Double-click **`Open Editor.cmd`** (or run `npm run editor`). It opens http://localhost:4300, where you can add and edit products (names, Telugu names, also-known-as names, brands, sizes, price, notes, multiple photos), categories and festivals (items, messages, dates). Every save rebuilds the site, and **View in browser** opens the preview at http://localhost:4173. The editor only runs on this computer and is never deployed. Data is stored in `src/data/catalogue.json` and `src/data/festivals.json`. Nothing goes live until the changes are committed and pushed.
 
+### Using the editor on another computer (laptop)
+
+One-time: install Git (git-scm.com) and Node.js LTS (nodejs.org), then run **Setup on this computer.cmd** (it downloads the site into DocumentsJanardhan-Stores, installs the tools and puts **Janardhan Editor** on the desktop). Every time the editor opens it first gets the latest version from GitHub (**⟳ Sync** in the top bar does it again; it also runs by itself when you come back after 5 minutes, and before every Publish). Edits that were not published are kept as a local version and are never uploaded by Sync. If both computers changed the same item, nothing is changed and the editor says so.
+
 ### Festival recommendations (home page)
 
 The top of the home page shows the next festival automatically, using today's date in India: items to buy for a few days before it, then a greeting on the festival day. Festivals, dates, greetings and items are in `src/data/festivals.mjs`. **Add next year's dates there once a year** (the build warns when fewer than 120 days of dates are left). Preview any day with `/?fest-date=YYYY-MM-DD`.

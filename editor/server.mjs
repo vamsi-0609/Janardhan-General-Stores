@@ -16,6 +16,7 @@ import { createServer, request as httpRequest } from 'node:http'
 import { readFile, writeFile, rename, readdir, unlink, mkdir, stat } from 'node:fs/promises'
 import { existsSync } from 'node:fs'
 import { join, extname } from 'node:path'
+import { hostname } from 'node:os'
 import { spawn, execFile } from 'node:child_process'
 import { randomBytes } from 'node:crypto'
 import sharp from 'sharp'
@@ -24,7 +25,7 @@ import { cleanLogo } from '../scripts/lib/logo-clean.mjs'
 import { root, srcDir, outDir, thumbDir, creditsFile, IMAGE_EXT, processPhoto, ownCredit, readCrops, writeCrops, validCrop, uprightBuffer } from '../scripts/lib/photos.mjs'
 
 const PORT = Number(process.env.EDITOR_PORT || 4300)
-const PREVIEW_PORT = 4173
+const PREVIEW_PORT = Number(process.env.PREVIEW_PORT || 4173)
 const HOSTS = new Set([`localhost:${PORT}`, `127.0.0.1:${PORT}`])
 const ORIGINS = new Set([...HOSTS].map((h) => `http://${h}`))
 const dataDir = join(root, 'src', 'data')
@@ -338,8 +339,10 @@ async function ensurePreview() {
   process.on('exit', () => child.kill())
   for (let i = 0; i < 20 && !(await previewUp()); i++) await new Promise((r) => setTimeout(r, 150))
 }
+/** Changes not live yet: edited files + versions saved on this computer but not uploaded. */
 function gitChanges() {
-  return new Promise((res) => execFile('git', ['status', '--porcelain'], { cwd: root }, (err, out) => res(err ? null : out.split('\n').filter(Boolean).length)))
+  const count = (args) => new Promise((res) => execFile('git', args, { cwd: root }, (err, out) => res(err ? 0 : args[0] === 'status' ? out.split('\n').filter(Boolean).length : Number(out) || 0)))
+  return Promise.all([count(['status', '--porcelain']), count(['rev-list', '--count', 'origin/main..HEAD'])]).then(([a, b]) => a + b)
 }
 
 // ───────────────────────── publish to the live website ─────────────────────────
@@ -399,6 +402,52 @@ async function changeSummary() {
   return { files: files.length + unpushed, lines }
 }
 
+// ───────────────────────── sync with GitHub (several computers) ─────────────────────────
+// GitHub "main" is the live website. When the editor opens (and on "⟳ Sync"), this computer gets the latest version:
+//   1. unpublished edits made here are first saved as a local version (NOT uploaded, so nothing goes live),
+//   2. the newer versions from GitHub are fetched and this computer's versions are placed on top of them,
+//   3. if both computers changed the very same lines, nothing is changed and the editor says so.
+const sync = { state: 'idle', at: 0, got: 0, message: '' }
+let syncing = null
+async function ensureGitIdentity() {
+  if (!(await run('git', ['config', 'user.email'])).out) {
+    await run('git', ['config', 'user.email', 'editor@janardhan-stores.local'])
+    await run('git', ['config', 'user.name', `Janardhan editor (${hostname()})`])
+  }
+}
+function syncNow() {
+  if (!syncing) syncing = doSync().finally(() => { syncing = null })
+  return syncing
+}
+async function doSync() {
+  Object.assign(sync, { state: 'syncing', message: '' })
+  await ensureGitIdentity()
+  const f = await run('git', ['fetch', 'origin', 'main'], { timeout: 90000 })
+  if (!f.ok) {
+    Object.assign(sync, { state: 'offline', message: /Could not resolve host|unable to access|timed out/i.test(f.out) ? 'No internet: working with the copy on this computer.' : 'Could not reach GitHub: working with the copy on this computer.' })
+    return sync
+  }
+  const behind = Number((await run('git', ['rev-list', '--count', 'HEAD..origin/main'])).out) || 0
+  if (!behind) { Object.assign(sync, { state: 'ok', at: Date.now(), got: 0, message: 'Up to date with GitHub.' }); return sync }
+  // keep this computer's unpublished edits safe as a local version first
+  if ((await run('git', ['status', '--porcelain'])).out) {
+    await run('git', ['add', '-A'])
+    await run('git', ['commit', '-m', `Editor: unpublished changes on ${hostname()}`])
+  }
+  const lockBefore = (await run('git', ['rev-parse', 'HEAD:package-lock.json'])).out
+  const p = await run('git', ['pull', '--rebase', 'origin', 'main'], { timeout: 120000 })
+  if (!p.ok) {
+    await run('git', ['rebase', '--abort'])
+    Object.assign(sync, { state: 'conflict', message: 'Both computers changed the same item, so nothing was changed here. Your work on this computer is safe. Ask Claude to “sync the static site”.' })
+    return sync
+  }
+  const lockAfter = (await run('git', ['rev-parse', 'HEAD:package-lock.json'])).out
+  Object.assign(sync, { state: 'updated', at: Date.now(), got: behind,
+    message: `Got ${behind} update${behind === 1 ? '' : 's'} from GitHub.` + (lockBefore !== lockAfter ? ' Close the editor window and open it again to finish the update.' : '') })
+  scheduleBuild()
+  return sync
+}
+
 async function liveMatches() {
   try {
     const local = await readFile(join(root, 'dist', 'index.html'), 'utf8')
@@ -425,6 +474,12 @@ async function doPublish(note) {
   }
   publish.running = true; publish.steps = []; publish.error = ''; publish.live = 'idle'; publish.commit = ''
   try {
+    step('Getting the latest from GitHub')
+    const sy = await syncNow()
+    if (sy.state === 'conflict') throw Object.assign(new Error('Both computers changed the same item, so nothing was published.'), { detail: sy.message })
+    if (sy.state === 'offline') throw Object.assign(new Error('No connection to GitHub, so nothing was published. Your changes are saved on this computer.'), { detail: sy.message })
+    step('Getting the latest from GitHub', 'done', sy.message)
+
     step('Building the website')
     while (build.status === 'building' || build.status === 'pending') await new Promise((r) => setTimeout(r, 300))
     const b = await run(process.execPath, [join(root, 'scripts', 'build.mjs')])
@@ -600,10 +655,12 @@ async function handle(req, res) {
     if (path === '/api/telugu') return send(res, 200, await teluguOptions(str(url.searchParams.get('text'), 60)))
     if (path === '/api/publish') return send(res, 200, { ...publish, summary: publish.running ? null : await changeSummary(), liveUrl: LIVE_URL })
     if (path === '/api/build') return send(res, 200, { build, changes: await gitChanges() })
+    if (path === '/api/sync') return send(res, 200, sync)
     return send(res, 404, 'Not found', 'text/plain')
   }
 
   if (req.method === 'POST' && path === '/api/preview') { await ensurePreview(); if (build.status !== 'ok') runBuild(); return send(res, 200, { ok: true, port: PREVIEW_PORT }) }
+  if (req.method === 'POST' && path === '/api/sync') { must(!publish.running, 'Publishing is running. Try again in a minute.'); return send(res, 200, await syncNow()) }
   if (req.method === 'POST' && path === '/api/rebuild') { runBuild(); return send(res, 200, { ok: true }) }
 
   // Publish
@@ -1042,6 +1099,9 @@ createServer((req, res) => {
 }).listen(PORT, '127.0.0.1', async () => {
   const url = `http://localhost:${PORT}/`
   console.log(`\n  Janardhan catalogue editor: ${url}\n  Website preview:            http://localhost:${PREVIEW_PORT}/\n\n  Keep this window open while editing. Close it (or press Ctrl+C) when you are done.\n`)
+  console.log('  Getting the latest version from GitHub…')
+  const sy = await syncNow()
+  console.log('  ' + (sy.message || sy.state) + '\n')
   runBuild()
   await ensurePreview()
   if (!process.env.NO_OPEN) {
