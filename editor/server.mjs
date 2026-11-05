@@ -514,7 +514,7 @@ async function doPublish(note) {
     if (!p.ok) {
       const hint = /fetch first|non-fast-forward/i.test(p.out) ? 'GitHub has newer changes than this computer. Ask Claude to sync before publishing.'
         : /Internal Server Error|remote rejected.*failure|50[0-4]|Service Unavailable|Bad Gateway/i.test(p.out) ? 'GitHub is having a problem right now (not your fault). Your changes are saved on this computer. Wait 15–30 minutes and press Publish again; check githubstatus.com if it keeps failing.'
-        : /Authentication|credential|could not read Username|403|401/i.test(p.out) ? 'GitHub needs you to sign in again. Run "git push" once in the static-site folder (a sign-in window opens), then publish again.'
+        : /Authentication|credential|could not read Username|403|401/i.test(p.out) ? 'GitHub needs you to sign in on this computer. Press “🔑 Sign in to GitHub” below (a sign-in window opens), then publish again.'
         : /Could not resolve host|unable to access|timed out/i.test(p.out) ? 'No internet connection to GitHub. Check the internet and publish again (your changes are saved).' : ''
       throw Object.assign(new Error(`Upload failed. ${hint}`), { detail: p.out.slice(-600) })
     }
@@ -660,6 +660,14 @@ async function handle(req, res) {
   }
 
   if (req.method === 'POST' && path === '/api/preview') { await ensurePreview(); if (build.status !== 'ok') runBuild(); return send(res, 200, { ok: true, port: PREVIEW_PORT }) }
+  // GitHub sign-in on this computer: an upload with the sign-in window allowed (Git Credential Manager remembers it)
+  if (req.method === 'POST' && path === '/api/github-signin') {
+    must(!publish.running, 'Publishing is running. Try again in a minute.')
+    await ensureGitIdentity()
+    const p = await run('git', ['push', 'origin', 'HEAD:main'], { timeout: 300000, env: { GIT_TERMINAL_PROMPT: '0', GCM_INTERACTIVE: 'auto' } })
+    must(p.ok || /Everything up-to-date/i.test(p.out), /fetch first|non-fast-forward/i.test(p.out) ? 'Signed in, but GitHub has newer changes: press ⟳ Sync, then Publish.' : 'Sign-in did not finish. Press the button again and complete the GitHub window.')
+    return send(res, 200, { ok: true })
+  }
   if (req.method === 'POST' && path === '/api/sync') { must(!publish.running, 'Publishing is running. Try again in a minute.'); return send(res, 200, await syncNow()) }
   if (req.method === 'POST' && path === '/api/rebuild') { runBuild(); return send(res, 200, { ok: true }) }
 

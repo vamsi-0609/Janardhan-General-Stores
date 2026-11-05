@@ -1317,7 +1317,13 @@
       stepsBox.replaceChildren(...p.steps.map((s) => h('li', { class: `pub-step ${s.status}` },
         h('span', { class: 'ico', 'aria-hidden': 'true' }, { running: '⏳', done: '✅', error: '❌', warn: '⚠️' }[s.status] || '•'),
         h('span', {}, h('strong', {}, s.label), s.detail ? h('span', { class: 'pub-detail' }, s.detail) : ''))))
-      if (p.error) result.replaceChildren(h('p', { class: 'pub-error' }, p.error), h('button', { class: 'btn', type: 'button', onclick: () => { closeDrawer(true); switchTab('help'); setTimeout(() => document.getElementById('if-publishing-fails')?.scrollIntoView({ block: 'start' }), 50) } }, '❓ What should I do? (Help)'))
+      if (p.error) result.replaceChildren(h('p', { class: 'pub-error' }, p.error),
+        /sign in/i.test(p.error) ? h('button', { class: 'btn primary', type: 'button', onclick: async (e) => {
+          e.currentTarget.disabled = true; e.currentTarget.textContent = 'Waiting for the GitHub window…'
+          if (await act(() => api('POST', '/api/github-signin', {}), 'Signed in ✓ Your changes are uploaded — Cloudflare is putting them live.')) { closeDrawer(true) }
+          else { e.currentTarget.disabled = false; e.currentTarget.textContent = '🔑 Sign in to GitHub' }
+        } }, '🔑 Sign in to GitHub') : '',
+        h('button', { class: 'btn', type: 'button', onclick: () => { closeDrawer(true); switchTab('help'); setTimeout(() => document.getElementById('if-publishing-fails')?.scrollIntoView({ block: 'start' }), 50) } }, '❓ What should I do? (Help)'))
       else if (p.live === 'live') result.replaceChildren(h('p', { class: 'pub-ok' }, '🎉 Your changes are live! ', h('a', { href: p.liveUrl || 'https://shop.myconnect.sbs/', target: '_blank', rel: 'noopener' }, 'Open shop.myconnect.sbs ↗')))
       else if (p.live === 'slow') result.replaceChildren(h('p', { class: 'pub-error' }, 'Uploaded, but the live site has not updated yet. Open Cloudflare → Workers & Pages → janardhan-general-stores → Deployments to see why.'))
       else result.replaceChildren()

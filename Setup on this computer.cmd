@@ -38,6 +38,8 @@ if exist "%DEST%\.git" (
 cd /d "%DEST%"
 echo  Installing the editor's tools ^(about a minute^)...
 call npm install --no-audit --no-fund
+echo  Signing in to GitHub ^(needed to publish from this computer^). A GitHub window may open: sign in there.
+git push --dry-run origin HEAD:main >nul 2>nul
 echo  Putting "Janardhan Editor" on the desktop...
 powershell -NoProfile -Command "$s=(New-Object -ComObject WScript.Shell).CreateShortcut([Environment]::GetFolderPath('Desktop')+'\Janardhan Editor.lnk');$s.TargetPath='%DEST%\Open Editor.cmd';$s.WorkingDirectory='%DEST%';$s.IconLocation='%SystemRoot%\System32\shell32.dll,43';$s.Save()"
 echo.
