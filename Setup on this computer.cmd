@@ -4,6 +4,10 @@ echo.
 echo  Janardhan General Stores - set up the catalogue editor on this computer
 echo  ----------------------------------------------------------------------
 echo.
+rem Find Node.js and Git in their normal folders even if Windows has not updated PATH yet (that needs a restart)
+if exist "%ProgramFiles%\nodejs\node.exe" set "PATH=%ProgramFiles%\nodejs;%PATH%"
+if exist "%LOCALAPPDATA%\Programs\nodejs\node.exe" set "PATH=%LOCALAPPDATA%\Programs\nodejs;%PATH%"
+if exist "%ProgramFiles%\Git\cmd\git.exe" set "PATH=%ProgramFiles%\Git\cmd;%PATH%"
 where git >nul 2>nul
 if errorlevel 1 (
   echo  Git is not installed. Install it from https://git-scm.com/download/win
@@ -13,8 +17,8 @@ if errorlevel 1 (
 )
 where node >nul 2>nul
 if errorlevel 1 (
-  echo  Node.js is not installed. Install it from https://nodejs.org ^(the LTS button^),
-  echo  then run this file again.
+  echo  Node.js was not found. Install it from https://nodejs.org ^(LTS, "Windows Installer .msi"^),
+  echo  then RESTART the computer and run this file again.
   pause
   exit /b 1
 )

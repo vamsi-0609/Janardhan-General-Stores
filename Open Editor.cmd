@@ -1,6 +1,10 @@
 @echo off
 title Janardhan catalogue editor
 cd /d "%~dp0"
+rem Find Node.js and Git in their normal folders even if Windows has not updated PATH yet
+if exist "%ProgramFiles%\nodejs\node.exe" set "PATH=%ProgramFiles%\nodejs;%PATH%"
+if exist "%LOCALAPPDATA%\Programs\nodejs\node.exe" set "PATH=%LOCALAPPDATA%\Programs\nodejs;%PATH%"
+if exist "%ProgramFiles%\Git\cmd\git.exe" set "PATH=%ProgramFiles%\Git\cmd;%PATH%"
 where node >nul 2>nul
 if errorlevel 1 (
   echo Node.js is not installed on this computer.
