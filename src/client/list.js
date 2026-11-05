@@ -75,6 +75,7 @@
     if (i >= 0) { state.items[i] = { ...state.items[i], c, amt, ...(note !== undefined ? { note } : {}) }; save(); return state.items[i] }
     if (state.items.length >= MAX) { toast(`Your list is full (${MAX} lines). Send it first.`); return null }
     const e = { id, c, v: vid, amt, note: note || '' }
+    state.sentAt = 0
     state.items.push(e)
     save()
     return e
@@ -85,6 +86,7 @@
     if (e) { e.kit = items; save(); return e }
     if (state.items.length >= MAX) { toast(`Your list is full (${MAX} lines). Send it first.`); return null }
     const ne = { id: idOf(c, vid), c, v: vid, amt: 1, note: '', kit: items }
+    state.sentAt = 0
     state.items.push(ne)
     save()
     return ne
@@ -526,7 +528,6 @@
       <button type="button" class="btn btn-primary" data-repeat>Add the same items again <span lang="te">మళ్ళీ అదే జాబితా</span></button>
     </div>`
   }
-  let sentNotice = false
   function itemRow(e, i) {
     const v = vOf(e.c, e.v)
     const pic = v.i || e.c.i
@@ -568,6 +569,18 @@
   function drawPage() {
     const n = state.items.length
     if (!n) {
+      // Just sent: confirm, and let the customer bring the list back if WhatsApp did not send it.
+      const sent = state.sentAt && Date.now() - state.sentAt < 2 * 864e5 && loadLast()
+      if (sent) {
+        page.innerHTML = `<div class="list-empty list-sent" role="status">
+          <div class="le-ic ok" aria-hidden="true">✓</div>
+          <h2>List sent to the shop</h2><p lang="te">జాబితా షాప్‌కు పంపబడింది</p>
+          <p>The shop will check your items and reply on WhatsApp with the bill and the total. Your list here has been cleared.</p>
+          <div class="actions"><a class="btn btn-primary" href="/">Back to the shop</a><button type="button" class="btn btn-light" data-restore>Didn’t send it? Restore my list</button></div>
+        </div>`
+        page.querySelector('[data-restore]').addEventListener('click', () => { state.items = sent.items.slice(0, MAX); state.sentAt = 0; save(); drawPage() })
+        return
+      }
       page.innerHTML = `<div class="list-empty">
         <div class="le-ic" aria-hidden="true">${CLIP}</div>
         <h2>Your list is empty</h2><p lang="te">మీ జాబితా ఖాళీగా ఉంది</p>
@@ -623,8 +636,6 @@
         <label class="sp-check"><input type="checkbox" data-ask${state.askPrice ? ' checked' : ''}>
           <span><strong>Ask the shop for the estimated total price</strong><span lang="te">మొత్తం అంచనా ధర చెప్పమని అడగండి</span></span></label>
         <button type="button" class="btn btn-wa sp-send" data-send><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path class="icon-fill" d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.1-.3-.2-.6-.3ZM12 2a10 10 0 0 0-8.6 15l-1.4 5 5.1-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.5 0-3-.4-4.2-1.2l-.3-.2-3 .8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2Z"/></svg>Send list on WhatsApp</button>
-        ${sentNotice ? `<div class="sp-sent" role="status"><p><strong>Did you send the message?</strong> The shop will reply on WhatsApp to confirm.</p>
-          <div class="actions"><button type="button" class="btn btn-light" data-clear-sent>Yes, clear my list</button><button type="button" class="link-btn" data-keep>Keep the list</button></div></div>` : ''}
         <details class="sp-preview"><summary>See the message</summary><pre data-preview>${esc(message())}</pre></details>
         <p class="sp-small">WhatsApp opens with your list typed in. Just press send. No payment is taken here. Pay at the shop when you pick up.</p>
       </section>
@@ -678,12 +689,13 @@
       if (!phoneOk) return page.querySelector('[data-phone]').focus()
       if (!pickOk) return page.querySelector('input[name="sp-day"]:not(:disabled)').focus()
       open(`https://wa.me/${page.dataset.wa}?text=${encodeURIComponent(message())}`, '_blank', 'noopener')
+      // The list goes to "last list" and is cleared here, so it does not stay on the phone after sending.
       try { localStorage.setItem(LAST, JSON.stringify({ at: Date.now(), items: state.items })) } catch {}
-      sentNotice = true
-      drawPage()
+      state.items = []
+      state.sentAt = Date.now()
+      save(); drawPage()
+      scrollTo({ top: 0 })
     })
-    page.querySelector('[data-clear-sent]')?.addEventListener('click', () => { state.items = []; sentNotice = false; save(); drawPage() })
-    page.querySelector('[data-keep]')?.addEventListener('click', () => { sentNotice = false; drawPage() })
   }
 
   document.addEventListener('jgs:cards', refresh) // search results were (re)drawn

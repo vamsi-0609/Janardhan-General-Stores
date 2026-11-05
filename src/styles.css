@@ -1424,3 +1424,25 @@ li.pc .card .size { margin-top: 6px; }
 .rp-pin.on { background: #e7f6ec; border-color: #c7e6d1; }
 .rp-pin .btn { justify-self: start; }
 .rp-pin:not(.on) { margin: 0 0 14px; border: 2px solid #f0d27a; background: #fff8e1; }
+
+.list-sent .le-ic.ok { background: #e7f6ec; color: #1f7a4a; font-size: 2rem; font-weight: 800; display: grid; place-items: center; }
+.list-sent > p:not([lang]) { margin: 10px auto 18px; max-width: 380px; color: var(--muted); }
+
+/* ── Reply page: tap an item for details; send / save the PDF bill ── */
+button.bl-item { border: 0; background: none; padding: 0; margin: 0; text-align: left; font: inherit; color: inherit; cursor: pointer; }
+button.bl-item strong { text-decoration: underline; text-decoration-color: #c9cfc9; text-underline-offset: 4px; }
+.rp-send-help { margin-top: -4px; font-size: .9rem; color: var(--muted); }
+.rp-send-help[hidden] { display: none; }
+.rp-more { display: flex; flex-wrap: wrap; gap: 10px; }
+.rp-dlg { width: min(440px, calc(100% - 24px)); max-height: calc(100% - 24px); padding: 0; border: 0; border-radius: 20px; box-shadow: 0 20px 60px rgb(0 0 0 / 35%); }
+.rp-dlg::backdrop { background: rgb(20 20 20 / 55%); }
+.dlg-in { position: relative; display: grid; gap: 10px; padding: 18px 18px 20px; }
+.dlg-x { position: absolute; top: 10px; right: 10px; width: 44px; height: 44px; border: 0; border-radius: 999px; background: #fff; box-shadow: 0 2px 8px rgb(0 0 0 / 18%); font-size: 1.3rem; cursor: pointer; z-index: 1; }
+.dlg-in img { width: 100%; max-height: 300px; object-fit: contain; border-radius: 14px; background: var(--mist); }
+.dlg-in h3 { font-size: 1.25rem; padding-right: 44px; }
+.dlg-te { margin-top: -6px; color: var(--muted); }
+.dlg-in dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; margin: 4px 0; padding: 12px 14px; border-radius: 14px; background: var(--bg); }
+.dlg-in dt { color: var(--muted); font-weight: 600; }
+.dlg-in dd { margin: 0; font-weight: 700; }
+.dlg-note { font-style: italic; color: var(--maroon); }
+.dlg-de { color: var(--muted); font-size: .92rem; line-height: 1.5; }

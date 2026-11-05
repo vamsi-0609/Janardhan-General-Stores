@@ -253,7 +253,7 @@ for (const t of products) {
   if (ls.length > 1) searchIndex.push({ k: 't', n: t.name, t: t.te, a: [...(t.aliases || [])], b: [...new Set(skusOf(t.slug).map((x) => x.brandName).filter(Boolean))], ...common, u: productUrl(t), i: thumb(t.photo || t.slug), cnt: ls.length })
   for (const line of ls) {
     const p = firstIn(line), main = lineMain(line)
-    searchIndex.push({ n: p.name, z: line.length === 1 ? sizeText(p) : `${line.length} sizes`, t: p.te || t.te, a: [...new Set([...line.flatMap((x) => x.aliases || []), ...(t.aliases || []), ...(ls.length > 1 ? [typeShort(t)] : [])])], b: p.brandName ? [p.brandName] : [], ...(brandLogo(p.brand) ? { bl: brandLogo(p.brand) } : {}), ...common, u: skuUrl(p), i: main ? thumb(main) : '', o: lineCfg(line) })
+    searchIndex.push({ n: p.name, z: line.length === 1 ? sizeText(p) : `${line.length} sizes`, t: p.te || t.te, a: [...new Set([...line.flatMap((x) => x.aliases || []), ...(t.aliases || []), ...(ls.length > 1 ? [typeShort(t)] : [])])], b: p.brandName ? [p.brandName] : [], ...(brandLogo(p.brand) ? { bl: brandLogo(p.brand) } : {}), de: String(p.desc || t.desc || '').slice(0, 220), ...common, u: skuUrl(p), i: main ? thumb(main) : '', o: lineCfg(line) })
   }
 }
 
