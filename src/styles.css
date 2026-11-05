@@ -1459,3 +1459,38 @@ button.bl-item strong { text-decoration: underline; text-decoration-color: #c9cf
 .bp-screen .bp-items small[lang] { color: #666; font-size: .82rem; }
 @media (max-width: 480px) { .bp-screen { padding: 14px 10px; } .bp-screen .bp-items th, .bp-screen .bp-items td { padding: 5px 3px; font-size: .9rem; } }
 .bp-screen .bp-items td:nth-child(3) { white-space: nowrap; }
+
+.bp-note { margin-top: 14px; padding: 10px 14px; border-left: 4px solid #c8962e; background: #f6f3ea; border-radius: 8px; display: grid; gap: 4px; font-size: .95rem; }
+.bp-note .ok { color: #1f6b41; font-weight: 700; }
+.bp-note .no { color: #a3321f; font-weight: 700; }
+.bp-note [lang='te'] { color: #555; }
+
+/* ── My list: pickup day (calendar cards) and time (rows) look different on purpose ── */
+.pick { gap: 0; }
+.pk-step { display: flex; align-items: center; gap: 8px; margin: 12px 0 8px; font-weight: 800; font-size: .98rem; }
+.pk-step [lang='te'] { font-weight: 500; color: var(--muted); font-size: .85rem; }
+.pk-num { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--forest); color: #fff; font-size: .85rem; }
+.pk-days { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.pk-day, .pk-slot { position: relative; display: block; }
+.pk-day input, .pk-slot input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.pk-card { display: grid; justify-items: center; gap: 2px; padding: 0 8px 12px; border: 2px solid var(--line); border-radius: 16px; background: #fff; overflow: hidden; text-align: center; cursor: pointer; }
+.pk-top { width: calc(100% + 16px); padding: 6px 0; margin-bottom: 6px; background: #f1ede4; font: 800 .8rem var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.pk-card strong { font-size: 1.15rem; }
+.pk-card small { color: var(--muted); }
+.pk-card em { font-style: normal; font-size: .78rem; font-weight: 700; color: #a3321f; }
+.pk-day input:checked + .pk-card { border-color: var(--forest); box-shadow: 0 0 0 2px var(--forest) inset; }
+.pk-day input:checked + .pk-card .pk-top { background: var(--forest); color: #fff; }
+.pk-day input:disabled + .pk-card { opacity: .55; cursor: not-allowed; }
+.pk-day input:focus-visible + .pk-card, .pk-slot input:focus-visible + .pk-row { outline: 3px solid var(--kgold); outline-offset: 2px; }
+.pk-slots { display: grid; gap: 8px; }
+.pk-row { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto 26px; align-items: center; gap: 10px; min-height: 58px; padding: 8px 12px; border: 2px solid var(--line); border-radius: 14px; background: #fff; cursor: pointer; }
+.pk-ic { font-size: 1.5rem; text-align: center; }
+.pk-t { display: grid; line-height: 1.2; }
+.pk-t small { color: var(--muted); font-size: .8rem; }
+.pk-time { font-weight: 700; color: var(--forest); white-space: nowrap; }
+.pk-tick { width: 24px; height: 24px; border-radius: 50%; border: 2px solid #b9bfb9; }
+.pk-slot input:checked + .pk-row { border-color: var(--forest); background: #eef6f0; }
+.pk-slot input:checked + .pk-row .pk-tick { border-color: var(--forest); background: var(--forest) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L19 7'/%3E%3C/svg%3E") center / 15px no-repeat; }
+.pk-slot input:disabled + .pk-row { opacity: .5; cursor: not-allowed; }
+.pk-slot input:disabled + .pk-row .pk-time { color: #a3321f; }
+.pk-sum { margin: 10px 0 2px; padding: 8px 12px; border-radius: 12px; background: #e7f6ec; color: #1f6b41; font-weight: 600; }

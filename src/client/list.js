@@ -444,6 +444,10 @@
     const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Kolkata', hour: '2-digit', hourCycle: 'h23' }).formatToParts(new Date())
     return Number(parts.find((p) => p.type === 'hour').value)
   }
+  const SLOT_IC = { morning: '☀️', afternoon: '🌤️', evening: '🌙' }
+  const SLOT_TE = { morning: 'ఉదయం', afternoon: 'మధ్యాహ్నం', evening: 'సాయంత్రం' }
+  /** "Thu, 5 Nov" for today (0) or tomorrow (1), in India time. */
+  const dayLabel = (add) => new Date(Date.now() + add * 864e5).toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'Asia/Kolkata' })
   const SLOTS = [['morning', 'Morning', '6 AM – 12 PM', 12], ['afternoon', 'Afternoon', '12 – 4 PM', 16], ['evening', 'Evening', '4 – 10 PM', 22]]
   const slotOk = (day, slot) => day !== 'today' || istNow() < SLOTS.find((s) => s[0] === slot)[3]
   const pickupText = () => {
@@ -623,13 +627,24 @@
         <label class="sp-field"><span>Your WhatsApp number <span lang="te">మీ వాట్సాప్ నంబర్</span></span>
           <input type="tel" data-phone inputmode="numeric" maxlength="17" autocomplete="tel-national" value="${esc(state.phone || '')}" placeholder="10-digit mobile number" aria-describedby="err-phone">
           <small class="sp-err" id="err-phone" hidden>Please enter your 10-digit mobile number.</small></label>
-        <fieldset class="sp-field"><legend>Pickup time <span lang="te">ఎప్పుడు తీసుకెళ్తారు?</span></legend>
-          <div class="opts">
-            ${[['today', 'Today', 'ఈరోజు'], ['tomorrow', 'Tomorrow', 'రేపు']].map(([v, en, t]) => `<label class="opt"><input type="radio" name="sp-day" value="${v}"${state.day === v ? ' checked' : ''}${v === 'today' && !today ? ' disabled' : ''}><span>${en} <small lang="te">${t}</small></span></label>`).join('')}
+        <fieldset class="sp-field pick"><legend>Pickup at the shop <span lang="te">ఎప్పుడు తీసుకెళ్తారు?</span></legend>
+          <p class="pk-step"><span class="pk-num" aria-hidden="true">1</span>Which day? <span lang="te">ఏ రోజు?</span></p>
+          <div class="pk-days">
+            ${[['today', 'Today', 'ఈరోజు', 0], ['tomorrow', 'Tomorrow', 'రేపు', 1]].map(([v, en, t, add]) => {
+              const off = v === 'today' && !today
+              return `<label class="pk-day"><input type="radio" name="sp-day" value="${v}"${state.day === v ? ' checked' : ''}${off ? ' disabled' : ''}>
+                <span class="pk-card"><span class="pk-top">${en}</span><strong>${esc(dayLabel(add))}</strong><small lang="te">${t}</small>${off ? '<em>Closed for today</em>' : ''}</span></label>`
+            }).join('')}
           </div>
-          <div class="opts slots">
-            ${SLOTS.map(([v, en, time]) => `<label class="opt"><input type="radio" name="sp-slot" value="${v}"${state.slot === v ? ' checked' : ''}${state.day && !slotOk(state.day, v) ? ' disabled' : ''}><span>${en} <small>${time}</small></span></label>`).join('')}
+          <p class="pk-step"><span class="pk-num" aria-hidden="true">2</span>What time? <span lang="te">ఏ సమయం?</span></p>
+          <div class="pk-slots">
+            ${SLOTS.map(([v, en, time]) => {
+              const off = state.day && !slotOk(state.day, v)
+              return `<label class="pk-slot"><input type="radio" name="sp-slot" value="${v}"${state.slot === v ? ' checked' : ''}${off ? ' disabled' : ''}>
+                <span class="pk-row"><span class="pk-ic" aria-hidden="true">${SLOT_IC[v]}</span><span class="pk-t"><strong>${en}</strong><small lang="te">${SLOT_TE[v]}</small></span><span class="pk-time">${off ? 'Closed now' : time}</span><span class="pk-tick" aria-hidden="true"></span></span></label>`
+            }).join('')}
           </div>
+          ${state.day && state.slot && slotOk(state.day, state.slot) ? `<p class="pk-sum">✓ Pickup: <strong>${esc(pickupText())}</strong></p>` : ''}
           <small class="sp-info">Pickup at the shop only, Main Road, Rajampet. We don’t do home delivery. <span lang="te">హోమ్ డెలివరీ లేదు.</span></small>
           <small class="sp-err" id="err-pick" hidden>Please choose the day and the time.</small>
         </fieldset>
@@ -645,7 +660,7 @@
     page.querySelector('[data-name]').addEventListener('input', (e) => { state.name = e.target.value; save(); updatePreview(); page.querySelector('#err-name').hidden = true })
     page.querySelector('[data-phone]').addEventListener('input', (e) => { state.phone = e.target.value.replace(/[^\d+ ]/g, ''); if (state.phone !== e.target.value) e.target.value = state.phone; save(); updatePreview(); if (mobile(state.phone)) page.querySelector('#err-phone').hidden = true })
     page.querySelectorAll('input[name="sp-day"]').forEach((r) => r.addEventListener('change', () => { state.day = r.value; if (state.slot && !slotOk(state.day, state.slot)) state.slot = ''; save(); drawPage(); page.querySelector(`input[name="sp-day"][value="${r.value}"]`).focus() }))
-    page.querySelectorAll('input[name="sp-slot"]').forEach((r) => r.addEventListener('change', () => { state.slot = r.value; save(); updatePreview(); page.querySelector('#err-pick').hidden = true }))
+    page.querySelectorAll('input[name="sp-slot"]').forEach((r) => r.addEventListener('change', () => { state.slot = r.value; save(); drawPage(); page.querySelector(`input[name="sp-slot"][value="${r.value}"]`)?.focus() }))
     page.querySelector('[data-ask]').addEventListener('change', (e) => { state.askPrice = e.target.checked; save(); updatePreview() })
     page.querySelector('[data-clear]').addEventListener('click', () => { if (confirm('Remove all items from your list?')) { state.items = []; save(); drawPage() } })
     page.querySelectorAll('[data-del]').forEach((b) => b.addEventListener('click', () => { state.items.splice(Number(b.dataset.del), 1); save(); drawPage() }))

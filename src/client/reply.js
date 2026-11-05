@@ -110,6 +110,19 @@
   const unpriced = () => priced(lines(data)).filter((x) => !isNo(x.key) && !(Number(rec.prices[x.key]) > 0))
   const pickupText = () => { const slot = SLOTS[data.s]; return slot && data.d ? `${data.d === 'today' ? 'Today' : 'Tomorrow'} ${slot[0].toLowerCase()} (${slot[1]})` : '' }
 
+  /** What the customer should know: ready / not available / when to come / call if not possible. */
+  function noteLines() {
+    const all = priced(lines(data))
+    const miss = missing()
+    const ready = all.length - miss.length
+    const out = []
+    if (ready) out.push(['ok', `Ready: ${ready} item${ready === 1 ? ' is' : 's are'} ready for you.`])
+    if (miss.length) out.push(['no', `Not available: ${miss.map((x) => itemName(x.id)).join(', ')}.`])
+    out.push(['', pickupText() ? `Please come to the shop ${pickupText().replace(/^Today/, 'today').replace(/^Tomorrow/, 'tomorrow')}.` : 'Please come to the shop to pick up your items.'])
+    out.push(['', `If you cannot come at that time, please call or WhatsApp us: ${shop.phone}.`])
+    out.push(['te', 'మీరు ఆ సమయానికి రాలేకపోతే, దయచేసి మాకు ఫోన్ చేసి చెప్పండి.'])
+    return out
+  }
   function replyText() {
     const ls = lines(data)
     const name = (data.n || '').trim()
@@ -125,7 +138,8 @@
     if (!miss.length) out.push('✓ All items are available. అన్నీ ఉన్నాయి.')
     else if (miss.length === priced(ls).length) out.push('Sorry, these items are not available right now.')
     else out.push(`✗ ${miss.length} item${miss.length === 1 ? '' : 's'} not available now. మిగతావి సిద్ధంగా ఉన్నాయి.`)
-    if (pickupText()) out.push(`Pickup: ${pickupText()}`)
+    out.push('')
+    for (const [k, t] of noteLines()) if (k !== 'ok' && k !== 'no') out.push(t)
     out.push('', 'Thank you! 🙏')
     return out.join('\n')
   }
@@ -283,7 +297,8 @@
         <tr><td>Phone: <strong>${esc(phoneText(data.p) || '—')}</strong></td><td>${pickupText() ? `Pickup: <strong>${esc(pickupText().replace(/ \(.*\)$/, ''))}</strong>` : ''}</td></tr></table>
       <table class="bp-items"><thead><tr><th>No.</th><th>Item</th><th>Qty</th><th class="bp-r">Price</th></tr></thead><tbody>${rows}</tbody>
         <tfoot><tr><td colspan="3">Total${miss ? ` <small>(${miss} item${miss === 1 ? '' : 's'} not available)</small>` : ''}</td><td class="bp-r">${esc(rupees(total()))}</td></tr></tfoot></table>
-      <p class="bp-thanks">Thank you! Please pick up your items at the shop. · ధన్యవాదాలు!</p></div>
+      <div class="bp-note">${noteLines().map(([k, t]) => `<p class="${k}"${k === 'te' ? ' lang="te"' : ''}>${esc(t)}</p>`).join('')}</div>
+      <p class="bp-thanks">Thank you! · ధన్యవాదాలు!</p></div>
       <div class="rp-actions"><button type="button" class="btn btn-primary" data-pdf>⬇ Download PDF bill</button>
         <p class="hint">Questions about the bill? Call or WhatsApp the shop: ${esc(shop.phone)}.</p></div>`
     root.querySelector('[data-pdf]').addEventListener('click', async () => savePdf(await makePdf()))
@@ -375,7 +390,11 @@
       } else rowBlock(String(k + 1), l.id, l.amt, l.key, l.note)
     })
     const miss = missing().length
-    const totalH = 150
+    // the note box under the total
+    font(scratch, 400, 25)
+    const notes = noteLines().map(([k, t]) => ({ k, rows: wrap(scratch, t, W - 2 * P - 48) }))
+    const noteH = 40 + notes.reduce((a, n) => a + n.rows.length * 34 + 8, 0)
+    const totalH = 120 + noteH + 70
 
     // headers
     const firstHead = (c, paint) => {
@@ -436,7 +455,18 @@
         c.fillStyle = '#222'; c.fillRect(P, yy + 6, W - 2 * P, 4)
         font(c, 800, 36); c.fillStyle = '#111'; c.textAlign = 'left'; c.fillText('Total', P, yy + 62); c.textAlign = 'right'; c.fillText(rupees(total()), cPrice, yy + 62); c.textAlign = 'left'
         if (miss) { font(c, 400, 23); c.fillStyle = '#555'; c.fillText(`${miss} item${miss === 1 ? '' : 's'} not available`, P, yy + 98) }
-        font(c, 400, 24); c.fillStyle = '#333'; c.textAlign = 'center'; c.fillText('Thank you! Please pick up your items at the shop. · ధన్యవాదాలు!', W / 2, yy + 140); c.textAlign = 'left'
+        // note box
+        let ny = yy + 120
+        c.fillStyle = '#f6f3ea'; c.fillRect(P, ny, W - 2 * P, noteH)
+        c.fillStyle = '#c8962e'; c.fillRect(P, ny, 6, noteH)
+        ny += 20
+        for (const n of notes) {
+          font(c, n.k === 'ok' || n.k === 'no' ? 700 : 400, 25)
+          c.fillStyle = n.k === 'no' ? '#a3321f' : n.k === 'ok' ? '#1f6b41' : '#222'
+          for (const r of n.rows) { ny += 34; c.fillText(r, P + 30, ny - 8) }
+          ny += 8
+        }
+        font(c, 400, 24); c.fillStyle = '#333'; c.textAlign = 'center'; c.fillText('Thank you! · ధన్యవాదాలు!', W / 2, yy + 120 + noteH + 50); c.textAlign = 'left'
       }
       font(c, 400, 21); c.fillStyle = '#777'; c.textAlign = 'center'; c.fillText(`Page ${i + 1} of ${pages.length}`, W / 2, H - P + 10); c.textAlign = 'left'
       jpegs.push(new Uint8Array(await (await new Promise((r) => cv.toBlob(r, 'image/jpeg', 0.85))).arrayBuffer()))
