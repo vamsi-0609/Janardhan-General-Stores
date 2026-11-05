@@ -352,6 +352,7 @@ function header(current) {
         <hr>
         <a href="${telHref}"><span>Call ${esc(shop.phoneDisplay)}</span>${icon('phone')}</a>
         <a href="${whatsappHref('Hello Janardhan General Stores, I have a question.')}" target="_blank" rel="noopener"><span>WhatsApp</span>${icon('whatsapp')}</a>
+        <a class="menu-shop" href="/reply/"${cur('reply')}><span>For the shop: reply to lists</span>${te('షాప్ కోసం')}</a>
       </nav>
     </details>
   </div>
@@ -1018,7 +1019,7 @@ await page('/list/', {
 await page('/reply/', {
   title: 'Reply to a list | Janardhan General Stores',
   description: 'For the shop: mark which items of a customer list are available and send the reply on WhatsApp.',
-  current: '',
+  current: 'reply',
   noindex: true,
   scripts: [REPLY_JS],
   body: `<section class="page-hero plain"><div class="container">
