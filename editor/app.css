@@ -444,3 +444,5 @@ legend { font-weight: 700; color: var(--forest-d); padding: 0 6px; }
 .site-switch.off .ss-track { background: #b9b2a5; }
 .site-switch.off .ss-knob { left: 3px; }
 .site-switch:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.site-switch.unknown { background: #fff1c2; border-color: #f0d27a; color: #7a5200; cursor: default; }
+.site-switch.unknown .ss-track { background: #c9b68a; }

@@ -421,6 +421,12 @@ function syncNow() {
   if (!syncing) syncing = doSync().finally(() => { syncing = null })
   return syncing
 }
+// Shop data the editor writes (a real clash here must be decided by a person). Everything else is program code:
+// if both computers changed it, GitHub's version wins.
+const isShopData = (f) => /^(src\/data\/|public\/img\/|shop-photos\/|brand-source\/)/.test(f)
+// Program files changed by a sync → this editor must restart to use them (Open Editor.cmd starts it again).
+const needsRestart = (f) => /^(editor\/|scripts\/lib\/|package(-lock)?\.json$)/.test(f)
+const BOOT_ID = randomBytes(4).toString('hex') // the page reloads itself when this changes (editor restarted)
 async function doSync() {
   Object.assign(sync, { state: 'syncing', message: '' })
   await ensureGitIdentity()
@@ -431,23 +437,45 @@ async function doSync() {
   }
   const behind = Number((await run('git', ['rev-list', '--count', 'HEAD..origin/main'])).out) || 0
   if (!behind) { Object.assign(sync, { state: 'ok', at: Date.now(), got: 0, message: 'Up to date with GitHub.' }); return sync }
-  // keep this computer's unpublished edits safe as a local version first
+  // files that differ only in Windows line endings are not real edits: put them back as they were
+  for (const file of (await run('git', ['diff', '--name-only'])).out.split('\n').filter(Boolean)) {
+    if ((await run('git', ['diff', '--ignore-cr-at-eol', '--quiet', '--', file])).ok) await run('git', ['checkout', '--', file])
+  }
+  // keep this computer's unpublished edits safe as a local version first (not uploaded)
   if ((await run('git', ['status', '--porcelain'])).out) {
     await run('git', ['add', '-A'])
     await run('git', ['commit', '-m', `Editor: unpublished changes on ${hostname()}`])
   }
-  const lockBefore = (await run('git', ['rev-parse', 'HEAD:package-lock.json'])).out
-  const p = await run('git', ['pull', '--rebase', 'origin', 'main'], { timeout: 120000 })
+  const before = (await run('git', ['rev-parse', 'HEAD'])).out
+  let p = await run('git', ['pull', '--rebase', 'origin', 'main'], { timeout: 120000 })
+  // a clash only in program files: take GitHub's version and carry on
+  for (let i = 0; !p.ok && i < 20; i++) {
+    const clash = (await run('git', ['diff', '--name-only', '--diff-filter=U'])).out.split('\n').filter(Boolean)
+    if (!clash.length || clash.some(isShopData)) break
+    for (const file of clash) {
+      if (!(await run('git', ['checkout', '--ours', '--', file])).ok) await run('git', ['rm', '-q', '--', file]) // during a rebase "ours" = GitHub
+      await run('git', ['add', '--', file])
+    }
+    const nothingLeft = (await run('git', ['diff', '--cached', '--quiet'])).ok
+    p = await run('git', ['-c', 'core.editor=true', 'rebase', nothingLeft ? '--skip' : '--continue'], { timeout: 120000 })
+  }
   if (!p.ok) {
     await run('git', ['rebase', '--abort'])
     Object.assign(sync, { state: 'conflict', message: 'Both computers changed the same item, so nothing was changed here. Your work on this computer is safe. Ask Claude to “sync the static site”.' })
     return sync
   }
-  const lockAfter = (await run('git', ['rev-parse', 'HEAD:package-lock.json'])).out
-  Object.assign(sync, { state: 'updated', at: Date.now(), got: behind,
-    message: `Got ${behind} update${behind === 1 ? '' : 's'} from GitHub.` + (lockBefore !== lockAfter ? ' Close the editor window and open it again to finish the update.' : '') })
+  const changed = (await run('git', ['diff', '--name-only', before, 'HEAD'])).out.split('\n').filter(Boolean)
+  const restart = changed.some(needsRestart)
+  const deps = changed.some((x) => /^package(-lock)?\.json$/.test(x))
+  Object.assign(sync, { state: 'updated', at: Date.now(), got: behind, restart, deps,
+    message: `Got ${behind} update${behind === 1 ? '' : 's'} from GitHub.` + (restart ? ' The editor itself was updated: restarting it…' : '') })
   scheduleBuild()
   return sync
+}
+/** Restart with the new program code (Open Editor.cmd starts the editor again; 76 = also install new tools). */
+function restartEditor() {
+  console.log('\n  The editor was updated from GitHub: restarting…\n')
+  setTimeout(() => process.exit(sync.deps ? 76 : 75), 400)
 }
 
 async function liveMatches() {
@@ -522,8 +550,10 @@ async function doPublish(note) {
     }
     step('Uploading to GitHub', 'done', 'Cloudflare is now building the live site')
     step('Going live on shop.myconnect.sbs', 'running', 'Usually 1–2 minutes')
-    watchLive().then(() => step('Going live on shop.myconnect.sbs', publish.live === 'live' ? 'done' : 'warn',
-      publish.live === 'live' ? 'Live ✓' : 'Taking longer than usual. Check the Deployments page in Cloudflare.'))
+    watchLive().then(() => {
+      step('Going live on shop.myconnect.sbs', publish.live === 'live' ? 'done' : 'warn', publish.live === 'live' ? 'Live ✓' : 'Taking longer than usual. Check the Deployments page in Cloudflare.')
+      if (sync.restart) setTimeout(restartEditor, 8000) // after the page has shown "live"
+    })
   } catch (e) {
     publish.error = e.message
     const s = publish.steps.find((x) => x.status === 'running')
@@ -658,7 +688,7 @@ async function handle(req, res) {
     if (path === '/api/telugu') return send(res, 200, await teluguOptions(str(url.searchParams.get('text'), 60)))
     if (path === '/api/publish') return send(res, 200, { ...publish, summary: publish.running ? null : await changeSummary(), liveUrl: LIVE_URL })
     if (path === '/api/build') return send(res, 200, { build, changes: await gitChanges() })
-    if (path === '/api/sync') return send(res, 200, sync)
+    if (path === '/api/sync') return send(res, 200, { ...sync, bootId: BOOT_ID })
     return send(res, 404, 'Not found', 'text/plain')
   }
 
@@ -671,7 +701,13 @@ async function handle(req, res) {
     must(p.ok || /Everything up-to-date/i.test(p.out), /fetch first|non-fast-forward/i.test(p.out) ? 'Signed in, but GitHub has newer changes: press ⟳ Sync, then Publish.' : 'Sign-in did not finish. Press the button again and complete the GitHub window.')
     return send(res, 200, { ok: true })
   }
-  if (req.method === 'POST' && path === '/api/sync') { must(!publish.running, 'Publishing is running. Try again in a minute.'); return send(res, 200, await syncNow()) }
+  if (req.method === 'POST' && path === '/api/sync') {
+    must(!publish.running, 'Publishing is running. Try again in a minute.')
+    const sy = await syncNow()
+    send(res, 200, { ...sy, bootId: BOOT_ID })
+    if (sy.restart) restartEditor()
+    return
+  }
   if (req.method === 'POST' && path === '/api/rebuild') { runBuild(); return send(res, 200, { ok: true }) }
 
   // Publish
@@ -1121,6 +1157,7 @@ createServer((req, res) => {
   console.log('  Getting the latest version from GitHub…')
   const sy = await syncNow()
   console.log('  ' + (sy.message || sy.state) + '\n')
+  if (sy.restart) return restartEditor()
   runBuild()
   await ensurePreview()
   if (!process.env.NO_OPEN) {

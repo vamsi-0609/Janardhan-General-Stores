@@ -1360,14 +1360,22 @@
   function paintSwitch() {
     const siteSwitch = $('#site-switch')
     if (!siteSwitch || !S) return
-    const on = S.online !== false
+    if (typeof S.online !== 'boolean') { // an older editor program is still running
+      siteSwitch.classList.add('unknown'); siteSwitch.disabled = true
+      siteSwitch.querySelector('.ss-label').textContent = 'Restart editor'
+      siteSwitch.title = 'The editor was updated. Close the black editor window and open the editor again.'
+      return
+    }
+    siteSwitch.classList.remove('unknown'); siteSwitch.disabled = false
+    const on = S.online
     siteSwitch.setAttribute('aria-checked', String(on))
     siteSwitch.classList.toggle('off', !on)
     siteSwitch.querySelector('.ss-label').textContent = on ? 'Website ON' : 'Website OFF'
     siteSwitch.title = on ? 'The website is open for customers. Click to turn it off.' : 'The website shows “Not available right now”. Click to turn it on.'
   }
   $('#site-switch')?.addEventListener('click', async () => {
-    const on = S.online !== false
+    if (typeof S.online !== 'boolean') return
+    const on = S.online
     const pending = S.changes || 0
     const ask = on
       ? 'Turn the website OFF?\n\nCustomers will see only “Not available right now” until you turn it on again. It takes 1–2 minutes.'
@@ -1669,7 +1677,8 @@ h('li', {}, s('Brand logo (optional):'), ' Brands tab → click “＋ logo” (
     try {
       const s = await api('POST', '/api/sync', {})
       paintSync(s)
-      if (s.state === 'updated') { await load(); render(); toast(s.message) }
+      if (s.state === 'updated' && s.restart) { toast(s.message); waitForRestart(s.bootId) }
+      else if (s.state === 'updated') { await load(); render(); toast(s.message) }
       else if (s.state === 'conflict' || s.state === 'offline') toast(s.message, s.state === 'conflict')
       else if (!quiet) toast('Up to date with GitHub ✓')
     } catch (e) { toast(e.message, true); paintSync({ state: 'offline', message: e.message }) }
@@ -1679,10 +1688,21 @@ h('li', {}, s('Brand logo (optional):'), ' Brands tab → click “＋ logo” (
   // auto sync: when you come back to the editor after 5 minutes or more
   let lastSync = Date.now()
   addEventListener('focus', () => { if (Date.now() - lastSync > 5 * 60000) { lastSync = Date.now(); runSync(true) } })
-  setInterval(() => api('GET', '/api/sync').then(paintSync).catch(() => {}), 60000)
+  // the editor restarted (updated from GitHub, or reopened): reload the page so it uses the new version
+  let bootId = null
+  function waitForRestart(old) {
+    const tick = () => api('GET', '/api/sync').then((x) => { if (x.bootId && x.bootId !== old) location.reload(); else setTimeout(tick, 1500) }).catch(() => setTimeout(tick, 1500))
+    setTimeout(tick, 1500)
+  }
+  setInterval(() => api('GET', '/api/sync').then((x) => {
+    if (bootId && x.bootId && x.bootId !== bootId) return location.reload()
+    bootId = bootId || x.bootId
+    paintSync(x)
+  }).catch(() => {}), 20000)
 
   load().then(async () => {
     const s = await api('GET', '/api/sync').catch(() => null)
+    if (s) bootId = s.bootId
     paintSync(s)
     if (s && (s.state === 'updated' || s.state === 'conflict' || s.state === 'offline')) toast(s.message, s.state === 'conflict')
   }).catch(() => {})

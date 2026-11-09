@@ -17,7 +17,5 @@ if not exist node_modules (
   call npm install --no-audit --no-fund
 )
 echo Starting the Janardhan catalogue editor...
-node editor\server.mjs
-echo.
-echo The editor has stopped. You can close this window.
-pause
+rem One line on purpose: a sync may update this file while the editor runs.
+node editor\run.mjs & echo. & echo The editor has stopped. You can close this window. & pause & exit /b

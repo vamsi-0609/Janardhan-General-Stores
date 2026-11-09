@@ -14,7 +14,7 @@
     "verify": "node scripts/verify.mjs",
     "verify:quick": "node scripts/verify.mjs --quick",
     "shop-photos": "node scripts/import-shop-photos.mjs",
-    "editor": "node editor/server.mjs",
+    "editor": "node editor/run.mjs",
     "local": "node scripts/open-local.mjs",
     "brand-assets": "node scripts/make-brand-assets.mjs"
   },
