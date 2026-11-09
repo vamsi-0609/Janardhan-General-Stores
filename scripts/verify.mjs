@@ -270,8 +270,8 @@ console.log('  mobile menu keyboard open/close OK')
 // Contact links
 await page.goto(`${BASE}/visit/`)
 const hrefs = await page.$$eval('a', (as) => as.map((a) => a.getAttribute('href')))
-for (const need of ['tel:+919705006062', 'mailto:vamsi8202@gmail.com', 'https://maps.app.goo.gl/sxt2WXo9wP9ZxnJ57?g_st=ac']) if (!hrefs.includes(need)) fail('visit', `missing ${need}`)
-if (!hrefs.some((h) => h?.startsWith('https://wa.me/919705006062'))) fail('visit', 'missing WhatsApp link')
+for (const need of ['tel:+917093850218', 'mailto:vamsi8202@gmail.com', 'https://maps.app.goo.gl/sxt2WXo9wP9ZxnJ57?g_st=ac']) if (!hrefs.includes(need)) fail('visit', `missing ${need}`)
+if (!hrefs.some((h) => h?.startsWith('https://wa.me/917093850218'))) fail('visit', 'missing WhatsApp link')
 console.log('  visit page: tel / mailto / wa.me / Google Maps links present')
 // Redirects
 for (const [from, to] of [['/pooja', '/puja-samagri/'], ['/directions', '/visit/'], ['/kirana', '/kirana/']]) {

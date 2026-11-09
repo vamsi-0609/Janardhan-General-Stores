@@ -675,7 +675,7 @@ const sortBox = '<label class="sort-box" data-sort-wrap hidden><span>Sort</span>
 
   await page('/', {
     title: 'Janardhan General Stores and Puja Samagri, Rajampet | జనార్దన్ జనరల్ స్టోర్స్',
-    description: 'Browse everyday Kirana groceries and Puja Samagri at Janardhan General Stores, Main Road, Rajampet. Open every day 6 AM – 10 PM. Call or WhatsApp 97050 06062.',
+    description: 'Browse everyday Kirana groceries and Puja Samagri at Janardhan General Stores, Main Road, Rajampet. Open every day 6 AM – 10 PM. Call or WhatsApp 70938 50218.',
     current: 'home',
     jsonld: [storeLd],
     body: `${festivalSections()}

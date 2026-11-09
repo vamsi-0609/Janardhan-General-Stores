@@ -21,9 +21,9 @@ export const shop = {
     country: 'IN',
   },
 
-  phoneDisplay: '97050 06062',
-  phoneE164: '+919705006062',
-  whatsappNumber: '919705006062',
+  phoneDisplay: '70938 50218',
+  phoneE164: '+917093850218',
+  whatsappNumber: '917093850218',
   email: 'vamsi8202@gmail.com',
 
   hours: {
